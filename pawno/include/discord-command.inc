@@ -37,7 +37,7 @@
 // Prefix
 
 #if	!defined CMD_PREFIX
-	#define	CMD_PREFIX		'!'
+	#define	CMD_PREFIX		'?'
 #endif
 
 // Macros

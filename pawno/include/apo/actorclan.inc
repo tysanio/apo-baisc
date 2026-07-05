@@ -1,28 +1,39 @@
 script actorclanc()
 {
     //clan asylum
-    CreateActor(27114,7511.3140,14679.4307,1003.0002,190.3401);
-    CreateActor(27115,7518.4946,14679.4229,1002.9931,154.7882);
-    CreateActor(27116,7508.0693,14689.8555,1002.9975,262.4075);
-    CreateActor(27114,7516.3315,14704.0928,1002.9975,198.1969);
-    CreateActor(27115,7513.1055,14698.8018,1002.9975,24.1738);
-    CreateActor(27116,7518.0039,14719.3564,1002.9938,82.1175);
-    CreateActor(27114,7506.3296,14733.9951,1002.9938,265.5642);
-    CreateActor(27115,7522.8188,14735.6025,1002.9938,89.0110);
-    CreateActor(27116,7509.8037,14723.9580,1002.9938,324.9298);
-    CreateActor(27114,7532.9033,14743.2480,1002.9931,195.8587);
-    CreateActor(27115,7481.5459,14735.4883,1003.0046,269.5162);
-    CreateActor(27116,7493.6313,14737.1514,1002.9975,271.7329);
-    CreateActor(27114,7477.8301,14751.3926,1003.0046,174.5753);
-    CreateActor(27115,7510.9922,14719.7012,1002.9938,271.8047);
-    CreateActor(27116,7516.2432,14742.7441,1003.0122,175.3767);
-    CreateActor(27114,7532.7705,14733.7139,1002.9931,274.2227);
-    CreateActor(27115,7554.4287,14736.3643,1002.9931,275.1626);
-    missionactor[0] = CreateActor(27140,7483.8965,14760.1084,1002.9934,109.7380);
-    missionactor[1] = CreateActor(27142,7475.8442,14761.8809,1002.9934,184.9388);
+    CreateActor(162,-672.4170,2704.1809,70.7614,246.4555);
+    CreateActor(162,-624.4245,2707.8982,72.3750,87.9074);
+    CreateActor(162,-624.1594,2712.2605,72.3750,77.5673);
+    CreateActor(162,-603.9059,2711.1470,72.3750,95.4274);
+    CreateActor(162,-599.7225,2712.2048,72.3750,272.4625);
+    CreateActor(162,-582.3083,2716.6399,72.0623,97.3075);
+    CreateActor(162,-578.5978,2715.0129,72.0242,303.4593);
+    CreateActor(162,-580.9335,2708.3379,71.5887,165.5914);
+    CreateActor(162,-600.9240,2710.0220,72.3750,199.4317);
+    missionactor[0] = CreateActor(168,-676.4368,2706.6545,70.1794,69.7340);
+    missionactor[1] = CreateActor(200,-679.5840,2701.0906,70.3549,61.2739);
+	//clanpolice or somehting
+	CreateActor(282,-219.1680,983.6078,19.5269,18.3019); 
+	CreateActor(283,-219.2213,974.5335,19.4927,254.5340); 
+	CreateActor(282,-221.2942,974.2610,22.2833,265.0190); 
+	CreateActor(283,-228.7793,979.0109,22.2833,359.6465); 
+	CreateActor(302,-216.7117,981.4099,22.9432,323.2761); 
+	CreateActor(302,-215.5549,977.2121,22.9432,235.8553); 
+	missionactor[2] = CreateActor(311,-226.5449,980.5844,19.5498,8.5856);
+	missionactor[3] = CreateActor(309,-229.7154,980.6211,19.5516,7.0189);
+	//sciene and army
+	CreateActor(179,282.4752,1872.3901,8.7578,102.7513);
+	CreateActor(179,282.5449,1866.9982,8.7578,87.5662);
+	missionactor[6] = CreateActor(191,273.4673,1864.6194,8.7578,4.8688); // spécial faction
+	CreateActor(287,279.8940,1864.6954,8.7578,7.8572); 
+	CreateActor(287,301.1192,1857.5419,7.7266,180.6506);
+	CreateActor(287,301.0567,1853.2960,7.7266,352.9856); 
+	CreateActor(287,295.7274,1857.1534,7.8281,263.2263);
+	missionactor[4] = CreateActor(70,272.2670,1854.0015,8.7649,171.0822); // science
+	missionactor[5] = CreateActor(70,279.6077,1855.4661,8.7649,296.1035); // science
     return 1;
 }
-Dialog:Missionclan0(playerid, response, listitem, inputtext[])
+Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 {
     if (response)
 	{
@@ -32,22 +43,178 @@ Dialog:Missionclan0(playerid, response, listitem, inputtext[])
             case 1:
             {
                 new meat = pData[playerid][inv][1],exp = meat*2;
-                pData[playerid][clanexp][0] += exp;
-                if(pData[playerid][clanexp][0] >= 5000) pData[playerid][clanexp][0] = 5000;
+                pData[playerid][clanexp][1] += exp;
                 Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1 done", "Thank for THAT MEAT!!\n{0f5900}Exp clan + %d", "OK", "", exp);
                 pData[playerid][inv][1] = 0;
             }
+            case 2: Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2", "Hey meat bag we need the chop chop.\nBring us the chop chop for the meat!", "OK", "");
+			case 3:
+			{
+				if(GetPlayerWeapon(playerid) == 4)
+				{
+					pData[playerid][clanexp][1] += 100;
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2 done", "Thank for the chop chop!!\n{0f5900}Exp clan + 100", "OK", "");
+					//remove weapon
+					RemovePlayerWeapon(playerid, 4);
+				}
+				else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2", "You dont have the chop chop!\nBring us the chop chop for the meat!", "OK", "");
+			}
+			case 4:
+			{
+				Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+				mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
+				mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
+				missioncheck = 1;
+			}
+			case 5:
+			{
+				if(missioncheck == 11)
+				{
+					pData[playerid][clanexp][1] += 200;
+					missioncheck = 0;
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
+				}
+				else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+			}
             case 10:
             {
-                if(pData[playerid][clanexp][0] >= 5000)
+                if(pData[playerid][clanexp][1] >= 5000)
                 {
-                    pData[playerid][clanexp][0] -= 5000;
+                    pData[playerid][clanexp][1] -= 5000;
                     pData[playerid][Score] += 1;
                     SetPlayerScore(playerid, pData[playerid][Score]);
                     Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -5000", "OK", "");
                 }
                 else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (5000)", "OK", "");
             }
+        }
+        return 1;
+    }
+    return 1;
+}
+Dialog:Missionclan01(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+        switch (listitem)
+        {
+            case 0: {	}
+            case 1:
+            {            }
+        }
+        return 1;
+    }
+    return 1;
+}
+Dialog:Missionclan10(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+        switch (listitem)
+        {
+            case 0: {			}
+            case 1: {			}
+            case 2: {			}
+			case 3: {			}
+			case 4:
+			{
+				Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+				mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
+				mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
+				missioncheck = 2;
+			}
+			case 5:
+			{
+				if(missioncheck == 22)
+				{
+					pData[playerid][clanexp][2] += 200;
+					missioncheck = 0;
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
+				}
+				else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+			}
+            case 10:
+            {
+                if(pData[playerid][clanexp][2] >= 5000)
+                {
+                    pData[playerid][clanexp][2] -= 5000;
+                    pData[playerid][Score] += 1;
+                    SetPlayerScore(playerid, pData[playerid][Score]);
+                    Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -5000", "OK", "");
+                }
+                else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (5000)", "OK", "");
+            }
+        }
+        return 1;
+    }
+    return 1;
+}
+Dialog:Missionclan11(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+        switch (listitem)
+        {
+            case 0: {	}
+            case 1:
+            {            }
+        }
+        return 1;
+    }
+    return 1;
+}
+Dialog:Missionclan20(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+        switch (listitem)
+        {
+            case 0: {			}
+            case 1: {			}
+            case 2: {			}
+			case 3: {			}
+			case 4:
+			{
+				Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+				mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
+				mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
+				missioncheck = 3;
+			}
+			case 5:
+			{
+				if(missioncheck == 33)
+				{
+					pData[playerid][clanexp][3] += 200;
+					missioncheck = 0;
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
+				}
+				else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+			}
+            case 10:
+            {
+                if(pData[playerid][clanexp][3] >= 5000)
+                {
+                    pData[playerid][clanexp][3] -= 5000;
+                    pData[playerid][Score] += 1;
+                    SetPlayerScore(playerid, pData[playerid][Score]);
+                    Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -5000", "OK", "");
+                }
+                else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (5000)", "OK", "");
+            }
+        }
+        return 1;
+    }
+    return 1;
+}
+Dialog:Missionclan22(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+        switch (listitem)
+        {
+            case 0: {	}
+            case 1:
+            {            }
         }
         return 1;
     }

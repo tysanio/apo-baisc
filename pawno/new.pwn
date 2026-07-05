@@ -3,6 +3,18 @@
 //#define FILTERSCRIPT
 
 #include <a_samp>
+#include <a_mysql>
+#include <ugmp>
+
+//define forward fuck you
+#define script%0(%1) forward%0(%1); public%0(%1)
+
+#define SQL_HOSTNAME 															"localhost"
+#define SQL_USERNAME 															"root"
+#define SQL_DATABASE 															"newscript"
+#define SQL_PASSWORD															""
+
+new g_iHandle;
 
 #if defined FILTERSCRIPT
 
@@ -32,12 +44,18 @@ main()
 
 public OnGameModeInit()
 {
+	SQL_Connect();
 	// Don't use these lines if it's a filterscript
 	SetGameModeText("Blank Script");
 	AddPlayerClass(0, 1958.3783, 1343.1572, 15.3746, 269.1425, 0, 0, 0, 0, 0, 0);
 	return 1;
 }
-
+SQL_Connect() {
+    mysql_log(LOG_WARNING | LOG_ERROR);
+	g_iHandle = mysql_connect(SQL_HOSTNAME, SQL_USERNAME, SQL_DATABASE, SQL_PASSWORD);
+	if (mysql_errno(g_iHandle) != 0) {printf("[SQL] Connection to \"%s\" failed! Please check the connection settings...", SQL_HOSTNAME);}
+	else {printf("[SQL] Connection to \"%s\" passed!", SQL_HOSTNAME);}	
+}
 public OnGameModeExit()
 {
 	return 1;

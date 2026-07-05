@@ -1,8 +1,0 @@
-For learning scripting, what should you learn? What do you need?
-
-Basic programming.
-What is conditioning.
-What is a variable.
-Data types in programming.
-What is repetition.
-Read the documentation.

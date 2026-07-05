@@ -1,1 +1,0 @@
-if(Vehicles[vehicleid][impounded] == 1) return va_SendClientMessage(playerid, COLOR_RED, "{ff6347}Error: Unable to spawn %s (ID: %d) because it is impounded.",GetVehicleName(Vehicles[vehicleid][vrID]), vehicleid);

@@ -45,7 +45,7 @@ stock Dialog_Close(playerid)
 stock Dialog_Open(playerid, function[], style, caption[], info[], button1[], button2[], {Float,_}:...)
 {
 	static
-	    string[1024],
+	    string[2024],
 		start,
 		end;
 
