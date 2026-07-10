@@ -1,7 +1,7 @@
 CMD:help(playerid, params[])
 {
     SendServerMessage(playerid, "---List of commands for this server---");
-	SendCommandMessage(playerid, "/howto, /me, /do, /stats, /craft, /use, /suggest");
+	SendCommandMessage(playerid, "/howto, /me, /do, /stats, /craft, /use, /suggest, /levelup");
     SendCommandMessage(playerid, "/dwep, /swep, /pwep, /storage, /editstorage, /animcmds, /dc");
 	SendCommandMessage(playerid, "/clan, /clanchest, /clanwar, /claninvite, /clanremove, /clanrank, /clanres");
     SendCommandMessage(playerid, "/repairleak, /repair, /refuel, /virtualworld, /discordconfirm");
@@ -13,10 +13,37 @@ CMD:howto(playerid, params[])
 {
 	Dialog_Show(playerid, howto, DIALOG_STYLE_MSGBOX, "How to do stuff","\
 	Q: How to pickup stuff?\nA: If its an item crouch and press N, if its a weapon /pwep\n\n\
-	Q: How to level up?\nA: Need to have 5000 exp on personal exp (clan exp 0) or one of the 4 clan or personal and go to the armory of the clan and select levelup.\n\n\
+	Q: How to level up?\nA: Need to have 5000 exp on personal exp (clan exp 0) or one of the 4 clan have 2500 exp go see them and select level up.\n\n\
 	Q: How to interact with those bots?\nA: Aim at then to have a dialog pop-in up.\n\n\
+	Q: How to have bigger backpack? \nA: Each 5 level 0 to 25 give bigger backpack slot 8-16-32 max 256.\n\n\
 	","OK","");
     return 1;
+}
+CMD:stats(playerid, params[])
+{
+	Dialog_Show(playerid, dSTATS,DIALOG_STYLE_TABLIST,"Account stats","Level Admin : \t%d\nLevel VIP : \t%d\nScore : \t%d\n\
+    Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\nOre(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
+    Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
+    inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d\nClan 0 Exp: \t%d\nClan 1 Exp: \t%d\nClan 2 Exp: \t%d\nClan 3 Exp: \t%d\nClan 4 Exp: \t%d\nDiscord ID : \t%s\
+    ", "Close","",pData[playerid][Admin],pData[playerid][VIP],pData[playerid][Score],\
+    pData[playerid][inv][1],pData[playerid][inv][2],pData[playerid][inv][3],pData[playerid][inv][4],pData[playerid][inv][5],\
+    pData[playerid][inv][6],pData[playerid][inv][7],pData[playerid][inv][8],pData[playerid][inv][9],pData[playerid][inv][10],\
+    pData[playerid][inv][11],pData[playerid][inv][12],pData[playerid][inv][13],pData[playerid][inv][14],pData[playerid][inv][15],\
+    pData[playerid][inv][16],pData[playerid][inv][17],pData[playerid][inv][18],pData[playerid][inv][19],pData[playerid][inv][20],\
+    pData[playerid][inv][21],pData[playerid][inv][22],pData[playerid][inv][23],pData[playerid][inv][24],pData[playerid][inv][25],\
+    pData[playerid][clanexp][0],pData[playerid][clanexp][1],pData[playerid][clanexp][2],pData[playerid][clanexp][3],pData[playerid][clanexp][4],pData[playerid][pDiscordID]);
+	return 1;
+}
+CMD:levelup(playerid, params[])
+{
+	if(pData[playerid][clanexp][0] >= 5000)
+	{
+		pData[playerid][clanexp][0] -= 5000;
+        pData[playerid][Score] += 1;
+        SetPlayerScore(playerid, pData[playerid][Score]);
+        Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Wow a self thought congradulation!\nLevel up +1\nPersonnal Exp -5000", "OK", "");
+    }
+    else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (5000).", "OK", "");
 }
 CMD:me(playerid, params[])
 {
@@ -29,6 +56,7 @@ CMD:me(playerid, params[])
 	else {
 	    SendNearbyMessage(playerid, 20.0, COLOR_PURPLE, "* %s %s", Name[playerid], params);
 	}
+	pData[playerid][clanexp][0] += random(3)+1;
 	return 1;
 }
 CMD:do(playerid, params[])
@@ -43,26 +71,12 @@ CMD:do(playerid, params[])
 	else {
 	    SendNearbyMessage(playerid, 30.0, COLOR_PURPLE, "* %s (( %s ))", params, Name[playerid]);
 	}
+	pData[playerid][clanexp][0] += random(3)+1;
 	return 1;
 }
 CMD:virtualworld(playerid, params[])
 {
     SendServerMessage(playerid,"Virtual world %d",GetPlayerVirtualWorld(playerid));
-	return 1;
-}
-CMD:stats(playerid, params[])
-{
-	Dialog_Show(playerid, dSTATS,DIALOG_STYLE_TABLIST,"Account stats","Level Admin : \t%d\nLevel VIP : \t%d\nScore : \t%d\n\
-    Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\ninv7 : \t%d\ninv8 : \t%d\ninv9 : \t%d\ninv10 : \t%d\n\
-    Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
-    inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d\nClan 0 Exp: \t%d\nClan 1 Exp: \t%d\nClan 2 Exp: \t%d\nClan 3 Exp: \t%d\nClan 4 Exp: \t%d\nDiscord ID : \t%s\
-    ", "Close","",pData[playerid][Admin],pData[playerid][VIP],pData[playerid][Score],\
-    pData[playerid][inv][1],pData[playerid][inv][2],pData[playerid][inv][3],pData[playerid][inv][4],pData[playerid][inv][5],\
-    pData[playerid][inv][6],pData[playerid][inv][7],pData[playerid][inv][8],pData[playerid][inv][9],pData[playerid][inv][10],\
-    pData[playerid][inv][11],pData[playerid][inv][12],pData[playerid][inv][13],pData[playerid][inv][14],pData[playerid][inv][15],\
-    pData[playerid][inv][16],pData[playerid][inv][17],pData[playerid][inv][18],pData[playerid][inv][19],pData[playerid][inv][20],\
-    pData[playerid][inv][21],pData[playerid][inv][22],pData[playerid][inv][23],pData[playerid][inv][24],pData[playerid][inv][25],\
-    pData[playerid][clanexp][0],pData[playerid][clanexp][1],pData[playerid][clanexp][2],pData[playerid][clanexp][3],pData[playerid][clanexp][4],pData[playerid][pDiscordID]);
 	return 1;
 }
 CMD:dwep(playerid,params[])
@@ -80,7 +94,7 @@ CMD:dwep(playerid,params[])
                 break;
             }
 		}
-        if(f > MAX_OBJ) return SendClientMessage(playerid, -1, "You dont have a weapon on you.");
+        if(f > MAX_OBJ) return SendServerMessage(playerid,"You dont have a weapon on you.");
 		RemovePlayerWeapon(playerid, GunID);
 		dGunData[f][ObjData][0] = GunID;
 		dGunData[f][ObjData][1] = GunAmmo;
@@ -106,7 +120,7 @@ CMD:swep(playerid,params[])
 		    break;
 		}
 	}
-	if(f > MAX_OBJ) return SendClientMessage(playerid, -1, "No weapon is near you, please try again.");
+	if(f > MAX_OBJ) return SendServerMessage(playerid,"No weapon is near you, please try again.");
 	GetWeaponName(dGunData[f][ObjData][0], GunNames, sizeof(GunNames));
 	SendServerMessage(playerid, "You have found a %s type /pwep to pick it up.", GunNames);
   	return 1;
@@ -126,7 +140,7 @@ CMD:pwep(playerid,params[])
     format(query, sizeof(query),"DELETE FROM weapon_drops WHERE `weaponid`='%d' AND `ammo`='%d' LIMIT 1",
 	dGunData[f][ObjData][0],dGunData[f][ObjData][1]);
     mysql_query(mysql, query, false);
-	if(f > MAX_OBJ) return SendClientMessage(playerid, -1, "You are not near a weapon that you can pick up.");
+	if(f > MAX_OBJ) return SendServerMessage(playerid,"You are not near a weapon that you can pick up.");
 	DestroyObject(dGunData[f][ObjID]);
 	GetWeaponName(dGunData[f][ObjData][0], GunNames, sizeof(GunNames));
 	AllowWeapon(playerid, dGunData[f][ObjData][0], dGunData[f][ObjData][1]);
@@ -152,7 +166,7 @@ CMD:editstorage(playerid, params[])
     if (sscanf(params, "s[16]S()[32]",subcmd, args)) {
         SendCommandMessage(playerid, "Usage: /editstorage <withdraw|give|view> [item_id] [amount]");
 		SendServerMessage(playerid, "1: Meat(s), 2: Wood(s), 3: Metal(s),4: Cloth(s), 5: Plastic(s),6: Gun Powder(s)");
-		SendServerMessage(playerid, "7: inv7, 8: inv8, 9: inv9, 10: inv10, 11: Repair kit(s), 12: Med Kit(s),13: Jerrycan(s) ");
+		SendServerMessage(playerid, "7: Ore(s), 8: Iron(s), 9: Gold(s), 10: Lockpick(s), 11: Repair kit(s), 12: Med Kit(s),13: Jerrycan(s) ");
 		SendServerMessage(playerid, "14: 9mm Bullet(s), 15: 00' Buck's, 16: 308(s), 17: Armor Plate(s), 18: Water Bottle, 19: Canned Food");
 		SendServerMessage(playerid, "20: inv20, 21: inv21, 22: inv22, 23: inv23, 24: inv24,25: inv25");
         return 1;
@@ -168,7 +182,9 @@ CMD:editstorage(playerid, params[])
             if (item_id < 0 || item_id > 26) return SendServerMessage(playerid,"Invalid item ID [1-25].");
             if (amount <= 0) return SendServerMessage(playerid, "Invalid amount.");
             if (storageData[id][storagesInv][item_id] < amount) return SendServerMessage(playerid,"Not enough items in storage.");
-            storageData[id][storagesInv][item_id] -= amount;
+			if (pData[playerid][inv][item_id] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough backpack space for this item.");
+			storageData[id][storagesInv][item_id] -= amount;
             pData[playerid][inv][item_id] += amount;
             SendServerMessage(playerid,"You withdrew %d of item %s from storage.", amount, ItemNames[item_id]);
             storages_Save(id);
@@ -186,6 +202,8 @@ CMD:editstorage(playerid, params[])
             if (item_id < 0 || item_id >= 26) return SendServerMessage(playerid,"Invalid item ID [1-25].");
             if (amount <= 0) return SendServerMessage(playerid,"Invalid amount.");
             if (pData[playerid][inv][item_id] < amount) return SendServerMessage(playerid,"You don't have enough of that item.");
+			if (storageData[id][storagesInv][item_id] + amount > GetStorageCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item.");
             storageData[id][storagesInv][item_id] += amount;
             pData[playerid][inv][item_id] -= amount;
             SendServerMessage(playerid,"You gave %d of %s to storage.", amount, ItemNames[item_id]);
@@ -198,11 +216,13 @@ CMD:editstorage(playerid, params[])
 		if ((id = Storage_Nearest(playerid)) != -1)
 		{
 			if (storageData[id][storagesLock] != pData[playerid][ID]) return SendServerMessage(playerid, "This is not your storage."); 
-			Dialog_Show(playerid, storageData,DIALOG_STYLE_MSGBOX,"Storage","Lock [ID] : \t%d\n\
-			Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\ninv7 : \t%d\ninv8 : \t%d\ninv9 : \t%d\ninv10 : \t%d\n\
-			Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
-			inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d\n\
-			", "Close","",storageData[id][storagesLock],\
+			Dialog_Show(playerid, storageData,DIALOG_STYLE_MSGBOX,"Storage","Lock [ID] : \t%d\nCapacity : \t%d\n\
+			Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\n\
+			Ore(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
+			Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n\
+			9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\n\
+			Water Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\ninv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d\n\
+			", "Close","",storageData[id][storagesLock],GetStorageCapacity(id),\
 			storageData[id][storagesInv][1],storageData[id][storagesInv][2],storageData[id][storagesInv][3],storageData[id][storagesInv][4],storageData[id][storagesInv][5],\
 			storageData[id][storagesInv][6],storageData[id][storagesInv][7],storageData[id][storagesInv][8],storageData[id][storagesInv][9],storageData[id][storagesInv][10],\
 			storageData[id][storagesInv][11],storageData[id][storagesInv][12],storageData[id][storagesInv][13],storageData[id][storagesInv][14],storageData[id][storagesInv][15],\
@@ -213,22 +233,6 @@ CMD:editstorage(playerid, params[])
 	}
 	else return SendServerMessage(playerid, "Invalid option to choose from.");
 	return 1;
-}
-CMD:sobject(playerid,params[])
-{
-    if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 1;
-    new f = MAX_SPAWNPOS+1;
-	for(new a = 0; a < MAX_SPAWNPOS; a++)
-	{
-	    if(IsPlayerInRangeOfPoint(playerid, 2.0, dspawnpos[a][Pos][0], dspawnpos[a][Pos][1], dspawnpos[a][Pos][2]))
-	    {
-	        f = a;
-	        break;
-	    }
-	}
-	if(f > MAX_SPAWNPOS) return SendServerMessage(playerid, "No object is near you, please try again.");
-  	SendServerMessage(playerid, "You have found an object!");
-    return 1;
 }
 CMD:deer(playerid, params[])
 {
@@ -252,7 +256,7 @@ CMD:craft(playerid, params[])
 }
 CMD:use(playerid, params[])
 {
-	Dialog_Show(playerid, UseItem,DIALOG_STYLE_LIST,"Use Item(s)","9 mm\n00' Buck's\n.308\nMed Kit\nArmor Plates\nJerrycan\nWater Bottle\nCanned Food", "Use", "Close");
+	Dialog_Show(playerid, UseItem,DIALOG_STYLE_LIST,"Use Item(s)","9 mm\n00' Buck's\n.308\nMed Kit\nArmor Plates\nJerrycan\nWater Bottle\nCanned Food\nLockpick", "Use", "Close");
     return 1;
 }
 CMD:saveveh(playerid, params[])
@@ -340,14 +344,32 @@ CMD:refuel(playerid, params[])
     SendServerMessage(playerid,"[Vehicle] refuel successfully!");
     return 1;
 }
+//mine
+CMD:mine(playerid, params[])
+{
+	if(IsMining[playerid] == 1) return SendServerMessage(playerid,"Vous êtes déjà en train de miner ! Veuillez patienter.");
+	if(IsPlayerInRangeOfPoint(playerid, 50.0, MineRock_X, MineRock_Y, MineRock_Z))
+    {
+        IsMining[playerid] = 1;
+        TogglePlayerControllable(playerid, 0);            
+        ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.0, 1, 0, 0, 0, 0);
+        GameTextForPlayer(playerid, "~w~Minage en cours...~n~~r~10 Secondes Restantes", 10000, 3);
+        SetTimerEx("FinishMining", 10000, false, "i", playerid);
+    }
+    else
+    {
+		SendServerMessage(playerid,"Vous n'êtes pas à côté d'un rocher exploitable.");
+    }
+    return 1;
+}
 //anims
 CMD:animcmds(playerid, params[])
 {
-	SendClientMessage(playerid, COLOR_LIGHTBLUE, "ANIMATION:{FFFFFF} /dance, /handsup, /bat, /slap, /bar, /wash, /lay, /workout, /blowjob, /bomb.");
-	SendClientMessage(playerid, COLOR_LIGHTBLUE, "ANIMATION:{FFFFFF} /carry, /crack, /sleep, /jump, /deal, /dancing, /eating, /puke, /gsign, /chat.");
-	SendClientMessage(playerid, COLOR_LIGHTBLUE, "ANIMATION:{FFFFFF} /goggles, /spray, /throw, /swipe, /office, /kiss, /knife, /cpr, /scratch, /point.");
-	SendClientMessage(playerid, COLOR_LIGHTBLUE, "ANIMATION:{FFFFFF} /cheer, /wave, /strip, /smoke, /reload, /taichi, /wank, /cower, /skate, /drunk.");
-	SendClientMessage(playerid, COLOR_LIGHTBLUE, "ANIMATION:{FFFFFF} /cry, /tired, /assis, /crossarms, /fucku, /walk, /piss, /stopanim.");
+	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /dance, /handsup, /bat, /slap, /bar, /wash, /lay, /workout, /blowjob, /bomb.");
+	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /carry, /crack, /sleep, /jump, /deal, /dancing, /eating, /puke, /gsign, /chat.");
+	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /goggles, /spray, /throw, /swipe, /office, /kiss, /knife, /cpr, /scratch, /point.");
+	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /cheer, /wave, /strip, /smoke, /reload, /taichi, /wank, /cower, /skate, /drunk.");
+	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /cry, /tired, /assis, /crossarms, /fucku, /walk, /piss, /stopanim.");
 	return 1;
 }
 CMD:dance(playerid, params[])
@@ -357,7 +379,7 @@ CMD:dance(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/dance [1-4]");
+	    return SendCommandMessage(playerid,"/dance [1-4]");
 	if (type < 1 || type > 4)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -388,7 +410,7 @@ CMD:bat(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/bat [1-5]");
+	    return SendCommandMessage(playerid,"/bat [1-5]");
 	if (type < 1 || type > 5)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -413,7 +435,7 @@ CMD:bar(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/bar [1-8]");
+	    return SendCommandMessage(playerid,"/bar [1-8]");
 	if (type < 1 || type > 8)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -441,7 +463,7 @@ CMD:lay(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/lay [1-5]");
+	    return SendCommandMessage(playerid,"/lay [1-5]");
 	if (type < 1 || type > 5)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -459,7 +481,7 @@ CMD:workout(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/workout [1-7]");
+	    return SendCommandMessage(playerid,"/workout [1-7]");
 	if (type < 1 || type > 7)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -479,7 +501,7 @@ CMD:blowjob(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/blowjob [1-4]");
+	    return SendCommandMessage(playerid,"/blowjob [1-4]");
 	if (type < 1 || type > 4)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -494,7 +516,6 @@ CMD:bomb(playerid, params[])
 {
     if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
-
 	ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -504,7 +525,7 @@ CMD:carry(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/carry [1-6]");
+	    return SendCommandMessage(playerid,"/carry [1-6]");
 	if (type < 1 || type > 6)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -523,7 +544,7 @@ CMD:crack(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/crack [1-6]");
+	    return SendCommandMessage(playerid,"/crack [1-6]");
 	if (type < 1 || type > 6)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -542,7 +563,7 @@ CMD:sleep(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/sleep [1-2]");
+	    return SendCommandMessage(playerid,"/sleep [1-2]");
 	if (type < 1 || type > 2)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -564,7 +585,7 @@ CMD:deal(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/deal [1-6]");
+	    return SendCommandMessage(playerid,"/deal [1-6]");
 	if (type < 1 || type > 6)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -583,7 +604,7 @@ CMD:dancing(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/dancing [1-10]");
+	    return SendCommandMessage(playerid,"/dancing [1-10]");
 	if (type < 1 || type > 10)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -606,7 +627,7 @@ CMD:eating(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/eating [1-3]");
+	    return SendCommandMessage(playerid,"/eating [1-3]");
 	if (type < 1 || type > 3)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -620,7 +641,6 @@ CMD:puke(playerid, params[])
 {
     if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
-
 	ApplyAnimation(playerid, "FOOD", "EAT_Vomit_P", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -630,7 +650,7 @@ CMD:gsign(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/gsign [1-15]");
+	    return SendCommandMessage(playerid,"/gsign [1-15]");
 	if (type < 1 || type > 15)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -658,7 +678,7 @@ CMD:chat(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/chat [1-6]");
+	    return SendCommandMessage(playerid,"/chat [1-6]");
 	if (type < 1 || type > 6)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -705,7 +725,7 @@ CMD:office(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/office [1-6]");
+	    return SendCommandMessage(playerid,"/office [1-6]");
 	if (type < 1 || type > 6)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -724,7 +744,7 @@ CMD:kiss(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/kiss [1-6]");
+	    return SendCommandMessage(playerid,"/kiss [1-6]");
 	if (type < 1 || type > 6)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -743,7 +763,7 @@ CMD:knife(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/knife [1-8]");
+	    return SendCommandMessage(playerid,"/knife [1-8]");
 	if (type < 1 || type > 8)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -771,7 +791,7 @@ CMD:scratch(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/scratch [1-4]");
+	    return SendCommandMessage(playerid,"/scratch [1-4]");
 	if (type < 1 || type > 4)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -788,7 +808,7 @@ CMD:point(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/point [1-4]");
+	    return SendCommandMessage(playerid,"/point [1-4]");
 	if (type < 1 || type > 4)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -805,7 +825,7 @@ CMD:cheer(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/cheer [1-8]");
+	    return SendCommandMessage(playerid,"/cheer [1-8]");
 	if (type < 1 || type > 8)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -826,7 +846,7 @@ CMD:strip(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/strip [1-7]");
+	    return SendCommandMessage(playerid,"/strip [1-7]");
 	if (type < 1 || type > 7)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -846,7 +866,7 @@ CMD:wave(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/wave [1-3]");
+	    return SendCommandMessage(playerid,"/wave [1-3]");
 	if (type < 1 || type > 3)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -862,7 +882,7 @@ CMD:smoke(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/smoke [1-3]");
+	    return SendCommandMessage(playerid,"/smoke [1-3]");
 	if (type < 1 || type > 3)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -878,7 +898,7 @@ CMD:reload(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/reload [1-4]");
+	    return SendCommandMessage(playerid,"/reload [1-4]");
 	if (type < 1 || type > 4)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -902,7 +922,7 @@ CMD:wank(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/wank [1-3]");
+	    return SendCommandMessage(playerid,"/wank [1-3]");
 	if (type < 1 || type > 3)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -926,7 +946,7 @@ CMD:skate(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/skate [1-2]");
+	    return SendCommandMessage(playerid,"/skate [1-2]");
 	if (type < 1 || type > 2)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -955,7 +975,7 @@ CMD:tired(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/tired [1-2]");
+	    return SendCommandMessage(playerid,"/tired [1-2]");
 	if (type < 1 || type > 2)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -970,7 +990,7 @@ CMD:assis(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/assis [1-6]");
+	    return SendCommandMessage(playerid,"/assis [1-6]");
 	if (type < 1 || type > 6)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -989,7 +1009,7 @@ CMD:crossarms(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/crossarms [1-4]");
+	    return SendCommandMessage(playerid,"/crossarms [1-4]");
 	if (type < 1 || type > 4)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {
@@ -1013,7 +1033,7 @@ CMD:walk(playerid, params[])
 	if (!AnimationCheck(playerid))
 	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
 	if (sscanf(params, "d", type))
-	    return SendServerMessage(playerid,"/walk [1-16]");
+	    return SendCommandMessage(playerid,"/walk [1-16]");
 	if (type < 1 || type > 17)
 	    return SendServerMessage(playerid,"Invalide type spécifié.");
 	switch (type) {

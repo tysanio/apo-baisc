@@ -40,7 +40,7 @@ Dialog:Craft(playerid, response, listitem, inputtext[])
 	{
         switch (listitem)
         {
-            case 0: Dialog_Show(playerid, Craft01, DIALOG_STYLE_LIST, "Craft Vehicles", "Bicycle(15M/15P)\nBandito(50M/50P)", "Craft", "Close");
+            case 0: Dialog_Show(playerid, Craft01, DIALOG_STYLE_LIST, "Craft Vehicles", "Bicycle(8M/2P/2I)\nBandito(24M/24P/5G)", "Craft", "Close");
             case 1: Dialog_Show(playerid, Craft11, DIALOG_STYLE_LIST, "Craft Weapons", "Pistol\nShotGun\nRifle\nSniper", "Craft", "Close");
             case 2: Dialog_Show(playerid, Craft21, DIALOG_STYLE_LIST, "Craft Ammos", "9 mm(5M/5P/5GP)\n00' Buck's(5M/5P/10GP)\n.308(5M/5P/25GP)", "Craft", "Close");
             case 3: Dialog_Show(playerid, Craft31, DIALOG_STYLE_LIST, "Craft Miscs", "Repair kit (3M/3P)\nMed Kit(2M/3P/5C)\nJerrycan (3P/Stations)\nArmor Plates(10M/10P/10C)\nCanned Food(1M/2Meats)\nBarricades", "Craft", "Close");
@@ -58,11 +58,12 @@ Dialog:Craft01(playerid, response, listitem, inputtext[])
         {
             case 0: 
 			{
-				if (pData[playerid][inv][3] >= 15 && pData[playerid][inv][5] >= 15)
+				if (pData[playerid][inv][3] >= 8 && pData[playerid][inv][5] >= 2 && pData[playerid][inv][8] >= 2)
 				{
 					pData[playerid][clanexp][0] += 250;
-					pData[playerid][inv][3] -= 15;
-					pData[playerid][inv][5] -= 15;
+					pData[playerid][inv][3] -= 8;
+					pData[playerid][inv][5] -= 2;
+					pData[playerid][inv][8] -= 2;
 					GetPlayerPos(playerid, x, y, z);
 					GetPlayerFacingAngle(playerid, a);
 					mysql_format(mysql, query, sizeof(query),"INSERT INTO vehicles (model, posX, posY, posZ, rot,  color1, color2, fuel) VALUES (481,%f,%f,%f,%f,-1,-1,100)", x, y, z, a, color1, color2);
@@ -70,14 +71,15 @@ Dialog:Craft01(playerid, response, listitem, inputtext[])
 					mysql_tquery(mysql, query, "OnVehicleCreated", "iffffii", modelid, x, y, z, a, color1, color2);
 					SendServerMessage(playerid, "Vehicle crafted and saved.");
 				}
-				else SendServerMessage(playerid, "You don't have 15 Metal or/and 15 plastic.");
+				else SendServerMessage(playerid, "You don't have 8 metals or/and 2 plastics or/and 2 irons.");
 			}
             case 1:
 			{
-				if (pData[playerid][inv][3] >= 50 && pData[playerid][inv][5] >= 50)
+				if (pData[playerid][inv][3] >= 24 && pData[playerid][inv][5] >= 24 && pData[playerid][inv][9] >= 5)
 				{
-					pData[playerid][inv][3] -= 50;
-					pData[playerid][inv][5] -= 50;
+					pData[playerid][inv][3] -= 24;
+					pData[playerid][inv][5] -= 24;
+					pData[playerid][inv][9] -= 5;
 					pData[playerid][clanexp][0] += 1000;
 					GetPlayerPos(playerid, x, y, z);
 					GetPlayerFacingAngle(playerid, a);
@@ -86,7 +88,7 @@ Dialog:Craft01(playerid, response, listitem, inputtext[])
 					mysql_tquery(mysql, query, "OnVehicleCreated", "iffffii", modelid, x, y, z, a, color1, color2);
 					SendServerMessage(playerid, "Vehicle crafted and saved.");
 				}
-				else SendServerMessage(playerid, "You don't have 50 Metal or/and 50 plastic.");
+				else SendServerMessage(playerid, "You don't have 24 metals or/and 24 plastics or/and 5 golds.");
 			}
 		}
         return 1;
@@ -124,7 +126,7 @@ Dialog:Craft21(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][5] -= 5;
 					pData[playerid][inv][6] -= 5;
 				}
-				else SendServerMessage(playerid, "You don't have 5 Metal or/and 5 plastic or/and 5 gun powder.");
+				else SendServerMessage(playerid, "You don't have 5 metals or/and 5 plastics or/and 5 gun powders.");
 			}
             case 1:
 			{
@@ -136,7 +138,7 @@ Dialog:Craft21(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][5] -= 5;
 					pData[playerid][inv][6] -= 10;
 				}
-				else SendServerMessage(playerid, "You don't have 5 Metal or/and 5 plastic or/and 10 gun powder.");
+				else SendServerMessage(playerid, "You don't have 5 metals or/and 5 plastics or/and 10 gun powders.");
 			}
             case 2:
 			{
@@ -148,7 +150,7 @@ Dialog:Craft21(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][5] -= 5;
 					pData[playerid][inv][6] -= 25;
 				}
-				else SendServerMessage(playerid, "You don't have 5 Metal or/and 5 plastic or/and 25 gun powder.");
+				else SendServerMessage(playerid, "You don't have 5 metals or/and 5 plastics or/and 25 gun powders.");
 			}
 		}
         return 1;
@@ -166,18 +168,22 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 			{
 				if (pData[playerid][inv][3] >= 3 && pData[playerid][inv][5] >= 3)
 				{
+					if (pData[playerid][inv][11] + 1 > GetBackpackCapacity(playerid))
+						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					pData[playerid][clanexp][0] += 10;
 					pData[playerid][inv][11] += 1;
 					pData[playerid][inv][3] -= 3;
 					pData[playerid][inv][5] -= 3;
 					SendServerMessage(playerid, "You craft one Repair kit.");
 				}
-				else SendServerMessage(playerid, "You don't have 3 Metal or/and 3 plastic.");
+				else SendServerMessage(playerid, "You don't have 3 metals or/and 3 plastics.");
 			}
             case 1: 
 			{
 				if (pData[playerid][inv][3] >= 3 && pData[playerid][inv][5] >= 3 && pData[playerid][inv][4] >= 5)
 				{
+					if (pData[playerid][inv][12] + 12 > GetBackpackCapacity(playerid))
+						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					pData[playerid][clanexp][0] += 15;
 					pData[playerid][inv][12] += 1;
 					pData[playerid][inv][3] -= 3;
@@ -185,14 +191,16 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][4] -= 5;
 					SendServerMessage(playerid, "You craft one med kit.");
 				}
-				else SendServerMessage(playerid, "You don't have 3 Metal or/and 3 plastic or/and 5 cloth.");
+				else SendServerMessage(playerid, "You don't have 3 metals or/and 3 plastics or/and 5 cloths.");
 			}
             case 2: 
 			{
 				if (pData[playerid][inv][5] >= 3 && stationid == -1)
 				{
 					if (FuelStation[stationid][fsStock] <= 0)
-						return SendClientMessage(playerid, -1, "[Fuel] This station is out of fuel!");			
+						return SendServerMessage(playerid,"[Fuel] This station is out of fuel!");
+					if (pData[playerid][inv][13] + 1 > GetBackpackCapacity(playerid))
+						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					FuelStation[stationid][fsStock] -= 5;
 					format(label, sizeof(label), "[ID %d] Fuel: %d liters",stationid,FuelStation[stationid][fsStock],FuelStation[stationid][fsPricePerLiter]);
 					UpdateDynamic3DTextLabelText(FuelStation[stationid][fsLabel], 0x00FF00FF, label);
@@ -203,12 +211,14 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][13] += 1;
 					SendServerMessage(playerid, "You craft one jerrycan and filled up.");	
 				}
-				else SendServerMessage(playerid, "You don't have 3 plastic of not in the right position to refuel");
+				else SendServerMessage(playerid, "You don't have 3 plastics or not in the right position to refuel");
 			}
             case 3: 
 			{
 				if (pData[playerid][inv][3] >= 10 && pData[playerid][inv][5] >= 10 && pData[playerid][inv][4] >= 10)
 				{
+					if (pData[playerid][inv][17] + 1 > GetBackpackCapacity(playerid))
+						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					pData[playerid][clanexp][0] += 25;
 					pData[playerid][inv][17] += 1;
 					pData[playerid][inv][3] -= 10;
@@ -216,19 +226,21 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][4] -= 10;
 					SendServerMessage(playerid, "You craft one armor plate.");
 				}
-				else SendServerMessage(playerid, "You don't have 10 Metal or/and 10 plastic or/and 10 cloth.");
+				else SendServerMessage(playerid, "You don't have 10 metals or/and 10 plastics or/and 10 cloths.");
 			}
             case 4: 
 			{
 				if (pData[playerid][inv][1] >= 2 && pData[playerid][inv][3] >= 1 )
 				{
+					if (pData[playerid][inv][19] + 1 > GetBackpackCapacity(playerid))
+						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					pData[playerid][clanexp][0] += 3;
 					pData[playerid][inv][19] += 1;
 					pData[playerid][inv][1] -= 2;
 					pData[playerid][inv][3] -= 1;
-					SendServerMessage(playerid, "You craft one armor plate.");
+					SendServerMessage(playerid, "You craft one can of food.");
 				}
-				else SendServerMessage(playerid, "You don't have 1 Metal or/and 2 meats.");
+				else SendServerMessage(playerid, "You don't have 1 metals or/and 2 meats.");
 			}
 			case 5: ShowModelSelectionMenu(playerid, "Crafting Barricades", MODEL_SELECTION_CRAFT, CraftBarridaces, sizeof(CraftBarridaces), -12.0, 0.0, 0.0);
 		}
@@ -238,7 +250,7 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 }
 // /use
 Dialog:UseItem(playerid, response, listitem, inputtext[])
-{//9 mm\n00' Buck's\n.308\nMed Kit\nArmor Plates\nRefuel
+{//9 mm\n00' Buck's\n.308\nMed Kit\nArmor Plates\nRefuel\nWater\nFood\nLockpick
     if (response)
 	{
 		static Float:health;
@@ -358,6 +370,7 @@ Dialog:UseItem(playerid, response, listitem, inputtext[])
 				}
 				else SendServerMessage(playerid, "You don't have a canned food(s).");
 			}
+			case 8: {} //lockpick stuff
 		}
         return 1;
 	}
@@ -438,11 +451,11 @@ Dialog:CLANDIALOG00(playerid, response, listitem, inputtext[])
 			}
 			case 5:
 			{
-				if (pData[playerid][inv][1] >= 100 && pData[playerid][inv][2] >= 100 && pData[playerid][inv][4] >= 100)
+				if (pData[playerid][inv][1] >= 25 && pData[playerid][inv][2] >= 25 && pData[playerid][inv][4] >= 25)
 				{
-					pData[playerid][inv][1] -= 100;
-					pData[playerid][inv][2] -= 100;
-					pData[playerid][inv][4] -= 100;
+					pData[playerid][inv][1] -= 25;
+					pData[playerid][inv][2] -= 25;
+					pData[playerid][inv][4] -= 25;
 					clans[facass][chestpos][0] = x;
 					clans[facass][chestpos][1] = y;
 					clans[facass][chestpos][2] = z;				
@@ -456,9 +469,9 @@ Dialog:CLANDIALOG00(playerid, response, listitem, inputtext[])
 					}
 					clans[facass][pickup][2] =  CreateDynamicPickup(964, 23, clans[facass][chestpos][0], clans[facass][chestpos][1],clans[facass][chestpos][2], -1, -1, -1, 50);
 				}
-				else SendServerMessage(playerid, "You don't have 100 Metal(s) or/and 100 plastic(s) or/and 100 wood(s).");
+				else SendServerMessage(playerid, "You don't have 25 Metal(s) or/and 25 plastic(s) or/and 25 wood(s).");
 			}
-			case 6: Dialog_Show(playerid, CLANDIALOG02, DIALOG_STYLE_INPUT, "Max rank", "Put maximum rank to be in your clan.", "Set", "Back");
+			case 6: Dialog_Show(playerid, CLANDIALOG02, DIALOG_STYLE_INPUT, "Max rank", "Put maximum ranks for the member your clan.", "Set", "Back");
 			case 7: 
 			{
 				if (pData[playerid][idclan] !=0)
@@ -550,127 +563,122 @@ Dialog:CLANDIALOG10(playerid, response, listitem, inputtext[])
 			case 1:
 			{
 				claninv = 2;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Wood(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 2:
 			{
 				claninv = 3;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Metal(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 3:
 			{
 				claninv = 4;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Cloth(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 4:
 			{
 				claninv = 5;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Plastic(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 5:
 			{
 				claninv = 6;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Gun Powder(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 6:
 			{
 				claninv = 7;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Ore(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 7:
 			{
 				claninv = 8;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Iron(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 8:
 			{
 				claninv = 9;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Gold(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 9:
 			{
 				claninv = 10;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Lockpick(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 10:
 			{
 				claninv = 11;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Repair kit(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 11:
 			{
 				claninv = 12;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Med Kit(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 12:
 			{
 				claninv = 13;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Jerrycan(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 13:
 			{
 				claninv = 14;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "9mm Bullet(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 14:
 			{
 				claninv = 15;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "00' Buck's", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 15:
 			{
 				claninv = 16;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, ".308(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 16:
 			{
 				claninv = 17;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Armor Plate(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 17:
 			{
 				claninv = 18;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Water Bottle(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 18:
 			{
 				claninv = 19;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Canned Food", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 19:
 			{
 				claninv = 20;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv20", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 20:
 			{
 				claninv = 21;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv21", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 21:
 			{
 				claninv = 22;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv22", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 22:
 			{
 				claninv = 23;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv23", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 23:
 			{
 				claninv = 24;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv24", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 24:
 			{
 				claninv = 25;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
-			}
-			case 25:
-			{
-				claninv = 26;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Amount", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv25", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 		}
 	}
@@ -684,6 +692,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 1)
 		{
 			if (amount < 0 || amount >= clans[id][inv][1]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Meat", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][1] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][1] -=amount;
 			pData[playerid][inv][1] +=amount;
 			SendServerMessage(playerid,"You take %d meat(s) from the clan chest.",amount);
@@ -693,6 +703,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 2)
 		{
 			if (amount < 0 || amount >= clans[id][inv][2]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Woods", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][2] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][2] -=amount;
 			pData[playerid][inv][2] +=amount;
 			SendServerMessage(playerid,"You take %d wood(s) from the clan chest.",amount);
@@ -702,6 +714,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 3)
 		{
 			if (amount < 0 || amount >= clans[id][inv][3]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Metals", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][3] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][3] -=amount;
 			pData[playerid][inv][3] +=amount;
 			SendServerMessage(playerid,"You take %d Metal(s) from the clan chest.",amount);
@@ -711,6 +725,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 4)
 		{
 			if (amount < 0 || amount >= clans[id][inv][4]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Cloths", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][4] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][4] -=amount;
 			pData[playerid][inv][4] +=amount;
 			SendServerMessage(playerid,"You take %d Cloth(s) from the clan chest.",amount);
@@ -720,6 +736,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 5)
 		{
 			if (amount < 0 || amount >= clans[id][inv][5]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Plastics", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][5] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][5] -=amount;
 			pData[playerid][inv][5] +=amount;
 			SendServerMessage(playerid,"You take %d Plastic(s) from the clan chest.",amount);
@@ -729,6 +747,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 6)
 		{
 			if (amount < 0 || amount >= clans[id][inv][6]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Gun Powder", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][6] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][6] -= amount;
 			pData[playerid][inv][6] += amount;
 			SendServerMessage(playerid,"You take %d Gun Powder(s) from the clan chest.",amount);
@@ -737,43 +757,53 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		}
 		if(claninv == 7)
 		{
-			if (amount < 0 || amount >= clans[id][inv][7]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv7", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (amount < 0 || amount >= clans[id][inv][7]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Ore(s)", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][7] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][7] -= amount;
 			pData[playerid][inv][7] += amount;
-			SendServerMessage(playerid,"You take %d inv7(s) from the clan chest.",amount);
+			SendServerMessage(playerid,"You take %d Ore(s) from the clan chest.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv7` = '%d' WHERE `idclan` = '%d'", clans[id][inv][7], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 8)
 		{
-			if (amount < 0 || amount >= clans[id][inv][8]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv8", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (amount < 0 || amount >= clans[id][inv][8]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Iron(s)", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][8] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][8] -= amount;
 			pData[playerid][inv][8] += amount;
-			SendServerMessage(playerid,"You take %d inv8(s) from the clan chest.",amount);
+			SendServerMessage(playerid,"You take %d Iron(s) from the clan chest.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv8` = '%d' WHERE `idclan` = '%d'", clans[id][inv][8], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 9)
 		{
-			if (amount < 0 || amount >= clans[id][inv][9]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv9", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (amount < 0 || amount >= clans[id][inv][9]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Gold(s)", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][9] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][9] -= amount;
 			pData[playerid][inv][9] += amount;
-			SendServerMessage(playerid,"You take %d inv9(s) from the clan chest.",amount);
+			SendServerMessage(playerid,"You take %d Gold(s) from the clan chest.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv9` = '%d' WHERE `idclan` = '%d'", clans[id][inv][9], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 10)
 		{
-			if (amount < 0 || amount >= clans[id][inv][10]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv10", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (amount < 0 || amount >= clans[id][inv][10]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Lockpick(s)", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][10] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][10] -= amount;
 			pData[playerid][inv][10] += amount;
-			SendServerMessage(playerid,"You take %d inv10(s) from the clan chest.",amount);
+			SendServerMessage(playerid,"You take %d Lockpick(s) from the clan chest.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv10` = '%d' WHERE `idclan` = '%d'", clans[id][inv][10], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 11)
 		{
 			if (amount < 0 || amount >= clans[id][inv][11]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Repair kit", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][11] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][11] -= amount;
 			pData[playerid][inv][11] += amount;
 			SendServerMessage(playerid,"You take %d Repair kit(s) from the clan chest.",amount);
@@ -783,6 +813,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 12)
 		{
 			if (amount < 0 || amount >= clans[id][inv][12]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Med Kit", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][12] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][12] -= amount;
 			pData[playerid][inv][12] += amount;
 			SendServerMessage(playerid,"You take %d Med Kit(s) from the clan chest.",amount);
@@ -792,6 +824,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 13)
 		{
 			if (amount < 0 || amount >= clans[id][inv][13]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Jerrycan", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][13] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][13] -= amount;
 			pData[playerid][inv][13] += amount;
 			SendServerMessage(playerid,"You take %d Jerrycan(s) from the clan chest.",amount);
@@ -801,6 +835,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 14)
 		{
 			if (amount < 0 || amount >= clans[id][inv][14]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "9mm Bullet", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][14] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][14] -= amount;
 			pData[playerid][inv][14] += amount;
 			SendServerMessage(playerid,"You take %d 9mm Bullet(s) from the clan chest.",amount);
@@ -810,6 +846,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 15)
 		{
 			if (amount < 0 || amount >= clans[id][inv][15]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "00' Buck's", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][15] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][15] -= amount;
 			pData[playerid][inv][15] += amount;
 			SendServerMessage(playerid,"You take %d 00' Buck's from the clan chest.",amount);
@@ -819,6 +857,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 16)
 		{
 			if (amount < 0 || amount >= clans[id][inv][16]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, ".308(s)", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][16] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][16] -= amount;
 			pData[playerid][inv][16] += amount;
 			SendServerMessage(playerid,"You take %d .308(s) from the clan chest.",amount);
@@ -828,6 +868,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 17)
 		{
 			if (amount < 0 || amount >= clans[id][inv][17]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Armor Plate(s)", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][17] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][17] -= amount;
 			pData[playerid][inv][17] += amount;
 			SendServerMessage(playerid,"You take %d Armor Plate(s) from the clan chest.",amount);
@@ -837,6 +879,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 18)
 		{
 			if (amount < 0 || amount >= clans[id][inv][18]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv18 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][18] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][18] -= amount;
 			pData[playerid][inv][18] += amount;
 			SendServerMessage(playerid,"You take %d Water Bottle(s) from the clan chest.",amount);
@@ -846,6 +890,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 19)
 		{
 			if (amount < 0 || amount >= clans[id][inv][19]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv19 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][19] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][19] -= amount;
 			pData[playerid][inv][19] += amount;
 			SendServerMessage(playerid,"You take %d Canned Food(s) from the clan chest.",amount);
@@ -855,6 +901,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 20)
 		{
 			if (amount < 0 || amount >= clans[id][inv][20]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv20 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][20] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][20] -= amount;
 			pData[playerid][inv][20] += amount;
 			SendServerMessage(playerid,"You take %d inv20 (s) from the clan chest.",amount);
@@ -864,6 +912,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 21)
 		{
 			if (amount < 0 || amount >= clans[id][inv][21]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv21 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][21] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][21] -= amount;
 			pData[playerid][inv][21] += amount;
 			SendServerMessage(playerid,"You take %d inv21 (s) from the clan chest.",amount);
@@ -873,6 +923,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 22)
 		{
 			if (amount < 0 || amount >= clans[id][inv][22]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv22 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][22] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][22] -= amount;
 			pData[playerid][inv][22] += amount;
 			SendServerMessage(playerid,"You take %d inv22 (s) from the clan chest.",amount);
@@ -882,6 +934,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 23)
 		{
 			if (amount < 0 || amount >= clans[id][inv][23]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv23 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][23] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][23] -= amount;
 			pData[playerid][inv][23] += amount;
 			SendServerMessage(playerid,"You take %d inv23 (s) from the clan chest.",amount);
@@ -891,6 +945,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 24)
 		{
 			if (amount < 0 || amount >= clans[id][inv][24]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv24 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][24] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][24] -= amount;
 			pData[playerid][inv][24] += amount;
 			SendServerMessage(playerid,"You take %d inv24 (s) from the clan chest.",amount);
@@ -900,6 +956,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		if(claninv == 25)
 		{
 			if (amount < 0 || amount >= clans[id][inv][25]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv25 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (pData[playerid][inv][25] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][25] -= amount;
 			pData[playerid][inv][25] += amount;
 			SendServerMessage(playerid,"You take %d inv25 (s) from the clan chest.",amount);
@@ -911,7 +969,7 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 	else
 	{
 		Dialog_Show(playerid, CLANDIALOG10, DIALOG_STYLE_TABLIST, "Clan Chest\tAmount","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\n\
-		Gun Powder : \t%d\ninv7 : \t%d\ninv8 : \t%d\ninv9 : \t%d\ninv10 : \t%d\n\
+		Gun Powder : \t%d\nOre(s) : \t%d\nIron(s): \t%d\nGold(s) : \t%d\nLockpick(s): \t%d\n\
 		Repair kit(s) : \t%d\nMed Kit(s) : \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n\
 		.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
 		inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d", "OK", "",clans[id][inv][1],clans[id][inv][2],clans[id][inv][3],clans[id][inv][4],clans[id][inv][5],        clans[id][inv][6],clans[id][inv][7],clans[id][inv][8],clans[id][inv][9],clans[id][inv][10],        clans[id][inv][11],clans[id][inv][12],clans[id][inv][13],clans[id][inv][14],clans[id][inv][15],        clans[id][inv][16],clans[id][inv][17],clans[id][inv][18],clans[id][inv][19],clans[id][inv][20],        clans[id][inv][21],clans[id][inv][22],clans[id][inv][23],clans[id][inv][24],clans[id][inv][25]); 
@@ -1066,6 +1124,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 1)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][1]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Meat", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][1] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][1] -=amount;
 			clans[id][inv][1] +=amount;
 			SendServerMessage(playerid,"You give %d meat(s) into the chest clan.",amount);
@@ -1075,6 +1135,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 2)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][2]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Woods", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][2] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][2] -=amount;
 			pData[playerid][inv][2] +=amount;
 			SendServerMessage(playerid,"You give %d wood(s) into the chest clan.",amount);
@@ -1084,6 +1146,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 3)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][3]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Metals", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][3] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][3] -=amount;
 			clans[id][inv][3] +=amount;
 			SendServerMessage(playerid,"You give %d Metal(s) into the chest clan.",amount);
@@ -1093,6 +1157,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 4)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][4]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Cloths", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][4] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][4] -=amount;
 			clans[id][inv][4] +=amount;
 			SendServerMessage(playerid,"You give %d Cloth(s) into the chest clan.",amount);
@@ -1102,6 +1168,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 5)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][5]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Plastics", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][5] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][5] -=amount;
 			clans[id][inv][5] +=amount;
 			SendServerMessage(playerid,"You give %d Plastic(s) into the chest clan.",amount);
@@ -1111,6 +1179,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 6)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][6]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Gun Powder", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][6] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][6] -= amount;
 			clans[id][inv][6] += amount;
 			SendServerMessage(playerid,"You give %d Gun Powder(s) into the chest clan.",amount);
@@ -1119,43 +1189,53 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		}
 		if(claninv == 7)
 		{
-			if (amount < 0 || amount >= pData[playerid][inv][7]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv7", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (amount < 0 || amount >= pData[playerid][inv][7]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Ore(s)", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][7] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][7] -= amount;
 			clans[id][inv][7] += amount;
-			SendServerMessage(playerid,"You give %d inv7(s) into the chest clan.",amount);
+			SendServerMessage(playerid,"You give %d Ore(s) into the chest clan.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv7` = '%d' WHERE `idclan` = '%d'", clans[id][inv][7], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 8)
 		{
-			if (amount < 0 || amount >= pData[playerid][inv][8]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv8", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (amount < 0 || amount >= pData[playerid][inv][8]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Iron(s)", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][8] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][8] -= amount;
 			clans[id][inv][8] += amount;
-			SendServerMessage(playerid,"You give %d inv8(s) into the chest clan.",amount);
+			SendServerMessage(playerid,"You give %d Iron(s) into the chest clan.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv8` = '%d' WHERE `idclan` = '%d'",clans[id][inv][8], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 9)
 		{
-			if (amount < 0 || amount >= pData[playerid][inv][9]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv9", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (amount < 0 || amount >= pData[playerid][inv][9]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Gold(s)", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][9] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][9] -= amount;
 			pData[playerid][inv][9] += amount;
-			SendServerMessage(playerid,"You give %d inv9(s) into the chest clan.",amount);
+			SendServerMessage(playerid,"You give %d Gold(s) into the chest clan.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv9` = '%d' WHERE `idclan` = '%d'",clans[id][inv][9], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 10)
 		{
-			if (amount < 0 || amount >= pData[playerid][inv][10]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv10", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (amount < 0 || amount >= pData[playerid][inv][10]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Lockpick(s)", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][10] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][10] -= amount;
 			clans[id][inv][10] += amount;
-			SendServerMessage(playerid,"You give %d inv10(s) into the chest clan.",amount);
+			SendServerMessage(playerid,"You give %d Lockpick(s) into the chest clan.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv10` = '%d' WHERE `idclan` = '%d'",clans[id][inv][10], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 11)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][11]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Repair kit", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][11] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][11] -= amount;
 			clans[id][inv][11] += amount;
 			SendServerMessage(playerid,"You give %d Repair kit(s) into the chest clan.",amount);
@@ -1165,6 +1245,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 12)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][12]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Med Kit", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][12] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][12] -= amount;
 			clans[id][inv][12] += amount;
 			SendServerMessage(playerid,"You give %d Med Kit(s) into the chest clan.",amount);
@@ -1174,6 +1256,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 13)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][13]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Jerrycan", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][13] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][13] -= amount;
 			clans[id][inv][13] += amount;
 			SendServerMessage(playerid,"You give %d Jerrycan(s) into the chest clan.",amount);
@@ -1183,6 +1267,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 14)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][14]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "9mm Bullet", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][14] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][14] -= amount;
 			clans[id][inv][14] += amount;
 			SendServerMessage(playerid,"You give %d 9mm Bullet(s) into the chest clan.",amount);
@@ -1192,6 +1278,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 15)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][15]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "00' Buck's", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][15] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][15] -= amount;
 			clans[id][inv][15] += amount;
 			SendServerMessage(playerid,"You give %d 00' Buck's into the chest clan.",amount);
@@ -1201,6 +1289,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 16)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][16]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, ".308(s)", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][16] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][16] -= amount;
 			clans[id][inv][16] += amount;
 			SendServerMessage(playerid,"You give %d .308(s) into the chest clan.",amount);
@@ -1210,6 +1300,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 17)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][17]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Armor Plate(s)", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][17] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][17] -= amount;
 			clans[id][inv][17] += amount;
 			SendServerMessage(playerid,"You give %d Armor Plate(s) into the chest clan.",amount);
@@ -1219,6 +1311,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 18)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][18]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv18 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][18] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][18] -= amount;
 			clans[id][inv][18] += amount;
 			SendServerMessage(playerid,"You give %d Water Bottle(s) into the chest clan.",amount);
@@ -1228,6 +1322,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 19)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][19]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv19 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][19] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][19] -= amount;
 			clans[id][inv][19] += amount;
 			SendServerMessage(playerid,"You give %d Canned Food(s) into the chest clan.",amount);
@@ -1237,6 +1333,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 20)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][20]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv20 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][20] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][20] -= amount;
 			clans[id][inv][20] += amount;
 			SendServerMessage(playerid,"You give %d inv20 (s) into the chest clan.",amount);
@@ -1246,6 +1344,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 21)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][21]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv21 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][21] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][21] -= amount;
 			clans[id][inv][21] += amount;
 			SendServerMessage(playerid,"You give %d inv21 (s) into the chest clan.",amount);
@@ -1255,6 +1355,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 22)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][22]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv22 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][22] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][22] -= amount;
 			clans[id][inv][22] += amount;
 			SendServerMessage(playerid,"You give %d inv22 (s) into the chest clan.",amount);
@@ -1264,6 +1366,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 23)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][23]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv23 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][23] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][23] -= amount;
 			clans[id][inv][23] += amount;
 			SendServerMessage(playerid,"You give %d inv23 (s) into the chest clan.",amount);
@@ -1273,6 +1377,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 24)
 		{
 			if (amount < 0 || amount >= pData[playerid][inv][24]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv24 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][24] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][24] -= amount;
 			clans[id][inv][24] += amount;
 			SendServerMessage(playerid,"You give %d inv24 (s) into the chest clan.",amount);
@@ -1282,6 +1388,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		if(claninv == 25)
 		{
 			if (amount < 0 || amount >= clans[id][inv][25]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv25 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (clans[id][inv][25] + amount > GetClanCapacity(id))
+				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][25] -= amount;
 			clans[id][inv][25] += amount;
 			SendServerMessage(playerid,"You give %d inv25 (s) into the chest clan.",amount);
@@ -1292,7 +1400,7 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 	}
 	else
 	{
-		Dialog_Show(playerid, CLANDIALOG20,DIALOG_STYLE_TABLIST,"Inventory","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\ninv7 : \t%d\ninv8 : \t%d\ninv9 : \t%d\ninv10 : \t%d\n\
+		Dialog_Show(playerid, CLANDIALOG20,DIALOG_STYLE_TABLIST,"Inventory","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\nOre(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
 		Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
 		inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d\
 		", "Close","",pData[playerid][inv][1],pData[playerid][inv][2],pData[playerid][inv][3],pData[playerid][inv][4],pData[playerid][inv][5],\
@@ -1323,7 +1431,6 @@ Dialog:Ressources(playerid, response, listitem, inputtext[])
 	}	
 	return 1;
 }
-
 //storage
 Dialog:storageData(playerid, response, listitem, inputtext[])
 {

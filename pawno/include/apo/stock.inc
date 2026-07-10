@@ -1,3 +1,43 @@
+ini_GetValue(szParse[], szValueName[], szDest[], iDestLen) { // brian!!1
+
+	new iPos = strfind(szParse, "=", false),iLength = strlen(szParse);	
+	while(iLength-- && szParse[iLength] <= ' ') {
+		szParse[iLength] = 0;
+	}
+	if(strcmp(szParse, szValueName, false, iPos) == 0) {
+		strmid(szDest, szParse, iPos + 1, iLength + 1, iDestLen);
+		return 1;
+	}
+	return 0;
+}
+stock mysql_Init()
+{
+	new host[64], db[64], user[32], pass[128];
+	new fileString[128], File: fileHandle = fopen("mysql.cfg", io_read);
+	while(fread(fileHandle, fileString, sizeof(fileString))) {
+		if(ini_GetValue(fileString, "HOST", host, sizeof(host))) continue;
+		if(ini_GetValue(fileString, "DB", db, sizeof(db))) continue;
+		if(ini_GetValue(fileString, "USER", user, sizeof(user))) continue;
+		if(ini_GetValue(fileString, "PASS", pass, sizeof(pass))) continue;
+		if(ini_GetValue(fileString, "Dadmin1", Dadmin1, sizeof(Dadmin1))) continue;
+		if(ini_GetValue(fileString, "Dverifier", Dverifier, sizeof(Dverifier))) continue;
+		if(ini_GetValue(fileString, "DLeader", DLeader, sizeof(DLeader))) continue;
+		if(ini_GetValue(fileString, "DMember", DMember, sizeof(DMember))) continue;
+		if(ini_GetValue(fileString, "Ddiscord", Ddiscord, sizeof(Ddiscord))) continue;
+		if(ini_GetValue(fileString, "Dchat", Dchat, sizeof(Dchat))) continue;
+		if(ini_GetValue(fileString, "Achat", Achat, sizeof(Achat))) continue;
+		if(ini_GetValue(fileString, "ooc", ooc, sizeof(ooc))) continue;
+	}
+	fclose(fileHandle);
+	mysql = mysql_connect(host, user, db, pass);
+	if(mysql_errno(mysql) != 0) 
+	{ 
+		printf("[MySQL] (mysql) Fatal Error! Could not connect to MySQL: Host %s - DB: %s - User: %s", host, db, user);
+		printf("[MySQL] Error number: %d", mysql_errno(mysql));
+	}
+	else {printf("Successfully connected on DB %s",db);}
+	mysql_log(LOG_ALL );
+}
 stock IsNearChest(playerid)
 {
 	new id = clans[pData[playerid][idclan]][idclan];
@@ -314,6 +354,34 @@ stock GetEntranceByID(sqlid)
 	    return i;
 
 	return -1;
+}
+//backpack setting
+stock GetBackpackCapacity(playerid)
+{
+    new backpackLevel = pData[playerid][Score] / 5;
+
+    if (backpackLevel > 5)
+        backpackLevel = 5;
+
+    return 8 << backpackLevel; // 8,16,32,64,128,256
+}
+stock GetStorageCapacity(i)
+{
+    new storagesInv1 = storageData[i][storagesInv][0] / 5;
+
+    if (storagesInv1 > 5)
+        storagesInv1 = 5;
+
+    return 10 << storagesInv1; // 10,20,40,80,160,320
+}
+stock GetClanCapacity(i)
+{
+    new ClanInv1 = clans[i][inv][0] / 5;
+
+    if (ClanInv1 > 5)
+        ClanInv1 = 5;
+
+    return 100 << ClanInv1; // 100,200,400,800,1600,3200
 }
 stock SendClientMessageEx(playerid, color, const text[], {Float, _}:...)
 {

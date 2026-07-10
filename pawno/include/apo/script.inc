@@ -5,6 +5,9 @@ script AutoCleanExpiredBans()
 }
 script OnCheckPlayerBan(playerid)
 {
+    TogglePlayerSpectating(playerid, true);
+    SetPlayerCameraPos(playerid,6590.942871,-7440.374511,5.358576);
+    SetPlayerCameraLookAt(playerid,6610.283203,-7447.338378,7.408573);
     if(cache_num_rows() > 0)
     {
         new duration, ban_time, reason[128], value[64];
@@ -57,23 +60,25 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 {
     if (newtarget == missionactor[0])
     {
-        Dialog_Show(playerid, Missionclan01, DIALOG_STYLE_LIST, "Armory", "", "OK", "Quit");
+        ShowMenuForPlayer(Armory, playerid);
+        TogglePlayerControllable(playerid, 0);
     }
     if (newtarget == missionactor[1])
     {
-        Dialog_Show(playerid, Missionclan00, DIALOG_STYLE_LIST, "Mission", "Go get some meat!\n{0f5900}Quest validation.{FFFFFF}\nChop Chop!\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\n{0f5900}Quest validation.{FFFFFF}\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
+        Dialog_Show(playerid, Missionclan00, DIALOG_STYLE_LIST, "Mission", "Go get some meat!\nChop Chop!\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
     }
     if (newtarget == missionactor[2])
     {
-        Dialog_Show(playerid, Missionclan10, DIALOG_STYLE_LIST, "Mission", "Quest 1\n{0f5900}Quest validation.{FFFFFF}\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\n{0f5900}Quest validation.{FFFFFF}\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
+        Dialog_Show(playerid, Missionclan10, DIALOG_STYLE_LIST, "Mission", "Quest 1\n{0f5900}Quest validation.{FFFFFF}\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
     }
     if (newtarget == missionactor[3])
     {
-        Dialog_Show(playerid, Missionclan11, DIALOG_STYLE_LIST, "Armory", "", "OK", "Quit");
+        ShowMenuForPlayer(PoliceArmory, playerid);
+        TogglePlayerControllable(playerid, 0);
     }
     if (newtarget == missionactor[4])
     {
-        Dialog_Show(playerid, Missionclan20, DIALOG_STYLE_LIST, "Mission", "Quest 1\n{0f5900}Quest validation.{FFFFFF}\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\n{0f5900}Quest validation.{FFFFFF}\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
+        Dialog_Show(playerid, Missionclan20, DIALOG_STYLE_LIST, "Mission", "Quest 1\n{0f5900}Quest validation.{FFFFFF}\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
     }
     if (newtarget == missionactor[5])
     {
@@ -81,8 +86,27 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
     }
     if (newtarget == missionactor[6] && pData[playerid][Score] >= 5)
     {
-        Dialog_Show(playerid, Missionclan222, DIALOG_STYLE_MSGBOX, "Secret Quest", "You seems a good call.\nCan you check on my sister?\nShe is probably somewhere with a buch of wierdos.\nPlease go look out for here.", "OK", "Quit");
+        Dialog_Show(playerid, Missionclan222, DIALOG_STYLE_MSGBOX, "Secret Quest", "You seems a good call.\nCan you check on my sister?\nShe is probably somewhere with a bunch of wierdos.\nPlease go look out for here.", "OK", "Quit");
 		missioncheck = 333;
+		return 1;
+    }
+    if (newtarget == missionactor[7])
+    {
+		if(IsMining[playerid] == 1) return SendServerMessage(playerid,"You are trying to convert ores whitout finishing to mine it!");
+		new ores = pData[playerid][inv][7];
+		if (ores <= 0)
+			return SendServerMessage(playerid, "You have no ores to convert.");
+		new iron = ores / 2;
+		new gold = ores / 6;
+		if (pData[playerid][inv][8] + iron > GetBackpackCapacity(playerid))
+			return SendServerMessage(playerid, "Not enough backpack space for iron.");
+		if (pData[playerid][inv][9] + gold > GetBackpackCapacity(playerid))
+			return SendServerMessage(playerid, "Not enough backpack space for gold.");
+		pData[playerid][inv][8] += iron;
+		pData[playerid][inv][9] += gold;
+		pData[playerid][inv][7] = 0;
+		SendServerMessage(playerid,"You convert %d ores and received %d iron(s) and %d gold(s).",ores, iron, gold);
+		return 1;
     }
     if (oldtarget != INVALID_ACTOR_ID) {ClearActorAnimations(oldtarget);}
     return 1;
@@ -161,7 +185,8 @@ script OnAccountLoad(playerid)
     //SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0], pData[playerid][Pos][0], pData[playerid][Pos][0], 0.0, 0, 0, 0, 0, 0, 0);
 	TogglePlayerSpectating(playerid, 0);
 	TogglePlayerControllable(playerid, 1);
-	SendClientMessage(playerid, -1, "Successfully logged in"); //tell them that they have successfully logged in
+	SetCameraBehindPlayer(playerid);
+	SendServerMessage(playerid,"Successfully logged in"); //tell them that they have successfully logged in
     //weapons
 	new szTmp[64];
     for(new i = 0; i <= 12; i++)
@@ -231,7 +256,7 @@ script OnAccountCheck(playerid)
 		(!strlen(IP[playerid]) || strcmp(IP[playerid], newIP, true));
 		cache_get_field_content(0, "Password", pData[playerid][Password], mysql, 129);
 		pData[playerid][ID] = cache_get_field_content_int(0, "ID"); //now let's load player's ID into pData[playerid][ID] so we can use it later
-		Dialog_Show(playerid, dLOGIN, DIALOG_STYLE_PASSWORD, "Login", "In order to play, you need to login", "Login", "Quit"); //And since we found a result from the database, which means, there is an account; we will show a login dialog
+		Dialog_Show(playerid, dLOGIN, DIALOG_STYLE_PASSWORD, "Login", "In order to play, you need to login", "Login", "Quit");
 	}
 	else //if we didn't find any rows from the database, that means, no accounts were found
 	{
@@ -277,6 +302,7 @@ script loadspawnpos()
             case 5: dspawnpos[f][Objects] = CreateDynamicObject(1580, dspawnpos[f][Pos][0], dspawnpos[f][Pos][1], dspawnpos[f][Pos][2]-1.0, 0, 0, 0,-1,-1,-1);
         }
     }
+	printf("[Loot] %d loaded lootable objects positions", rows);
     return true;
 }
 script loadclans()
@@ -338,6 +364,7 @@ script loadclans()
         clans[f][pickup][1] =  CreateDynamicPickup(19132, 23, clans[f][exitpos][0], clans[f][exitpos][1],clans[f][exitpos][2], clans[f][exitvw], clans[f][exitinterior], -1, 50);
         clans[f][pickup][2] =  CreateDynamicPickup(964, 23, clans[f][chestpos][0], clans[f][chestpos][1],clans[f][chestpos][2], -1, -1, -1, 50);
     }
+	printf("[Clans] %d loaded clans", rows);
     return true;
 }
 script UnMutedTimer(playerid)
@@ -348,7 +375,7 @@ script UnMutedTimer(playerid)
 }
 script OnPlayerCommandTextEx(playerid, cmdtext[])
 {
-	SendClientMessage(playerid, COLOR_RED,"The command doesn't exists /help to see the commands avaible.");
+	SendCommandMessage(playerid,"The command %s doesn't exists /help to see the commands avaible.",cmdtext);
 	return 1;
 }
 script OnPlayerCommandPerformed(playerid, cmdtext[], success)
@@ -431,6 +458,7 @@ script objects_Load()
 	    objectsData[i][objectsPos][5] = cache_get_field_content_float(i, "objectsRZ");
 	    objectsData[i][objectsOb] = CreateDynamicObject(objectsData[i][objectsModel], objectsData[i][objectsPos][0], objectsData[i][objectsPos][1], objectsData[i][objectsPos][2], objectsData[i][objectsPos][3], objectsData[i][objectsPos][4], objectsData[i][objectsPos][5], objectsData[i][objectsWorld], objectsData[i][objectsInterior]);
 	}
+	printf("[Objects] %d loaded objects", rows);
 	return 1;
 }
 script OnobjectsCreated(objectsid)
@@ -596,6 +624,7 @@ script storages_Load()
         storageData[i][storagesInv][25] = cache_get_field_content_int(i, "inv25");
 	    storageData[i][storagesOb] = CreateDynamicObject(storageData[i][storagesModel], storageData[i][storagesPos][0], storageData[i][storagesPos][1], storageData[i][storagesPos][2], storageData[i][storagesPos][3], storageData[i][storagesPos][4], storageData[i][storagesPos][5], storageData[i][storagesWorld], storageData[i][storagesInterior]);
 	}
+	printf("[Storages] %d loaded storages", rows);
 	return 1;
 }
 script OnstoragesCreated(storagesid)
@@ -737,7 +766,7 @@ Storage_Nearest(playerid)
 }
 objects_Nearest(playerid)
 {
-    for (new i = 0; i != MAX_OBJECTSC; i ++) if (objectsData[i][objectsExists] && IsPlayerInRangeOfPoint(playerid, 10, objectsData[i][objectsPos][0], objectsData[i][objectsPos][1], objectsData[i][objectsPos][2]))
+    for (new i = 0; i != MAX_OBJECTSC; i ++) if (objectsData[i][objectsExists] && IsPlayerInRangeOfPoint(playerid, 2, objectsData[i][objectsPos][0], objectsData[i][objectsPos][1], objectsData[i][objectsPos][2]))
 	{
 		if (GetPlayerInterior(playerid) == objectsData[i][objectsInterior] && GetPlayerVirtualWorld(playerid) == objectsData[i][objectsWorld])
 			return i;
@@ -838,6 +867,7 @@ script OnVehiclesLoaded()
 		g_LastVehiclePos[DB_Vehicle[i]][1] = y;
 		g_LastVehiclePos[DB_Vehicle[i]][2] = z;
     }
+	printf("[Vehicles] %d loaded vehicles", rows);
     return 1;
 }
 script OnLoadModsForVehicle(playerid, vehicleid)
@@ -989,13 +1019,14 @@ script EndZoneWar(zoneIndex)///re check for attacker print doenst match up
 			GangZoneHideForAll(GangZones[zoneIndex][gZoneID]);
 			pData[attackers][clanexp][0] += 50;
 			GangZoneShowForAll(GangZones[zoneIndex][gZoneID], GetTeamZoneColor(attackerTeam));
+			SendServerMessage(attackers,"30 minutes = 1 point to convert into material.");
 			SendAdminAlert(COLOR_LIGHTRED,"[Capture] Team %s has captured zone %d!", clans[pData[attackerTeam][idclan]][clanname], zoneIndex);
 			GangZoneStopFlashForAll(GangZones[zoneIndex][gZoneID]);
 		}
 		else
 		{
 			pData[denferTeam][clanexp][0] += 50;
-			SendAdminAlert(COLOR_LIGHTRED,"[WAR] Defenders held zone %d successfully!", zoneIndex);
+			SendAdminAlert(COLOR_LIGHTRED,"[CAPTURE] Defenders held zone %d successfully!", zoneIndex);
 		}
     }
     ZoneInWar[zoneIndex] = false;
@@ -1025,7 +1056,7 @@ script CheckWarZoneEmpty(zoneIndex)
         ZoneInWar[zoneIndex] = false;
         WarTimer[zoneIndex] = 0;
         WarCheckTimer[zoneIndex] = 0;
-        SendAdminAlert(COLOR_LIGHTRED,"[WAR] War in zone %d canceled: no players in area.", zoneIndex);
+        SendAdminAlert(COLOR_LIGHTRED,"[CAPTURE] War in zone %d canceled: no players in area.", zoneIndex);
         GangZoneStopFlashForAll(GangZones[zoneIndex][gZoneID]);
     }
     GlobalZoneCooldown = gettime() + 300; // 5-minute global cooldown
@@ -1113,5 +1144,19 @@ script Entrance_Load()
 	    EntranceData[i][entranceWorld] = cache_get_field_content_int(i, "entranceWorld");
 	    Entrance_Refresh(i);
 	}
+	printf("[Entrances] %d loaded entrances", rows);
 	return 1;
+}
+//ming
+script FinishMining(playerid)
+{
+    TogglePlayerControllable(playerid, 1);
+    ClearAnimations(playerid); 
+	new taking = random(3) + 1;
+    if (pData[playerid][inv][7] + taking > GetBackpackCapacity(playerid)) return SendServerMessage(playerid, "Your backpack is full full of ores talk to the npc to convert to iron and gold.");
+	pData[playerid][inv][7] += taking;
+	pData[playerid][clanexp][0] += random(5)+1;
+    IsMining[playerid] = 0;    
+    GameTextForPlayer(playerid, "~g~Mining done!", 4000, 3);
+    return 1;
 }

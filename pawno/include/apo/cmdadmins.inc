@@ -1,6 +1,6 @@
 CMD:ahelp(playerid, params[])
 {
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
+    if(!pData[playerid][Admin]) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
     SendServerMessage(playerid, "---List of commands admins  for this server---");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/kick, /mute, /unmute, /setskin, /sethp, /setarmor, /resetweapons");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/position, /goto, /zoneinfo, /addpoint, /resetintvw");
@@ -8,7 +8,7 @@ CMD:ahelp(playerid, params[])
     SendClientMessage(playerid, COLOR_LIGHTRED, "/createobject, /editobject, /delobject");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/setvip /setscore, /createspawn, /createveh, /createentrance, /delentrance, /editentrance");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/deleteveh, /createstation, /delstation, /gzcreate, /gzdelete, /gzreload");
-    SendClientMessage(playerid, COLOR_PURPLE, "/setadmin");
+    SendClientMessage(playerid, COLOR_PURPLE, "/setadmin, /flushpoint, /flushspawn, /resetplayer");
     return 1;
 }
 //admin 1
@@ -28,7 +28,7 @@ CMD:resetintvw(playerid, params[])
 {
 	new lookupid;
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "u",lookupid)) return SendServerMessage(playerid ,"Usage: /resetintvw <playerid/Name> ");
+	if(sscanf(params, "u",lookupid)) return SendCommandMessage(playerid, "Usage: /resetintvw <playerid/Name> ");
 	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
 	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has reset %s (ID:%d) interior and virtual world to 0", GetName(playerid), playerid, GetName(lookupid),lookupid);
 	SetPlayerInterior(lookupid,0);
@@ -39,7 +39,7 @@ CMD:setskin(playerid, params[])
 {
 	new lookupid, amount;
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendServerMessage(playerid ,"Usage: /setskin <playerid/Name> <id>");
+	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setskin <playerid/Name> <id>");
 	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
 	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) skin to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
 	SetPlayerSkin(lookupid, amount);
@@ -50,7 +50,7 @@ CMD:setarmor(playerid, params[])
 {
 	new lookupid, amount;
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendServerMessage(playerid ,"Usage: /setarmor <playerid/Name> <amount>");
+	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setarmor <playerid/Name> <amount>");
 	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
 	SendAdminAlert(COLOR_RED ,  "Admin %s (ID:%d) has setted %s (ID:%d) armor to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
 	SetPlayerArmour(lookupid, amount);
@@ -62,9 +62,9 @@ CMD:sethp(playerid, params[])
 {
 	new lookupid, amount;
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendServerMessage(playerid ,"Usage: /sethp <playerid/Name> <amount>");
+	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /sethp <playerid/Name> <amount>");
 	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendServerMessage(lookupid , "Admin %s (ID:%d) has setted %s (ID:%d) hp to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
+	SendAdminAlert(lookupid , "Admin %s (ID:%d) has setted %s (ID:%d) hp to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
 	SetPlayerHealth(lookupid, amount);
 	pData[lookupid][Life] = amount;
     if (amount >= 101.10) {SetPlayerHealth(lookupid, 100.0);}
@@ -73,23 +73,23 @@ CMD:sethp(playerid, params[])
 CMD:resetweapons(playerid, params[])
 {
 	new lookupid;
-	if(pData[playerid][Admin] == 1)
+	if(pData[playerid][Admin] < 1)
 	{
-		if(sscanf(params, "u",lookupid)) return SendServerMessage(playerid ,"Usage: /resetweapons <playerid/Name> ");
+		if(sscanf(params, "u",lookupid)) return SendCommandMessage(playerid, "Usage: /resetweapons <playerid/Name> ");
 		if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
 		SendServerMessage(playerid,"Player got they weapons reset.");
 		SendServerMessage(lookupid,"You got your weapons reset.");
 		ResetAllowedWeapons(lookupid);
 		ResetPlayerWeapons(lookupid);
 	}
-    else return SendServerMessage(playerid, "Only admin 2 can use this cmd");
+    else return SendServerMessage(playerid, "Only admin 2+ can use this cmd");
 	return 1;
 }
 CMD:mute(playerid, params[])
 {
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
 	new id, mins;
-	if(sscanf(params,"ui",id,mins)) return SendServerMessage(playerid,"Usage: /mute <playerid> <minutes>");
+	if(sscanf(params,"ui",id,mins)) return SendCommandMessage(playerid, "Usage: /mute <playerid> <minutes>");
 	if (!IsPlayerConnected(id)) return 1; // invalid player
 	if(pMuted[id] == true) return SendServerMessage(playerid, "This player is already muted ");
 	pMuted[id] = true;
@@ -101,7 +101,7 @@ CMD:unmute(playerid, params[])
 {
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
 	new id;
-	if(sscanf(params,"u",id)) return SendServerMessage(playerid,"Usage: /mute <playerid>");
+	if(sscanf(params,"u",id)) return SendCommandMessage(playerid, "Usage: /mute <playerid>");
 	if(!IsPlayerConnected(id)) return SendServerMessage(playerid,"target is not connected"); // invalid player id
 	if(pMuted[id] == false) return SendClientMessage(playerid, COLOR_RED,"Player is not muted ");
 	pMuted[id] = false;
@@ -143,7 +143,7 @@ CMD:unban(playerid, params[])
     new target[24],admin[MAX_PLAYER_NAME];
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
     if(sscanf(params, "s[24]", target))
-        return SendServerMessage(playerid,"Usage: /unban <player name>");
+        return SendCommandMessage(playerid, "Usage: /unban <player name>");
     mysql_format(mysql, query, sizeof(query), "DELETE FROM bans WHERE player_name = '%e'", target);
     mysql_tquery(mysql, query, "", "");
     GetPlayerName(playerid, admin, sizeof(admin));
@@ -325,7 +325,7 @@ CMD:editstation(playerid, params[])
 	if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
     new subcmd[16], id, amount,Float:x, Float:y, Float:z,label[64];
     if (sscanf(params, "ds[16]D(-1)", id, subcmd, amount)) {
-        return SendServerMessage(playerid,"Usage: /editstation <id> <pos|stock> [amount]");
+        return SendCommandMessage(playerid, "Usage: /editstation <id> <pos|stock> [amount]");
     }
     if (id < 0 || id >= MAX_FUEL_STATIONS || FuelStation[id][fsID] == -1)
         return SendServerMessage(playerid, "[Fuel] Invalid station ID.");
@@ -392,7 +392,7 @@ CMD:addpoint(playerid, params[])
     GetPlayerPos(playerid, x, y, z);
     mysql_format(mysql, query, sizeof(query),"INSERT INTO missions (x, y, z) VALUES (%.4f, %.4f, %.4f)",x, y, z);
     mysql_tquery(mysql, query);
-    SendAdminAlert(COLOR_LIGHTRED, "Admin %s has create a checkpoint.",GetName(playerid));
+    SendAdminAlert(COLOR_LIGHTRED, "Admin %s has create a checkpoint for mission.",GetName(playerid));
     return 1;
 }
 //admin 2
@@ -400,110 +400,26 @@ CMD:setvip(playerid, params[])
 {
 	new lookupid, amount;
 	if(pData[playerid][Admin] < 2) return SendServerMessage(playerid, "Only admin level 2+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendServerMessage(playerid ,"Usage: /setvip <playerid/Name> <amount>");
+	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setvip <playerid/Name> <amount>");
 	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
     if(amount < 0 ||amount > 3) return SendServerMessage(playerid,  "0 to 3 levels"); //  you can change this to any level you want
-	SendServerMessage(lookupid , "Admin %s (ID:%d) has setted %s (ID:%d) vip to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
+	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) vip to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
 	SetPlayerScore(lookupid, amount);
 	pData[lookupid][VIP] = amount;
     if(amount == 1)
     {
-		pData[lookupid][inv][1] +=25;
-		pData[lookupid][inv][2] +=25;
-		pData[lookupid][inv][3] +=25;
-		pData[lookupid][inv][4] +=25;
-		pData[lookupid][inv][5] +=25;
-		pData[lookupid][inv][6] +=25;
-		pData[lookupid][inv][7] +=25;
-		pData[lookupid][inv][8] +=25;
-		pData[lookupid][inv][9] +=25;
-		pData[lookupid][inv][10] +=25;
-		pData[lookupid][inv][11] +=25;
-		pData[lookupid][inv][12] +=25;
-		pData[lookupid][inv][13] +=25;
-		pData[lookupid][inv][14] +=25;
-		pData[lookupid][inv][15] +=25;
-		pData[lookupid][inv][16] +=25;
-		pData[lookupid][inv][17] +=25;
-		pData[lookupid][inv][18] +=25;
-		pData[lookupid][inv][19] +=25;
-		pData[lookupid][inv][20] +=25;
-		pData[lookupid][inv][21] +=25;
-		pData[lookupid][inv][22] +=25;
-		pData[lookupid][inv][23] +=25;
-		pData[lookupid][inv][24] +=25;
-		pData[lookupid][inv][25] +=25;
-		pData[lookupid][clanexp][0] +=25;
-		pData[lookupid][clanexp][1] +=25;
-		pData[lookupid][clanexp][2] +=25;
-		pData[lookupid][clanexp][3] +=25;
-		pData[lookupid][clanexp][4] +=25;
+		for (new i = 1; i <= 25; i++) pData[lookupid][inv][i] += 25;
+		for (new i = 0; i <= 4; i++) pData[lookupid][clanexp][i] += 25;
     }
     if(amount == 2)
     {
-		pData[lookupid][inv][1] +=50;
-		pData[lookupid][inv][2] +=50;
-		pData[lookupid][inv][3] +=50;
-		pData[lookupid][inv][4] +=50;
-		pData[lookupid][inv][5] +=50;
-		pData[lookupid][inv][6] +=50;
-		pData[lookupid][inv][7] +=50;
-		pData[lookupid][inv][8] +=50;
-		pData[lookupid][inv][9] +=50;
-		pData[lookupid][inv][10] +=50;
-		pData[lookupid][inv][11] +=50;
-		pData[lookupid][inv][12] +=50;
-		pData[lookupid][inv][13] +=50;
-		pData[lookupid][inv][14] +=50;
-		pData[lookupid][inv][15] +=50;
-		pData[lookupid][inv][16] +=50;
-		pData[lookupid][inv][17] +=50;
-		pData[lookupid][inv][18] +=50;
-		pData[lookupid][inv][19] +=50;
-		pData[lookupid][inv][20] +=50;
-		pData[lookupid][inv][21] +=50;
-		pData[lookupid][inv][22] +=50;
-		pData[lookupid][inv][23] +=50;
-		pData[lookupid][inv][24] +=50;
-		pData[lookupid][inv][25] +=50;
-		pData[lookupid][clanexp][0] +=50;
-		pData[lookupid][clanexp][1] +=50;
-		pData[lookupid][clanexp][2] +=50;
-		pData[lookupid][clanexp][3] +=50;
-		pData[lookupid][clanexp][4] +=50;
+		for (new i = 1; i <= 25; i++) pData[lookupid][inv][i] += 50;
+		for (new i = 0; i <= 4; i++) pData[lookupid][clanexp][i] += 50;
     }
     if(amount == 3)
     {
-		pData[lookupid][inv][1] +=100;
-		pData[lookupid][inv][2] +=100;
-		pData[lookupid][inv][3] +=100;
-		pData[lookupid][inv][4] +=100;
-		pData[lookupid][inv][5] +=100;
-		pData[lookupid][inv][6] +=100;
-		pData[lookupid][inv][7] +=100;
-		pData[lookupid][inv][8] +=100;
-		pData[lookupid][inv][9] +=100;
-		pData[lookupid][inv][10] +=100;
-		pData[lookupid][inv][11] +=100;
-		pData[lookupid][inv][12] +=100;
-		pData[lookupid][inv][13] +=100;
-		pData[lookupid][inv][14] +=100;
-		pData[lookupid][inv][15] +=100;
-		pData[lookupid][inv][16] +=100;
-		pData[lookupid][inv][17] +=100;
-		pData[lookupid][inv][18] +=100;
-		pData[lookupid][inv][19] +=100;
-		pData[lookupid][inv][20] +=100;
-		pData[lookupid][inv][21] +=100;
-		pData[lookupid][inv][22] +=100;
-		pData[lookupid][inv][23] +=100;
-		pData[lookupid][inv][24] +=100;
-		pData[lookupid][inv][25] +=100;
-		pData[lookupid][clanexp][0] +=100;
-		pData[lookupid][clanexp][1] +=100;
-		pData[lookupid][clanexp][2] +=100;
-		pData[lookupid][clanexp][3] +=100;
-		pData[lookupid][clanexp][4] +=100;
+		for (new i = 1; i <= 25; i++) pData[lookupid][inv][i] += 100;
+		for (new i = 0; i <= 4; i++) pData[lookupid][clanexp][i] += 100;
     }
 	return 1;
 }
@@ -511,9 +427,9 @@ CMD:setscore(playerid, params[])
 {
 	new lookupid, amount;
 	if(pData[playerid][Admin] < 2) return SendServerMessage(playerid, "Only admin level 2+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendServerMessage(playerid ,"Usage: /setscore <playerid/Name> <amount>");
+	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setscore <playerid/Name> <amount>");
 	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendServerMessage(lookupid , "Admin %s (ID:%d) has setted %s (ID:%d) score count to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
+	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) score count to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
 	SetPlayerScore(lookupid, amount);
 	pData[lookupid][Score] = amount;
 	return 1;
@@ -526,7 +442,7 @@ CMD:createspawn(playerid,params[])
     GetPlayerPos(playerid, x, y, z);
     mysql_format(mysql, query, sizeof(query), "INSERT INTO `spawnpos` (`posx`,`posy`,`posz`) VALUES ('%.4f','%.4f','%.4f')", x, y, z);
     mysql_tquery(mysql, query, "", "");
-    SendServerMessage(playerid,"Spawn object created effective next reboot");
+    SendServerMessage(playerid,"Spawn object created effective next reboot.");
 	return 1;
 }
 CMD:createveh(playerid, params[])
@@ -749,7 +665,7 @@ CMD:gzcreate(playerid, params[])
 	if(pData[playerid][Admin] < 2) return SendServerMessage(playerid, "Only admin level 2+ can use this cmd.");  
 	new subcmd[8];
     if (sscanf(params, "s[8]", subcmd)) {
-        SendServerMessage(playerid,"Usage: /gzcreate pointa | pointb");
+        SendCommandMessage(playerid, "Usage: /gzcreate pointa | pointb");
         return 1;
     }
 	else if (!strcmp(subcmd, "pointa", true))
@@ -817,63 +733,79 @@ CMD:gzreload(playerid, params[])
     SendServerMessage(playerid,"[GangZone] Zones reloaded.");
     return 1;
 }
+//admin 3
 CMD:resetplayer(playerid, params[])
 {
 	new lookupid;
-	if(pData[playerid][Admin] < 2)
+	if(pData[playerid][Admin] < 3) return SendServerMessage(playerid, "Only admin level 3 can use this cmd.");
+	if(sscanf(params, "u",lookupid)) return SendCommandMessage(playerid, "Usage: /resetplayer <playerid/Name>");
+	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
+	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has reset %s (ID:%d)", GetName(playerid), playerid, GetName(lookupid),lookupid);
+	foreach (new i : Player)
 	{
-		if(sscanf(params, "u",lookupid)) return SendServerMessage(playerid ,"Usage: /resetplayer <playerid/Name>");
-		if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-		SendServerMessage(lookupid , "Admin %s (ID:%d) has reset %s (ID:%d)", GetName(playerid), playerid, GetName(lookupid),lookupid);
-        pData[lookupid][Admin] = 0;
-        pData[lookupid][VIP] = 0;
-		pData[lookupid][Life] = 100;
-		pData[lookupid][Armor] = 0;
-		pData[lookupid][skin] = 161;
-		pData[lookupid][Pos][0] = 209.4851;
-		pData[lookupid][Pos][1] = 2617.1570;
-		pData[lookupid][Pos][2] = 16.6514;
-		pData[lookupid][idclan] = 0;
-		pData[lookupid][clanrank] =0;
-		pData[lookupid][interior] = 0;
-		pData[lookupid][clanexp][0] = 0;
-		pData[lookupid][clanexp][1] = 0;
-		pData[lookupid][clanexp][2] = 0;
-		pData[lookupid][clanexp][3] = 0;
-		pData[lookupid][clanexp][4] = 0;
-		pData[lookupid][inv][0] = 0;
-		pData[lookupid][inv][1] = 0;
-		pData[lookupid][inv][2] = 0;
-		pData[lookupid][inv][3] = 0;
-		pData[lookupid][inv][4] = 0;
-		pData[lookupid][inv][5] = 0;
-		pData[lookupid][inv][6] = 0;
-		pData[lookupid][inv][7] = 0;
-		pData[lookupid][inv][8] = 0;
-		pData[lookupid][inv][9] = 0;
-		pData[lookupid][inv][10] = 0;
-		pData[lookupid][inv][11] = 0;
-		pData[lookupid][inv][12] = 0;
-		pData[lookupid][inv][13] = 0;
-		pData[lookupid][inv][14] = 0;
-		pData[lookupid][inv][15] = 0;
-		pData[lookupid][inv][16] = 0;
-		pData[lookupid][inv][17] = 0;
-		pData[lookupid][inv][18] = 0;
-		pData[lookupid][inv][19] = 0;
-		pData[lookupid][inv][20] = 0;
-		pData[lookupid][inv][21] = 0;
-		pData[lookupid][inv][22] = 0;
-		pData[lookupid][inv][23] = 0;
-		pData[lookupid][inv][24] = 0;
-		pData[lookupid][inv][25] = 0;
-		pData[lookupid][Score] = 0;
-		SetSpawnInfo(lookupid, 0, pData[lookupid][skin], pData[lookupid][Pos][0], pData[lookupid][Pos][0], pData[lookupid][Pos][0], 0.0, 0, 0, 0, 0, 0, 0);
-    }
-    else return SendServerMessage(lookupid,"Only admin 2 can use this cmd");
+		for (new p = 0; p < 3; p++)
+		{
+			if (IsValidDynamicPickup(clans[pData[lookupid][idclan]][pickup][p]))
+			{
+				DestroyDynamicPickup(clans[pData[lookupid][idclan]][pickup][p]);
+				clans[pData[lookupid][idclan]][pickup][p] = INVALID_STREAMER_ID;
+			}
+		}
+	}
+	mysql_format(mysql, query, sizeof(query),"DELETE FROM clans WHERE idclan = %d",pData[lookupid][idclan]);
+	mysql_tquery(mysql, query);
+    pData[lookupid][Admin] = 0;
+    pData[lookupid][VIP] = 0;
+	pData[lookupid][Life] = 100;
+	pData[lookupid][Armor] = 0;
+	pData[lookupid][Pos][0] = 209.4851;
+	pData[lookupid][Pos][1] = 2617.1570;
+	pData[lookupid][Pos][2] = 16.6514;
+	pData[lookupid][idclan] = 0;
+	pData[lookupid][clanrank] =0;
+	pData[lookupid][interior] = 0;
+	pData[lookupid][clanexp][0] = 0;
+	pData[lookupid][clanexp][1] = 0;
+	pData[lookupid][clanexp][2] = 0;
+	pData[lookupid][clanexp][3] = 0;
+	pData[lookupid][clanexp][4] = 0;
+	pData[lookupid][inv][0] = 0;
+	pData[lookupid][inv][1] = 0;
+	pData[lookupid][inv][2] = 0;
+	pData[lookupid][inv][3] = 0;
+	pData[lookupid][inv][4] = 0;
+	pData[lookupid][inv][5] = 0;
+	pData[lookupid][inv][6] = 0;
+	pData[lookupid][inv][7] = 0;
+	pData[lookupid][inv][8] = 0;
+	pData[lookupid][inv][9] = 0;
+	pData[lookupid][inv][10] = 0;
+	pData[lookupid][inv][11] = 0;
+	pData[lookupid][inv][12] = 0;
+	pData[lookupid][inv][13] = 0;
+	pData[lookupid][inv][14] = 0;
+	pData[lookupid][inv][15] = 0;
+	pData[lookupid][inv][16] = 0;
+	pData[lookupid][inv][17] = 0;
+	pData[lookupid][inv][18] = 0;
+	pData[lookupid][inv][19] = 0;
+	pData[lookupid][inv][20] = 0;
+	pData[lookupid][inv][21] = 0;
+	pData[lookupid][inv][22] = 0;
+	pData[lookupid][inv][23] = 0;
+	pData[lookupid][inv][24] = 0;
+	pData[lookupid][inv][25] = 0;
+	pData[lookupid][Score] = 0;
+	SetPlayerSkin(lookupid,pData[lookupid][skin]);
+	SetPlayerPos(lookupid, 209.4851, 2617.1570, 16.6514);
+	SetPlayerInterior(lookupid,0);
+	SetPlayerVirtualWorld(lookupid,0);
+	ResetAllowedWeapons(lookupid);
+	ResetPlayerWeapons(lookupid);
+	ShowModelSelectionMenu(lookupid, "Select your new clothes", MODEL_SELECTION_SKIN, Skinsskins, sizeof(Skinsskins), -16.0, 0.0, -55.0);
+	SetSpawnInfo(lookupid, 0, pData[lookupid][skin], pData[lookupid][Pos][0], pData[lookupid][Pos][0], pData[lookupid][Pos][0], 0.0, 0, 0, 0, 0, 0, 0);
 	return 1;
 }
-//admin 3
 CMD:setadmin(playerid, params[])
 {
 	new lookupid, level;
@@ -896,6 +828,24 @@ CMD:setadmin(playerid, params[])
             pData[lookupid][Admin] = level;
 		}
 	}
-	else return SendServerMessage(playerid, "Only admin 2 can use this cmd");
+	else return SendServerMessage(playerid, "Only admin 3 can use this cmd");
 	return 1;
+}
+CMD:flushspawn(playerid, params[])
+{
+    if (pData[playerid][Admin] < 3) return SendServerMessage(playerid, "Only admin level 3 can use this command.");
+    mysql_format(mysql, query, sizeof(query), "DELETE FROM spawnpos");
+    mysql_tquery(mysql, query);
+    SendServerMessage(playerid, "[ADMIN] Spawn loot positions table has been flushed effective next reboot.");
+    return 1;
+}
+CMD:flushpoint(playerid, params[])
+{
+	if (pData[playerid][Admin] < 3) return SendServerMessage(playerid, "Only admin level 3 can use this command.");
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+    mysql_format(mysql, query, sizeof(query), "DELETE FROM missions");
+    mysql_tquery(mysql, query);
+    SendServerMessage(playerid, "[ADMIN] Checkpoint mission table has been flushed effective next reboot.");
+    return 1;
 }

@@ -176,7 +176,7 @@ stock AC_CreateActor(modelid, Float:x, Float:y, Float:z, Float:rotation)
 {
 	new actorid = INVALID_ACTOR_ID;
 
-	if(0 <= modelid <= 311)
+	if(0 <= modelid <= 27474)
 	{
 		actorid = CreateActor(modelid, x, y, z, rotation);
 
@@ -243,7 +243,7 @@ public OnPlayerUpdate(playerid)
 public OnPlayerGiveDamageActor(playerid, damaged_actorid, Float:amount, weaponid, bodypart)
 {
 	// Sanity checks for safety. Players can easily manipulate this data.
-	if(!IsValidActor(damaged_actorid) || (!(0 <= amount <= 500.0)) || (!(0 <= weaponid <= 42)))
+	if(!IsValidActor(damaged_actorid) || (!(0 <= amount <= 500.0)) || (!(0 <= weaponid <= 421)))
 	{
 	    return 0;
 	}

@@ -1,6 +1,7 @@
 new IsPlayerRegisterd[MAX_PLAYERS];
 new query[2048],bool:pMuted[MAX_PLAYERS];
 
+new Dadmin1[24],Dverifier[24],DLeader[24],DMember[24],Ddiscord[24],Dchat[24],Achat[24],ooc[24];
 new DCC_Guild:GUILD_ID1,DCC_Role:RoleJoueur,DCC_Role:RoleLeader,DCC_Role:RoleMember,DCC_Channel:discordlog,bool:simembreroleok;
 new DCC_Role: RoleStaff1,bool:sistaff1ok,DCC_Embed:Embed;
 
@@ -14,7 +15,7 @@ new Float:gVehicleFuel[MAX_SERVER_VEHICLES],PlayerText:txtSpeed[MAX_PLAYERS],Pla
 new bool:EngineState[MAX_SERVER_VEHICLES],bool:FuelLeaking[MAX_SERVER_VEHICLES],bool:FuelWarningVisible[MAX_PLAYERS],FuelStationCount;
 new Float:g_LastVehiclePos[MAX_SERVER_VEHICLES][3];
 
-new missionactor[7],missioncheck;
+new missionactor[8],missioncheck;
 
 native WP_Hash(buffer[], len, const str[]);
 
@@ -26,7 +27,6 @@ enum DATAX
 	VIP,
 	Score,
     Exp,
-    Level,
     skin,
     interior,
     idclan, //for clan stuff
@@ -35,7 +35,7 @@ enum DATAX
     Float:Life,
 	Float:Armor,
     Float:Pos[3],
-    inv[26],
+    inv[26], //inv0= more inv space each
     Skill[11],//to do after
     Guns[13],
     Ammo[13],
@@ -145,11 +145,14 @@ enum clan
 };
 new clans[MAX_CLANS][clan],claninv;
 
-new Skinsskins[40] = {
+new Skinsskins[38] = {
     1,30,95,127,128,131,132,133,134,136,135,137,
 	151,157,158,159,160,161,162,168,179,191,192,
-	190,198,200,201,202,239,254,282,283,288,291,
-	292,302,303,309,311,310
+	190,198,200,201,202,239,254,283,288,291,
+	292,303,309,311,310
+};
+new Skinspolice[9] = {
+    280,281,282,284,300,301,302,306,307
 };
 
 enum e_InteriorData {
@@ -405,31 +408,31 @@ enum entranceData {
 };
 new EntranceData[MAX_OBJECTSC][entranceData];
 
-new CraftBarridaces[4] = {
-	16404,16405,3260,3302
+new CraftBarridaces[12] = { //18259 big one
+	16404,3260,3302,19865,1446,18259,19339,1410,2991,2319
 };
 
 new ItemNames[26][24] =
 {
-    "Nothing",
-    "Meat(s)",
-    "Wood(s)",
-    "Metal(s)",
-    "Cloth(s)",
-    "Plastic(s)",
-    "Gun Powder(s)",
-    "inv7",
-    "inv8",
-    "inv9",
-    "inv10",
+    "Nothing",  //0
+    "Meat(s)",  //1
+    "Wood(s)",  //2
+    "Metal(s)", //3
+    "Cloth(s)", //4
+    "Plastic(s)", //5
+    "Gun Powder(s)", //6
+    "Ore(s)", //inv 7
+    "Iron(s)", //inv 8
+    "Gold(s)", //inv 9
+    "Lockpick(s)", //inv10
     "Repair kit(s)",
     "Med Kit(s)",
     "Jerrycan(s)",
     "9mm Bullet(s)",
     "00' Buck's",
-    "308(s)",
+    ".308(s)",
     "Armor Plate(s)",
-    "Water Bottle",
+    "Water Bottle(s)",
     "Canned Food",
     "inv20",
     "inv21",
@@ -438,3 +441,49 @@ new ItemNames[26][24] =
     "inv24",
     "inv25"
 };
+
+//mining
+new IsMining[MAX_PLAYERS]; // Suit si le joueur est en train de miner
+new Float:MineRock_X = 590.11;
+new Float:MineRock_Y = 890.35;
+new Float:MineRock_Z = -42.34;
+
+//menu shop-armory
+new Menu:Armory,Menu:PoliceArmory;
+InitMenu()
+{
+	//first clan armory
+	Armory = CreateMenu("Armory",2,20,120,120,15);
+	SetMenuColumnHeader(Armory,0,"Items");
+    AddMenuItem(Armory,0,"00' Buck x1");
+    AddMenuItem(Armory,0,"00' Buck x5");
+    AddMenuItem(Armory,0,"00' Buck x10");
+    AddMenuItem(Armory,0,"Shotgun");
+    AddMenuItem(Armory,0,"Sawn-off");
+    AddMenuItem(Armory,0,"Exit");
+    SetMenuColumnHeader(Armory,1,"Prices");
+    AddMenuItem(Armory,1,"1 Iron");
+    AddMenuItem(Armory,1,"5 Irons");
+    AddMenuItem(Armory,1,"10 Irons");
+    AddMenuItem(Armory,1,"2 Golds");
+    AddMenuItem(Armory,1,"3 Golds");
+	//police armory skin pistol food water
+	PoliceArmory = CreateMenu("Armory",2,20,120,120,15);
+	SetMenuColumnHeader(PoliceArmory,0,"Items");
+    AddMenuItem(PoliceArmory,0,"Clothes");
+    AddMenuItem(PoliceArmory,0,"Canned Foods x4");
+    AddMenuItem(PoliceArmory,0,"Water Bottles x2");
+    AddMenuItem(PoliceArmory,0,"9mm Bullet(s) x5");
+    AddMenuItem(PoliceArmory,0,"9mm Bullet(s) x10");
+    AddMenuItem(PoliceArmory,0,"Pistol");
+    AddMenuItem(PoliceArmory,0,"Exit");
+    SetMenuColumnHeader(PoliceArmory,1,"Prices");
+    AddMenuItem(PoliceArmory,1,"10 Cloths");
+    AddMenuItem(PoliceArmory,1,"5 Irons");
+    AddMenuItem(PoliceArmory,1,"3 Irons");
+    AddMenuItem(PoliceArmory,1,"5 Irons");
+    AddMenuItem(PoliceArmory,1,"10 Irons");
+    AddMenuItem(PoliceArmory,1,"5 Golds");
+	//army armory skins AR plate armor
+	//wasteland skin rifle medkit
+}

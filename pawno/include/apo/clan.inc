@@ -21,7 +21,7 @@ CMD:clanchest(playerid, params[])
 			if(IsNearChest(playerid))
 			{
 				Dialog_Show(playerid, CLANDIALOG10, DIALOG_STYLE_TABLIST, "Clan Chest \tAmount","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\n\
-				Gun Powder(s) : \t%d\ninv7 :\t%d\ninv8 : \t%d\ninv9 : \t%d\ninv10 : \t%d\n\
+				Gun Powder(s) : \t%d\nOre(s) :\t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
 				Repair kit(s) : \t%d\nMed Kit(s) : \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n\
 				.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
 				inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d", "OK", "",clans[id][inv][1],clans[id][inv][2],clans[id][inv][3],clans[id][inv][4],clans[id][inv][5],        clans[id][inv][6],clans[id][inv][7],clans[id][inv][8],clans[id][inv][9],clans[id][inv][10],        clans[id][inv][11],clans[id][inv][12],clans[id][inv][13],clans[id][inv][14],clans[id][inv][15],        clans[id][inv][16],clans[id][inv][17],clans[id][inv][18],clans[id][inv][19],clans[id][inv][20],        clans[id][inv][21],clans[id][inv][22],clans[id][inv][23],clans[id][inv][24],clans[id][inv][25]); 
@@ -36,7 +36,7 @@ CMD:clanchest(playerid, params[])
 		{
 			if(IsNearChest(playerid))
 			{
-				Dialog_Show(playerid, CLANDIALOG20,DIALOG_STYLE_TABLIST,"Inventory","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\ninv7 : \t%d\ninv8 : \t%d\ninv9 : \t%d\ninv10 : \t%d\n\
+				Dialog_Show(playerid, CLANDIALOG20,DIALOG_STYLE_TABLIST,"Inventory","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\nOre(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
 				Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
 				inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d\
 				", "Close","",pData[playerid][inv][1],pData[playerid][inv][2],pData[playerid][inv][3],pData[playerid][inv][4],pData[playerid][inv][5],\
@@ -119,7 +119,7 @@ CMD:clanquit(playerid, params[])
 	if (pData[playerid][idclan] == -1)
 	    return SendServerMessage(playerid, "You must be a member of any clan.");
 	if (pData[playerid][clanrank] == clans[pData[playerid][idclan]][maxrank])
-	    return SendServerMessage(playerid, "You are am owner of a clan use /clan to delete it");
+	    return SendServerMessage(playerid, "You are an owner of a clan use /clan to delete it");
 	pData[playerid][idclan] = 0;
 	pData[playerid][clanrank] = 0;
 	SendServerMessage(playerid, "You just quit your clan.");
@@ -135,24 +135,24 @@ CMD:clanwar(playerid, params[])
         {
             new zoneID = i,remaining = GlobalZoneCooldown - gettime();
             if (ZoneInWar[i])
-                return SendServerMessage(playerid,"[WAR] A war is already ongoing in this zone.");
+                return SendServerMessage(playerid,"[CAPTURE] A war is already ongoing in this zone.");
             // Check cooldown
 			if (gettime() < GlobalZoneCooldown)
 			{
-    			SendServerMessage(playerid,"[WAR] All zones are on cooldown for %d more seconds.", remaining);
+    			SendServerMessage(playerid,"[CAPTURE] All zones are on cooldown for %d more seconds.", remaining);
 			}
             if (GangZones[i][gTeamID] == attackerTeam)
-                return SendServerMessage(playerid,"[WAR] You already own this zone.");
+                return SendServerMessage(playerid,"[CAPTURE] You already own this zone.");
             // Start war
 			ZoneInWar[zoneID] = true;
 			WarTimer[zoneID] = SetTimerEx("EndZoneWar", 30000, false, "d", zoneID);
 			WarCheckTimer[zoneID] = SetTimerEx("CheckWarZoneEmpty", 5000, true, "d", zoneID);
 			GangZoneFlashForAll(GangZones[zoneID][gZoneID], GetTeamZoneColor(attackerTeam));
-            SendServerMessage(playerid,"[WAR] Clan %d has started a war for zone %d!", attackerTeam, i);
+            SendServerMessage(playerid,"[CAPTURE] Clan %d has started a war for zone %d!", attackerTeam, i);
             return 1;
         }
     }
-    SendServerMessage(playerid,"[WAR] You must be inside an enemy zone to start a war.");
+    SendServerMessage(playerid,"[CAPTURE] You must be inside an enemy zone to start a war.");
     return 1;
 }
 CMD:clanres(playerid, params[])

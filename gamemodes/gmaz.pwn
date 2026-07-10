@@ -1,4 +1,4 @@
-//total lines 7414
+//total lines 7975
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -27,7 +27,10 @@
 #include <apo/clan>
 #include <apo/cmdadmins>
 #include <apo/cmddebug>
+#define discordonline
+#if defined discordonline
 #include <apo/dc>
+#endif
 
 main(){}
 
@@ -36,12 +39,9 @@ static s_TargetActor[MAX_PLAYERS] = {INVALID_ACTOR_ID, ...};   //for resaon has 
 public OnGameModeInit()
 {
     AntiDeAMX();
-	mysql_log(LOG_ALL );
-	mysql = mysql_connect(host, user, db, pass);
-	if(mysql_errno(mysql) != 0) { print("Could not connect to database!");}
-	else {printf("Successfully connected on DB %s",db);}
-	SetGameModeText("Apo 0.15.7414");
-	SendRconCommand("ackslimit 5000");
+    mysql_Init();
+	SetGameModeText("Apo 0.18.7975");
+	SendRconCommand("ackslimit 10000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
     ManualVehicleEngineAndLights(); //vehicle on/off
@@ -55,6 +55,7 @@ public OnGameModeInit()
     mapping();
     AutoCleanExpiredBans();
     LoadWeaponDrops();
+    InitMenu(); //menu armory
     mysql_tquery(mysql, "SELECT * FROM `storages`", "storages_Load", "");
     mysql_tquery(mysql, "SELECT * FROM `objects`", "objects_Load", "");
     mysql_tquery(mysql, "SELECT * FROM `spawnpos`", "loadspawnpos", "");
@@ -69,7 +70,10 @@ public OnGameModeInit()
         DB_Vehicle[i] = INVALID_VEHICLE_ID;
         DB_VehicleID[i] = 0;
     }
+    #if defined discordonline
     loaddiscord();
+    #endif
+
     SetTimer("CheckUnoccupiedVehicleTeleport", 3000, true); //antitpveh
     SetTimer("GangZoneResourceTick", GANG_RESOURCE_TIME, true);  //timer reward
 	return 1;
@@ -128,10 +132,7 @@ public OnPlayerConnect(playerid)
     pData[playerid][Foodbar] = CreatePlayerProgressBar(playerid, 505.0, 105.0, 100.0, 5.0, 0xFFFF00AA, 100.0);
     pData[playerid][Waterbar] = CreatePlayerProgressBar(playerid, 505.0, 115.0, 100.0, 5.0, 0xFF0000AA, 100.0);
 
-    for (new i = 0; i < TotalGZ; i++)
-    {
-        GangZoneShowForPlayer(playerid, GangZones[i][gZoneID], GetTeamZoneColor(GangZones[i][gTeamID]));
-    }
+    for (new i = 0; i < TotalGZ; i++) GangZoneShowForPlayer(playerid, GangZones[i][gZoneID], GetTeamZoneColor(GangZones[i][gTeamID]));
 
 	return 1;
 }
@@ -187,7 +188,12 @@ public OnPlayerUpdate(playerid)
 	}
 	if (GetPlayerScore(playerid) != pData[playerid][Score])
 	{
-		SetPlayerScore(playerid, pData[playerid][Score]);
+		SetPlayerScore(playerid, pData[playerid][Score]);    // 0 = 8
+        if(pData[playerid][Score] == 5) pData[playerid][inv][0] = 1;   // 1 = 16
+        if(pData[playerid][Score] == 10) pData[playerid][inv][0] = 2;  // 2 = 32
+        if(pData[playerid][Score] == 15) pData[playerid][inv][0] = 3;  // 3 = 64
+        if(pData[playerid][Score] == 20) pData[playerid][inv][0] = 4;   // 4 = 128
+        if(pData[playerid][Score] == 25) pData[playerid][inv][0] = 5;   // 5 = 256
 	}
 	new target_actor = GetPlayerTargetActor(playerid);
 	if (s_TargetActor[playerid] != target_actor)
@@ -589,7 +595,6 @@ public OnPlayerSpawn(playerid)
 }
 public OnPlayerRequestClass(playerid, classid)
 {
-    //SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0], pData[playerid][Pos][0], pData[playerid][Pos][0], 0.0, 0, 0, 0, 0, 0, 0);
     SetSpawnInfo(playerid,0,0,0,0,0,0,0,0,0,0,0,0), SpawnPlayer(playerid);
 	SetPlayerColor(playerid, 0xFFFFFFFF);
 	return 1;
@@ -615,7 +620,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_DUCK)
 		{
 			if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 1;
-			new f = MAX_SPAWNPOS+1;
+			new f = MAX_SPAWNPOS+1,chancerand = random(35),taking = random(3) + 1;
 			for(new a = 0; a < MAX_SPAWNPOS; a++)
 			{
 				if(IsPlayerInRangeOfPoint(playerid, 2.0, dspawnpos[a][Pos][0], dspawnpos[a][Pos][1], dspawnpos[a][Pos][2]) && IsValidDynamicObject(dspawnpos[a][Objects]))
@@ -625,7 +630,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				}
 			}
 			if(f > MAX_SPAWNPOS) return SendClientMessage(playerid, COLOR_RED, "You are not near an object that you can pick up.");
-			switch(random(32))
+			switch(chancerand)
 			{
 				//melee
 				case 0: GivePlayerWeapon(playerid,4,random(2)+1);
@@ -639,32 +644,20 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				//rifle
 				case 6: GivePlayerWeapon(playerid,33,random(5)+1);
 				//inventaire
-				case 7: pData[playerid][inv][1] +=random(3)+1;
-				case 8: pData[playerid][inv][2] +=random(3)+1;
-				case 9: pData[playerid][inv][3] +=random(3)+1;
-				case 10: pData[playerid][inv][4] +=random(3)+1;
-				case 11: pData[playerid][inv][5] +=random(3)+1;
-				case 12: pData[playerid][inv][6] +=random(3)+1;
-				case 13: pData[playerid][inv][7] +=random(3)+1;
-				case 14: pData[playerid][inv][8] +=random(3)+1;
-				case 15: pData[playerid][inv][9] +=random(3)+1;
-				case 16: pData[playerid][inv][10] +=random(3)+1;
-				case 17: pData[playerid][inv][13] +=random(3)+1;
-				case 18: pData[playerid][inv][14] +=random(3)+1;
-				case 19: pData[playerid][inv][15] +=random(3)+1;
-				case 20: pData[playerid][inv][16] +=random(3)+1;
-				case 21: pData[playerid][inv][18] +=random(3)+1;
-				case 22: pData[playerid][inv][19] +=random(3)+1;
-				case 23: pData[playerid][inv][20] +=random(3)+1;
-				case 24: pData[playerid][inv][21] +=random(3)+1;
-				case 25: pData[playerid][inv][22] +=random(3)+1;
-				case 26: pData[playerid][inv][23] +=random(3)+1;
-				case 27: pData[playerid][inv][24] +=random(3)+1;
-				case 28: pData[playerid][inv][25] +=random(3)+1;
-                case 29: ShowModelSelectionMenu(playerid, "Select your new clothes", MODEL_SELECTION_SKIN, Skinsskins, sizeof(Skinsskins), -16.0, 0.0, -55.0);
+                case 7 .. 31:
+                {
+                    new invIndex = chancerand - 6;
+                    if (pData[playerid][inv][invIndex] + taking > GetBackpackCapacity(playerid))
+                    {
+                        DestroyDynamicObject(dspawnpos[f][Objects]);
+                        return SendServerMessage(playerid, "Your backpack is full you tossed away.");
+                    }
+                    pData[playerid][inv][invIndex] += taking;
+                }
+                case 32: ShowModelSelectionMenu(playerid, "Select your new clothes", MODEL_SELECTION_SKIN, Skinsskins, sizeof(Skinsskins), -16.0, 0.0, -55.0);
                 //grenade
-                case 30: GivePlayerWeapon(playerid,16,1);
-                case 31: GivePlayerWeapon(playerid,18,1);
+                case 33: GivePlayerWeapon(playerid,16,1);
+                case 34: GivePlayerWeapon(playerid,18,1);
 			}
             AllowWeapon(playerid, 4,4);
             AllowWeapon(playerid, 3,4);
@@ -679,6 +672,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             pData[playerid][clanexp][0] += random(3)+1;
 			DestroyDynamicObject(dspawnpos[f][Objects]);
 			SendClientMessage(playerid, COLOR_GREEN, "You have picked up an object.");
+            pData[playerid][Food] -= random(2);
+            pData[playerid][Water] -= random(2);
 			return 1;
 		}
 	}
@@ -922,9 +917,116 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 	{
 	    pData[playerid][skin] = modelid;
 	    SetPlayerSkin(playerid, modelid);
+        TogglePlayerControllable(playerid, 1);
+	}
+	if ((response) && (extraid == MODEL_SELECTION_POLICE))
+	{
+	    pData[playerid][skin] = modelid;
+	    SetPlayerSkin(playerid, modelid);
+        ShowMenuForPlayer(PoliceArmory, playerid);
 	}
 	if ((response) && (extraid == MODEL_SELECTION_CRAFT))
-	{
+    {
+        new Float:x,Float:y,Float:z,Float:angle;
+        if (GetPlayerPos(playerid, x, y, z) && GetPlayerFacingAngle(playerid, angle))
+        {
+            for (new i = 0; i < MAX_OBJECTSC; i ++) if (!objectsData[i][objectsExists])
+            {
+                if (i == -1)
+                {
+                    SendServerMessage(playerid, "You have reached the maximum barricade limit of the server!");
+                    return -1;
+                }
+                objectsData[i][objectsExists] = true;
+                if(modelid == 16404 && pData[playerid][inv][2] >= 10 && pData[playerid][inv][5] >= 5)
+				{
+                    pData[playerid][inv][2] -= 10;
+					pData[playerid][inv][5] -= 5;
+                    pData[playerid][clanexp][0] += 3;
+                }
+                else SendServerMessage(playerid, "You don't have 10 wood(s) or/and 5 plastic(s).");
+                if(modelid == 3260 && pData[playerid][inv][2] >= 5 && pData[playerid][inv][3] >= 2)
+				{
+                    pData[playerid][inv][2] -= 5;
+					pData[playerid][inv][3] -= 2;
+                    pData[playerid][clanexp][0] += 3;
+                }
+                else SendServerMessage(playerid, "You don't have 5 woods(s) or/and 2 metal(s).");
+                if(modelid == 3302 && pData[playerid][inv][3] >= 6)
+				{
+					pData[playerid][inv][3] -= 6;
+                    pData[playerid][clanexp][0] += 4;
+                }
+                else SendServerMessage(playerid, "You don't have 6 metal(s).");
+                if(modelid == 19865 && pData[playerid][inv][2] >= 25 && pData[playerid][inv][3] >= 5)
+				{
+                    pData[playerid][inv][2] -= 25;
+					pData[playerid][inv][3] -= 5;
+                    pData[playerid][clanexp][0] += 10;
+                }
+                else SendServerMessage(playerid, "You don't have 25 woods(s) or/and 5 metal(s).");
+                if(modelid == 1446 && pData[playerid][inv][2] >= 20 && pData[playerid][inv][3] >= 3)
+				{
+                    pData[playerid][inv][2] -= 20;
+					pData[playerid][inv][3] -= 3;
+                    pData[playerid][clanexp][0] += 8;
+                }
+                else SendServerMessage(playerid, "You don't have 20 woods(s) or/and 3 metal(s).");
+                if(modelid == 18259 && pData[playerid][inv][2] >= 100 && pData[playerid][inv][3] >= 100)
+				{
+                    pData[playerid][inv][2] -= 100;
+					pData[playerid][inv][3] -= 100;
+                    pData[playerid][clanexp][0] += 150;
+                }
+                else SendServerMessage(playerid, "You don't have 100 woods(s) or/and 100 metal(s).");
+                if(modelid == 19339 && pData[playerid][inv][2] >= 10 && pData[playerid][inv][3] >= 10)
+				{
+                    pData[playerid][inv][2] -= 10;
+					pData[playerid][inv][3] -= 10;
+                    pData[playerid][clanexp][0] += 10;
+                }
+                else SendServerMessage(playerid, "You don't have 10 woods(s) or/and 10 metal(s).");
+                if(modelid == 1410 && pData[playerid][inv][2] >= 15 && pData[playerid][inv][3] >= 3)
+				{
+                    pData[playerid][inv][2] -= 15;
+					pData[playerid][inv][3] -= 3;
+                    pData[playerid][clanexp][0] += 11;
+                }
+                else SendServerMessage(playerid, "You don't have 15 woods(s) or/and 3 metal(s).");
+                if(modelid == 2991 && pData[playerid][inv][2] >= 50)
+				{
+					pData[playerid][inv][2] -= 50;
+                    pData[playerid][clanexp][0] += 50;
+                }
+                else SendServerMessage(playerid, "You don't have 50 wood(s).");
+                if(modelid == 2319 && pData[playerid][inv][3] >= 10 && pData[playerid][inv][4] >= 10)
+				{
+					pData[playerid][inv][3] -= 10;
+                    pData[playerid][inv][4] -= 10;
+                    pData[playerid][clanexp][0] += 20;
+                }
+                else SendServerMessage(playerid, "You don't have 10 metal(s). or/and 10 cloth(s)");
+                objectsData[i][objectsModel] = modelid;
+                objectsData[i][objectsPos][0] = x + (3.0 * floatsin(-angle, degrees));
+                objectsData[i][objectsPos][1] = y + (3.0 * floatcos(-angle, degrees));
+                objectsData[i][objectsPos][2] = z;
+                objectsData[i][objectsPos][3] = 0.0;
+                objectsData[i][objectsPos][4] = 0.0;
+                objectsData[i][objectsPos][5] = angle;
+                objectsData[i][objectsInterior] = GetPlayerInterior(playerid);
+                objectsData[i][objectsWorld] = GetPlayerVirtualWorld(playerid);
+                objectsData[i][objectsOb] = CreateDynamicObject(objectsData[i][objectsModel], objectsData[i][objectsPos][0], objectsData[i][objectsPos][1], objectsData[i][objectsPos][2], objectsData[i][objectsPos][3], objectsData[i][objectsPos][4], objectsData[i][objectsPos][5], objectsData[i][objectsWorld], objectsData[i][objectsInterior]);
+                ResetEditing(playerid);
+                pData[playerid][pEditobjects] = i;
+                EditDynamicObject(playerid, objectsData[i][objectsOb]);
+                pData[playerid][Water] -= random(5)+1;
+                pData[playerid][Food] -= random(5)+1;
+                SendServerMessage(playerid, "You have created an barricade with (ID: %d.)", i);
+                mysql_format(mysql, query, sizeof(query),"INSERT INTO `objects` (`objectsModel`) VALUES(%d)",modelid);
+                mysql_tquery(mysql, query, "OnobjectsCreated", "i", i);
+                return i;
+            }
+        }
         //do stuff here
 	}
 	return 1;
@@ -943,6 +1045,206 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, source)
 	SendServerMessage(playerid,"You clicked on this player %s",Name[clickedplayerid]);
 	AdminTarget[playerid] = clickedplayerid;
 	Dialog_Show(playerid,InfomationClickedPlayer,DIALOG_STYLE_LIST,"Action you can perfom","","Ok","");
+	return 1;
+}
+public OnPlayerSelectedMenuRow(playerid, row)
+{
+    new Menu:PlayerMenu = GetPlayerMenu(playerid);
+	if(PlayerMenu == Armory) {
+        HideMenuForPlayer(Armory, playerid);
+        switch(row)
+        {
+            case 0 :   //inv 15 00 buck
+            {
+				if (pData[playerid][inv][8] >= 1)
+				{
+                    if (pData[playerid][inv][15] + 1 > GetBackpackCapacity(playerid))
+                    {
+                        SendServerMessage(playerid, "Not enough backpack space for this item.");
+                        ShowMenuForPlayer(Armory, playerid);
+                        return 1;
+                    }
+                    pData[playerid][inv][15] += 1;
+                    pData[playerid][inv][8] -= 1;
+                    SendServerMessage(playerid, "Thanks for the purchase meat bag.");
+                }
+                else SendServerMessage(playerid, "You don't have 1 iron.");
+                ShowMenuForPlayer(Armory, playerid);
+            }
+            case 1 :
+            {
+				if (pData[playerid][inv][8] >= 5)
+				{
+                    if (pData[playerid][inv][15] + 5 > GetBackpackCapacity(playerid))
+                    {
+                        SendServerMessage(playerid, "Not enough backpack space for this item.");
+                        ShowMenuForPlayer(Armory, playerid);
+                        return 1;
+                    }
+                    pData[playerid][inv][15] += 5;
+                    pData[playerid][inv][8] -= 5;
+                    SendServerMessage(playerid, "Thanks for the purchase meat bag.");
+                }
+                else SendServerMessage(playerid, "You don't have 5 irons.");
+                ShowMenuForPlayer(Armory, playerid);
+            }
+            case 2 :
+            {
+				if (pData[playerid][inv][8] >= 10)
+				{
+                    if (pData[playerid][inv][15] + 10 > GetBackpackCapacity(playerid))
+                    {
+                        SendServerMessage(playerid, "Not enough backpack space for this item.");
+                        ShowMenuForPlayer(Armory, playerid);
+                        return 1;
+                    }
+                    pData[playerid][inv][15] += 10;
+                    pData[playerid][inv][8] -= 10;
+                    SendServerMessage(playerid, "Thanks for the purchase meat bag.");
+                }
+                else SendServerMessage(playerid, "You don't have 10 irons.");
+                ShowMenuForPlayer(Armory, playerid);
+            }
+            case 3 :
+            {
+				if (pData[playerid][inv][9] >= 2)
+				{
+                    pData[playerid][inv][9] -= 2;
+                    GivePlayerWeapon(playerid,25,random(2)+1);
+                    SendServerMessage(playerid, "Thanks for the purchase meat bag.");
+                }
+                else SendServerMessage(playerid, "You don't have 2 golds.");
+                ShowMenuForPlayer(Armory, playerid);
+            }
+            case 4 :
+            {
+				if (pData[playerid][inv][9] >= 3)
+				{
+                    pData[playerid][inv][9] -= 3;
+                    GivePlayerWeapon(playerid,26,random(3)+1);
+                    SendServerMessage(playerid, "Thanks for the purchase meat bag.");
+                }
+                else SendServerMessage(playerid, "You don't have 3 golds.");
+                ShowMenuForPlayer(Armory, playerid);
+            }
+            case 5 :
+            {
+                HideMenuForPlayer(Armory, playerid);
+                TogglePlayerControllable(playerid, 1);
+            }
+        }
+        AllowWeapon(playerid, 25,2);
+        AllowWeapon(playerid, 26,3);
+	}
+	if(PlayerMenu == PoliceArmory) {
+        HideMenuForPlayer(PoliceArmory, playerid);
+        switch(row)
+        {
+            case 0 :   //inv 15 00 buck
+            {
+				if (pData[playerid][inv][4] >= 10)
+				{
+                    ShowModelSelectionMenu(playerid, "Select your new clothes", MODEL_SELECTION_POLICE, Skinspolice, sizeof(Skinspolice), -16.0, 0.0, -55.0);
+                    pData[playerid][inv][4] -= 10;
+                    SendServerMessage(playerid, "Thanks for the purchase civilian");
+                }
+                else SendServerMessage(playerid, "You don't have 10 cloths.");
+                ShowMenuForPlayer(PoliceArmory, playerid);
+            }
+            case 1 :
+            {
+				if (pData[playerid][inv][8] >= 5)
+				{
+                    if (pData[playerid][inv][19] + 4 > GetBackpackCapacity(playerid))
+                    {
+                        SendServerMessage(playerid, "Not enough backpack space for this item.");
+                        ShowMenuForPlayer(PoliceArmory, playerid);
+                        return 1;
+                    }
+                    pData[playerid][inv][19] += 4;
+                    pData[playerid][inv][8] -= 5;
+                    SendServerMessage(playerid, "Thanks for the purchase civilian");
+                }
+                else SendServerMessage(playerid, "You don't have 5 irons.");
+                ShowMenuForPlayer(PoliceArmory, playerid);
+            }
+            case 2 :
+            {
+				if (pData[playerid][inv][8] >= 3)
+				{
+                    if (pData[playerid][inv][15] + 1 > GetBackpackCapacity(playerid))
+                    {
+                        SendServerMessage(playerid, "Not enough backpack space for this item.");
+                        ShowMenuForPlayer(PoliceArmory, playerid);
+                        return 1;
+                    }
+                    pData[playerid][inv][18] += 1;
+                    pData[playerid][inv][8] -= 3;
+                    SendServerMessage(playerid, "Thanks for the purchase civilian");
+                }
+                else SendServerMessage(playerid, "You don't have 3 irons.");
+                ShowMenuForPlayer(PoliceArmory, playerid);
+            }
+            case 3 :
+            {
+				if (pData[playerid][inv][8] >= 3)
+				{
+                    if (pData[playerid][inv][14] + 5 > GetBackpackCapacity(playerid))
+                    {
+                        SendServerMessage(playerid, "Not enough backpack space for this item.");
+                        ShowMenuForPlayer(PoliceArmory, playerid);
+                        return 1;
+                    }
+                    pData[playerid][inv][14] += 5;
+                    pData[playerid][inv][8] -= 3;
+                    SendServerMessage(playerid, "Thanks for the purchase civilian");
+                }
+                else SendServerMessage(playerid, "You don't have 3 irons.");
+                ShowMenuForPlayer(PoliceArmory, playerid);
+            }
+            case 4 :
+            {
+				if (pData[playerid][inv][8] >= 10)
+				{
+                    if (pData[playerid][inv][14] + 10 > GetBackpackCapacity(playerid))
+                    {
+                        SendServerMessage(playerid, "Not enough backpack space for this item.");
+                        ShowMenuForPlayer(PoliceArmory, playerid);
+                        return 1;
+                    }
+                    pData[playerid][inv][14] += 10;
+                    pData[playerid][inv][8] -= 10;
+                    SendServerMessage(playerid, "Thanks for the purchase civilian");
+                }
+                else SendServerMessage(playerid, "You don't have 10 irons.");
+                ShowMenuForPlayer(PoliceArmory, playerid);
+            }
+            case 5 :
+            {
+				if (pData[playerid][inv][9] >= 5)
+				{
+                    pData[playerid][inv][9] -= 5;
+                    GivePlayerWeapon(playerid,22,1);
+                    SendServerMessage(playerid, "Thanks for the purchase civilian");
+                }
+                else SendServerMessage(playerid, "You don't have 5 golds.");
+                ShowMenuForPlayer(PoliceArmory, playerid);
+            }
+            case 6 :
+            {
+                HideMenuForPlayer(PoliceArmory, playerid);
+                TogglePlayerControllable(playerid, 1);
+            }
+        }
+        AllowWeapon(playerid, 22,2);
+	}
+    return 1;
+}
+public OnPlayerExitedMenu(playerid)
+{
+	new Menu:Current = GetPlayerMenu(playerid);
+	if(!IsValidMenu(Current)) return 1;
+	ShowMenuForPlayer(Current, playerid);
 	return 1;
 }
 AntiDeAMX()

@@ -31,6 +31,8 @@ script actorclanc()
 	CreateActor(287,295.7274,1857.1534,7.8281,263.2263);
 	missionactor[4] = CreateActor(70,272.2670,1854.0015,8.7649,171.0822); // science
 	missionactor[5] = CreateActor(70,279.6077,1855.4661,8.7649,296.1035); // science
+	//other NPC
+	missionactor[7] = CreateActor(26702,584.7945,870.1245,-42.4973,283.6910); //miner
     return 1;
 }
 Dialog:Missionclan00(playerid, response, listitem, inputtext[])
@@ -39,16 +41,18 @@ Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 	{
         switch (listitem)
         {
-            case 0: Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1", "Hey meat bag we need meat!\nBring us all the meat you can find and we gonna pay you.\nSimple right? GO GRAB SOME MEAT.", "OK", "");
-            case 1:
-            {
-                new meat = pData[playerid][inv][1],exp = meat*2;
-                pData[playerid][clanexp][1] += exp;
-                Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1 done", "Thank for THAT MEAT!!\n{0f5900}Exp clan + %d", "OK", "", exp);
-                pData[playerid][inv][1] = 0;
-            }
-            case 2: Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2", "Hey meat bag we need the chop chop.\nBring us the chop chop for the meat!", "OK", "");
-			case 3:
+			case 0: 
+			{
+				if(pData[playerid][inv][1] <= 0) return Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1", "Hey meat bag we need meats!\nBring us all the meat you can find and we gonna pay you.\nSimple right? GO GRAB SOME MEAT(S).", "OK", "");
+				else 
+				{
+					new meat = pData[playerid][inv][1],exp = meat*2;
+					pData[playerid][clanexp][1] += exp;
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1 done", "Thank for THAT MEAT(S)!!\n{0f5900}Exp clan + %d", "OK", "", exp);
+					pData[playerid][inv][1] = 0;
+				}
+			}
+			case 1:
 			{
 				if(GetPlayerWeapon(playerid) == 4)
 				{
@@ -59,14 +63,7 @@ Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 				}
 				else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2", "You dont have the chop chop!\nBring us the chop chop for the meat!", "OK", "");
 			}
-			case 4:
-			{
-				Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
-				mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
-				mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
-				missioncheck = 1;
-			}
-			case 5:
+			case 2:
 			{
 				if(missioncheck == 11)
 				{
@@ -74,33 +71,25 @@ Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 					missioncheck = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
 				}
-				else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+				else
+				{
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+					mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
+					mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
+					missioncheck = 1;
+				}
 			}
-            case 10:
+            case 7:
             {
-                if(pData[playerid][clanexp][1] >= 5000)
+                if(pData[playerid][clanexp][1] >= 2500)
                 {
-                    pData[playerid][clanexp][1] -= 5000;
+                    pData[playerid][clanexp][1] -= 2500;
                     pData[playerid][Score] += 1;
                     SetPlayerScore(playerid, pData[playerid][Score]);
-                    Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -5000", "OK", "");
+                    Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -2500", "OK", "");
                 }
-                else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (5000)", "OK", "");
+                else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (2500)", "OK", "");
             }
-        }
-        return 1;
-    }
-    return 1;
-}
-Dialog:Missionclan01(playerid, response, listitem, inputtext[])
-{
-    if (response)
-	{
-        switch (listitem)
-        {
-            case 0: {	}
-            case 1:
-            {            }
         }
         return 1;
     }
@@ -118,46 +107,31 @@ Dialog:Missionclan10(playerid, response, listitem, inputtext[])
 			case 3: {			}
 			case 4:
 			{
-				Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
-				mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
-				mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
-				missioncheck = 2;
-			}
-			case 5:
-			{
 				if(missioncheck == 22)
 				{
 					pData[playerid][clanexp][2] += 200;
 					missioncheck = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
 				}
-				else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+				else 
+				{
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+					mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
+					mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
+					missioncheck = 2;
+				}
 			}
-            case 10:
+            case 9:
             {
-                if(pData[playerid][clanexp][2] >= 5000)
+                if(pData[playerid][clanexp][2] >= 2500)
                 {
-                    pData[playerid][clanexp][2] -= 5000;
+                    pData[playerid][clanexp][2] -= 2500;
                     pData[playerid][Score] += 1;
                     SetPlayerScore(playerid, pData[playerid][Score]);
-                    Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -5000", "OK", "");
+                    Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -2500", "OK", "");
                 }
-                else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (5000)", "OK", "");
+                else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (2500)", "OK", "");
             }
-        }
-        return 1;
-    }
-    return 1;
-}
-Dialog:Missionclan11(playerid, response, listitem, inputtext[])
-{
-    if (response)
-	{
-        switch (listitem)
-        {
-            case 0: {	}
-            case 1:
-            {            }
         }
         return 1;
     }
@@ -175,31 +149,30 @@ Dialog:Missionclan20(playerid, response, listitem, inputtext[])
 			case 3: {			}
 			case 4:
 			{
-				Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
-				mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
-				mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
-				missioncheck = 3;
-			}
-			case 5:
-			{
 				if(missioncheck == 33)
 				{
 					pData[playerid][clanexp][3] += 200;
 					missioncheck = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
 				}
-				else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+				else
+				{
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
+					mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
+					mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
+					missioncheck = 3;
+				}
 			}
-            case 10:
+            case 9:
             {
-                if(pData[playerid][clanexp][3] >= 5000)
+                if(pData[playerid][clanexp][3] >= 2500)
                 {
-                    pData[playerid][clanexp][3] -= 5000;
+                    pData[playerid][clanexp][3] -= 2500;
                     pData[playerid][Score] += 1;
                     SetPlayerScore(playerid, pData[playerid][Score]);
-                    Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -5000", "OK", "");
+                    Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Level up +1\nClan Exp -2500", "OK", "");
                 }
-                else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (5000)", "OK", "");
+                else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (2500)", "OK", "");
             }
         }
         return 1;

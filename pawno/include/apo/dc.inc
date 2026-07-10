@@ -38,7 +38,7 @@ CMD:dc(playerid,params[])
     	DCC_SendChannelMessage(discordlog,string);
     	SendClientMessage(playerid,-1,string);
     }
-    else SendClientMessage(playerid,-1,"Text exceed 64 character long.");
+    else SendServerMessage(playerid,"Text exceed 64 character long.");
     return 1;
 }
 CMD:suggest(playerid,params[])
@@ -51,7 +51,7 @@ CMD:suggest(playerid,params[])
     	DCC_SendChannelMessage(discordlog,string);
     	SendServerMessage(playerid,"You send your suggestion to the discord");
     }
-    else SendClientMessage(playerid,-1,"Text exceed 64 character long.");
+    else SendServerMessage(playerid,"Text exceed 64 character long.");
     return 1;
 }
 DISCORD:c( DCC_Channel: channel, DCC_User: author, params[ ] )
@@ -69,7 +69,7 @@ DISCORD:players( DCC_Channel: channel, DCC_User: author, params[ ] )
     DCC_HasGuildMemberRole(GUILD_ID1,author,RoleJoueur,simembreroleok);
 	if (simembreroleok)
 	{
-		DCC_SendChannelMessage(discordlog,"**__Player on the server__**");
+		DCC_SendChannelMessage(discordlog,"**__Players on the server__**");
 		for(new i=0; i < 100; i++)
 		{
 			GetPlayerName(i, name, MAX_PLAYER_NAME);
