@@ -80,3 +80,17 @@ CMD:destroy(playerid, params[])
 	}	
 	return 1;
 }
+CMD:testlockpick(playerid, params[])
+{
+    new speed,pins,zone;
+    if(sscanf(params, "ddd", speed, pins, zone))
+    {
+        SendClientMessage(playerid,-1, "/testlockpick <speed> <pins> <zone>");
+        return 1;
+    }
+    if(speed < 20) return SendClientMessage(playerid,-1, "Speed minimum is 20.");
+    if(pins < 1 || pins > 10)return SendClientMessage(playerid,-1,"Pins: 1-10");
+    if(zone < 1 || zone > 10) return SendClientMessage(playerid,-1,"Zone: 1-10");
+    StartLockpick(playerid, speed, pins, zone);
+    return 1;
+}

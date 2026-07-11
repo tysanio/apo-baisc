@@ -156,7 +156,7 @@ CMD:pwep(playerid,params[])
 }
 CMD:storage(playerid, params[])
 {
-    Dialog_Show(playerid, storageData,DIALOG_STYLE_LIST,"Storage","Create Storage\nDelete storage\nEdit position\nLock", "Close","");
+    Dialog_Show(playerid, storageData,DIALOG_STYLE_LIST,"Storage","Create Storage\nDelete storage\nEdit position\nClaim", "Close","");
 	return 1;
 }
 CMD:editstorage(playerid, params[])

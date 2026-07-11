@@ -383,6 +383,108 @@ stock GetClanCapacity(i)
 
     return 100 << ClanInv1; // 100,200,400,800,1600,3200
 }
+//lockpick
+stock StartLockpick(playerid, speed, pins, zone)
+{
+    if(Lockpick[playerid][lpActive]) return 0;
+    Lockpick[playerid][lpActive] = true;
+    Lockpick[playerid][lpStep] = 0;
+    Lockpick[playerid][lpRequiredPins] = pins;
+    Lockpick[playerid][lpZoneSize] = zone;
+    Lockpick[playerid][lpSpeed] = speed;
+    Lockpick[playerid][lpPos] = 0;
+    Lockpick[playerid][lpDir] = 1;
+    Lockpick[playerid][lpZoneStart] = random(14) + 3;
+    Lockpick[playerid][lpZoneEnd] = Lockpick[playerid][lpZoneStart] + zone;
+    Lockpick[playerid][lpTimer] = SetTimerEx("LockpickUpdate", speed, true, "d", playerid);
+	SendServerMessage(playerid,"Lockpick started! Press ~k~~VEHICLE_ENTER_EXIT~ inside the zone.");
+    return 1;
+}
+//change weapons
+stock ReplaceWeapon(playerid, oldWeapon, newWeapon)
+{
+    new weapon, ammo,weapons[13], ammos[13];
+    for(new slot = 0; slot < 13; slot++)
+    {
+        GetPlayerWeaponData(playerid, slot, weapon, ammo);
+        weapons[slot] = weapon;
+        ammos[slot] = ammo;
+    }
+    ResetPlayerWeapons(playerid);
+    for(new slot = 0; slot < 13; slot++)
+    {
+        if(!weapons[slot] || ammos[slot] <= 0) continue;
+		AllowWeapon(playerid, weapons[slot],ammos[slot]);
+        if(weapons[slot] == oldWeapon) GivePlayerWeapon(playerid, newWeapon, ammos[slot]);
+        else GivePlayerWeapon(playerid, weapons[slot], ammos[slot]);
+    }
+
+    return 1;
+}
+stock GiveWeaponWithReplace(playerid, weaponid, ammo)
+{
+    new current = GetPlayerWeapon(playerid);
+    if(weaponid == 4 || weaponid == 3 || weaponid == 6)
+    {
+        if(current == 4 || current == 3 || current == 6)
+        {
+            if(current != weaponid)
+            {
+                ChangeWeaponOld[playerid] = current;
+                ChangeWeaponNew[playerid] = weaponid;
+                Dialog_Show(playerid,CHANGEWEAPON, DIALOG_STYLE_MSGBOX,"Replace Weapon","You already have a melee weapon.\n\nReplace it?\n(Current ammo will be kept.)","Yes","No");
+                return 0;
+            }
+        }
+    }
+    if(weaponid == 22 || weaponid == 23 || weaponid == 24)
+    {
+        if(current == 22 || current == 23 || current == 24)
+        {
+            if(current != weaponid)
+            {
+                ChangeWeaponOld[playerid] = current;
+                ChangeWeaponNew[playerid] = weaponid;
+                Dialog_Show(playerid,CHANGEWEAPON, DIALOG_STYLE_MSGBOX,"Replace Weapon","You already have a pistol.\n\nReplace it?\n(Current ammo will be kept.)","Yes","No");
+                return 0;
+            }
+        }
+    }
+    if(weaponid == 25 || weaponid == 26 || weaponid == 27)
+    {
+        if((current == 25 || current == 26 || current == 27) && current != weaponid)
+        {
+            ChangeWeaponOld[playerid] = current;
+            ChangeWeaponNew[playerid] = weaponid;
+            Dialog_Show(playerid,CHANGEWEAPON, DIALOG_STYLE_MSGBOX,"Replace Weapon","You already have a shotgun.\n\nReplace it?\n(Current ammo will be kept.)","Yes","No");
+            return 0;
+        }
+    }
+    if(weaponid == 33 || weaponid == 34)
+    {
+        if((current == 33 || current == 34) && current != weaponid)
+        {
+            ChangeWeaponOld[playerid] = current;
+            ChangeWeaponNew[playerid] = weaponid;
+            Dialog_Show(playerid,CHANGEWEAPON, DIALOG_STYLE_MSGBOX,"Replace Weapon","You already have a rifle.\n\nReplace it?\n(Current ammo will be kept.)","Yes","No");
+            return 0;
+        }
+    }
+    if(weaponid == 16 || weaponid == 18)
+    {
+        if((current == 16 || current == 18) && current != weaponid)
+        {
+            ChangeWeaponOld[playerid] = current;
+            ChangeWeaponNew[playerid] = weaponid;
+            Dialog_Show(playerid,CHANGEWEAPON, DIALOG_STYLE_MSGBOX,"Replace Weapon","You already have a throwable.\n\nReplace it?\n(Current ammo will be kept.)","Yes","No");
+            return 0;
+        }
+    }
+    // Doesn't have another weapons of the group
+	AllowWeapon(playerid, weaponid,ammo);
+    GivePlayerWeapon(playerid, weaponid, ammo);
+    return 1;
+}
 stock SendClientMessageEx(playerid, color, const text[], {Float, _}:...)
 {
 	static args,str[144];

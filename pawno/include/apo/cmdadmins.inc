@@ -2,8 +2,8 @@ CMD:ahelp(playerid, params[])
 {
     if(!pData[playerid][Admin]) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
     SendServerMessage(playerid, "---List of commands admins  for this server---");
-    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/kick, /mute, /unmute, /setskin, /sethp, /setarmor, /resetweapons");
-    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/position, /goto, /zoneinfo, /addpoint, /resetintvw");
+    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/kick, /mute, /unmute, /freeze, /unfreeze /setskin, /sethp, /setarmor, /resetweapons");
+    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/goto, /zoneinfo, /addpoint, /resetintvw");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/banperm, /bantemp, /unban, /banlist, /editveh, /editstation /stationlist");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/createobject, /editobject, /delobject");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/setvip /setscore, /createspawn, /createveh, /createentrance, /delentrance, /editentrance");
@@ -14,14 +14,32 @@ CMD:ahelp(playerid, params[])
 //admin 1
 CMD:kick(playerid, params[])
 {
-    new targetid, reason[64],name[MAX_PLAYER_NAME], admin[MAX_PLAYER_NAME];
+    new targetid, reason[64],lookupid;
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
     if(sscanf(params, "us[64]", targetid, reason))
         return SendCommandMessage(playerid, "Usage: /kick <player> <reason>");
-    GetPlayerName(targetid, name, sizeof(name));
-    GetPlayerName(playerid, admin, sizeof(admin));
-    SendAdminAlert(COLOR_LIGHTRED, "Admin %s has kick %s. Reason: %s", admin, name, reason);
+    SendAdminAlert(COLOR_LIGHTRED, "Admin %s has kick %s. Reason: %s", GetName(playerid), GetName(lookupid), reason);
     KickEx(targetid);
+    return 1;
+}
+CMD:unfreeze(playerid, params[])
+{
+    new lookupid;
+    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
+    if(sscanf(params, "u", lookupid))
+        return SendCommandMessage(playerid, "Usage: /freeze <player>");
+    SendAdminAlert(COLOR_LIGHTRED, "Admin %s has unfreeze %s.", GetName(playerid), GetName(lookupid));
+    TogglePlayerControllable(lookupid, 1);
+    return 1;
+}
+CMD:freeze(playerid, params[])
+{
+    new lookupid;
+    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
+    if(sscanf(params, "u", lookupid))
+        return SendCommandMessage(playerid, "Usage: /freeze <player>");
+    SendAdminAlert(COLOR_LIGHTRED, "Admin %s has freeze %s.", GetName(playerid), GetName(lookupid));
+    TogglePlayerControllable(lookupid, 0);
     return 1;
 }
 CMD:resetintvw(playerid, params[])
@@ -158,25 +176,13 @@ CMD:banlist(playerid, params[])
     mysql_tquery(mysql, query, "OnShowBanList", "d", playerid);
     return 1;
 }
-CMD:position(playerid, params[])
-{
-	static Float:x,Float:y,Float:z;
-	if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if (sscanf(params, "fff", x,y,z)) return SendCommandMessage(playerid, "/position <x> <y> <z>");
-	if (IsPlayerInAnyVehicle(playerid))
-	{
-	    SetVehiclePos(GetPlayerVehicleID(playerid), x, y, z);
-	}
-	else SetPlayerPos(playerid, x, y, z+1);
-	return 1;
-}
 CMD:goto(playerid, params[])
 {
 	static id,type[24],string[64];
 	if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
 	if (sscanf(params, "s[24]S()[64]", type, string))
 	{
-		SendServerMessage(playerid,"[NAMES]:{FFFFFF} actor, interior, car, entrance");
+		SendServerMessage(playerid, "[NAMES]: {FFFFFF}actor, interior, car, entrance, pos");
 		return 1;
 	}
 	else if (!strcmp(type, "actor", true))
@@ -219,6 +225,14 @@ CMD:goto(playerid, params[])
 		SetPlayerVirtualWorld(playerid, EntranceData[id][entranceExteriorVW]);
 	    SendServerMessage(playerid, "You have teleported to entrance ID: %d.", id);
 	    return 1;
+	}
+	else if (!strcmp(type, "pos", true))
+	{
+		static Float:x, Float:y, Float:z;
+		if (sscanf(string, "fff", x, y, z)) return SendCommandMessage(playerid, "/goto position <x> <y> <z>");
+		if (IsPlayerInAnyVehicle(playerid)) SetVehiclePos(GetPlayerVehicleID(playerid), x, y, z);
+		else SetPlayerPos(playerid, x, y, z + 1.0);
+		return 1;
 	}
 	else return SendServerMessage(playerid, "Invalide name to goto.");
 }

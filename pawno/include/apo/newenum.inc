@@ -49,6 +49,7 @@ enum DATAX
 	PlayerBar:Waterbar,
 	pFreeze,
 	pFreezeTimer,
+	pLockpickStorage, //because derp
 	pDiscordID
 }
 new pData[MAX_PLAYERS][DATAX];
@@ -351,7 +352,11 @@ new const g_arrInteriorData[][e_InteriorData] = {
 {"Woozie's apartment",1,-2158.72,641.29,1052.38},
 {"World of Coq",1,445.6,-6.9823,1000.73},
 {"Zero's RC shop",6,-2240.0,131.0,1035.4},
-{"ZIP",18,161.392,-93.1591,1001.8}
+{"ZIP",18,161.392,-93.1591,1001.8},
+{"Entrainement Swat",10,1019.8245,1246.5947,1799.4005},
+{"Élise", 1,-1991.9131, 1118.6000, 457.4883},
+{"Caravan FIX", 1,2511.8999, -1729.8052, 778.1525},
+{"Trailer park boys",1,2334.9458, -1047.7510,1043.7659}
 };
 enum E_FUEL_STATION {
     fsID,
@@ -487,3 +492,21 @@ InitMenu()
 	//army armory skins AR plate armor
 	//wasteland skin rifle medkit
 }
+//lockpick
+enum E_LOCKPICK_DATA
+{
+    bool:lpActive,
+    lpStep,
+    lpRequiredPins,
+    lpZoneSize,
+    lpPos,
+    lpDir,
+    lpZoneStart,
+    lpZoneEnd,
+    lpTimer,
+    lpSpeed
+};
+new Lockpick[MAX_PLAYERS][E_LOCKPICK_DATA];
+//weapons change
+new ChangeWeaponOld[MAX_PLAYERS];
+new ChangeWeaponNew[MAX_PLAYERS];

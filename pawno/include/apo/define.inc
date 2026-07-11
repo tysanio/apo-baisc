@@ -32,6 +32,7 @@ do admin edit stuff discord
 #define MAX_WEAPONS 13
 #define MAX_GZONES 50
 #define MAX_MISSION_CHECKPOINTS 5
+#define MAX_LOCKPICK_BAR 20
 
 #define MODEL_SELECTION_SKIN 													(1)
 #define MODEL_SELECTION_CRAFT 													(2)

@@ -1147,7 +1147,7 @@ script Entrance_Load()
 	printf("[Entrances] %d loaded entrances", rows);
 	return 1;
 }
-//ming
+//mining
 script FinishMining(playerid)
 {
     TogglePlayerControllable(playerid, 1);
@@ -1158,5 +1158,23 @@ script FinishMining(playerid)
 	pData[playerid][clanexp][0] += random(5)+1;
     IsMining[playerid] = 0;    
     GameTextForPlayer(playerid, "~g~Mining done!", 4000, 3);
+    return 1;
+}
+//lockpick
+script LockpickUpdate(playerid)
+{
+    if(!Lockpick[playerid][lpActive]) return 0;
+    Lockpick[playerid][lpPos] += Lockpick[playerid][lpDir];
+    if(Lockpick[playerid][lpPos] >= MAX_LOCKPICK_BAR) Lockpick[playerid][lpDir] = -1;
+    if(Lockpick[playerid][lpPos] <= 0) Lockpick[playerid][lpDir] = 1;
+    new bar[64];
+    for(new i = 0; i <= MAX_LOCKPICK_BAR; i++)
+    {
+        if(i == Lockpick[playerid][lpPos]) strcat(bar, "|");
+        else if( i >= Lockpick[playerid][lpZoneStart] && i <= Lockpick[playerid][lpZoneEnd]) strcat(bar, "=");
+        else strcat(bar, "-");
+    }
+	TogglePlayerControllable(playerid, 0);
+    GameTextForPlayer(playerid, bar, 100, 3);
     return 1;
 }

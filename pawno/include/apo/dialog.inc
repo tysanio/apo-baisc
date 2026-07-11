@@ -370,7 +370,20 @@ Dialog:UseItem(playerid, response, listitem, inputtext[])
 				}
 				else SendServerMessage(playerid, "You don't have a canned food(s).");
 			}
-			case 8: {} //lockpick stuff
+			case 8: 
+			{
+                if(pData[playerid][inv][10] >= 1)
+				{
+					new id = Storage_Nearest(playerid);
+					if(id != -1)
+					{
+						pData[playerid][pLockpickStorage] = id;
+						StartLockpick(playerid, 50, random(5)+1, random(3)+1);
+					}
+					else SendServerMessage(playerid,"Not near any storage to lockpick.");
+                }
+                else SendServerMessage(playerid, "You don't have atleast one lockpick to try it.");
+			} //lockpick stuff
 		}
         return 1;
 	}
@@ -1453,7 +1466,7 @@ Dialog:storageData(playerid, response, listitem, inputtext[])
 					pData[playerid][pEditobjects] = id;
 					EditDynamicObject(playerid, storageData[id][storagesOb]);
 					SendServerMessage(playerid, "You have created an storage with (ID: %d.)", id);
-					SendServerMessage(playerid, "To claim it use /storagelock .");
+					SendServerMessage(playerid, "To claim it use /storage.");
 				}
 				else SendServerMessage(playerid, "You don't have 100 Metal(s) or/and 100 plastic(s) or/and 100 wood(s).");
 
@@ -1510,4 +1523,22 @@ Dialog:storageData(playerid, response, listitem, inputtext[])
         return 1;
 	}
 	return 1;
+}
+//change weapon
+Dialog:CHANGEWEAPON(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+        if(response)
+        {
+            ReplaceWeapon(playerid,ChangeWeaponOld[playerid],ChangeWeaponNew[playerid]);
+            SendServerMessage(playerid,"Weapon replaced.");
+        }
+        else
+        {
+            SendServerMessage(playerid,"You kept your current weapon.");
+        }
+        return 1;
+    }
+    return 0;
 }

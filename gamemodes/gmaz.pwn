@@ -1,4 +1,4 @@
-//total lines 7975
+//total lines 8204
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -40,8 +40,8 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.18.7975");
-	SendRconCommand("ackslimit 10000");
+	SetGameModeText("Apo 0.19.8204");
+	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
     ManualVehicleEngineAndLights(); //vehicle on/off
@@ -73,7 +73,6 @@ public OnGameModeInit()
     #if defined discordonline
     loaddiscord();
     #endif
-
     SetTimer("CheckUnoccupiedVehicleTeleport", 3000, true); //antitpveh
     SetTimer("GangZoneResourceTick", GANG_RESOURCE_TIME, true);  //timer reward
 	return 1;
@@ -90,6 +89,7 @@ public OnPlayerConnect(playerid)
 	{
  		pData[playerid][DATAX:i] = 0;
 	}
+    Lockpick[playerid][lpActive] = false;
     TogglePlayerSpectating(playerid, 1);
     SetPlayerHealth(playerid,10);
     SetPlayerInterior(playerid,0);
@@ -264,6 +264,7 @@ public OnPlayerUpdate(playerid)
         new Float:hpPercent = vehHP / 10.0; // Normalize to 100 scale
         SetPlayerProgressBarValue(i, HealthBar[i], hpPercent);
         ShowPlayerProgressBar(i, HealthBar[i]);
+   		if (health <= 249.0) SetVehicleHealth(vehicleid,250.0);
         if (floatround(speed) > 280)
         {
             if (GetPlayerState(playerid) != PLAYER_STATE_PASSENGER)
@@ -620,7 +621,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_DUCK)
 		{
 			if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 1;
-			new f = MAX_SPAWNPOS+1,chancerand = random(35),taking = random(3) + 1;
+			new f = MAX_SPAWNPOS+1,chancerand = random(36),taking = random(3) + 1;
 			for(new a = 0; a < MAX_SPAWNPOS; a++)
 			{
 				if(IsPlayerInRangeOfPoint(playerid, 2.0, dspawnpos[a][Pos][0], dspawnpos[a][Pos][1], dspawnpos[a][Pos][2]) && IsValidDynamicObject(dspawnpos[a][Objects]))
@@ -633,16 +634,17 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			switch(chancerand)
 			{
 				//melee
-				case 0: GivePlayerWeapon(playerid,4,random(2)+1);
-                case 1: GivePlayerWeapon(playerid,3,random(2)+1);
-                case 2: GivePlayerWeapon(playerid,6,random(2)+1);
+				case 0: GiveWeaponWithReplace(playerid, 4,random(2)+1);
+                case 1: GiveWeaponWithReplace(playerid, 3,random(2)+1);
+                case 2: GiveWeaponWithReplace(playerid, 6,random(2)+1);
 				//pistol
-				case 3: GivePlayerWeapon(playerid,22,random(5)+1);
+				case 3: GiveWeaponWithReplace(playerid, 22,random(5)+1);
 				//shotgun
-				case 4: GivePlayerWeapon(playerid,25,random(10)+1);
-				case 5: GivePlayerWeapon(playerid,26,random(4)+1);
+				case 4: GiveWeaponWithReplace(playerid, 25,random(10)+1);
+				case 5: GiveWeaponWithReplace(playerid, 26,random(4)+1);
 				//rifle
-				case 6: GivePlayerWeapon(playerid,33,random(5)+1);
+				case 6: GiveWeaponWithReplace(playerid,33,random(5)+1);
+                case 35: GiveWeaponWithReplace(playerid,34,random(2)+1);
 				//inventaire
                 case 7 .. 31:
                 {
@@ -656,8 +658,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                 }
                 case 32: ShowModelSelectionMenu(playerid, "Select your new clothes", MODEL_SELECTION_SKIN, Skinsskins, sizeof(Skinsskins), -16.0, 0.0, -55.0);
                 //grenade
-                case 33: GivePlayerWeapon(playerid,16,1);
-                case 34: GivePlayerWeapon(playerid,18,1);
+                case 33: GiveWeaponWithReplace(playerid,16,1);
+                case 34: GiveWeaponWithReplace(playerid,18,1);
 			}
             AllowWeapon(playerid, 4,4);
             AllowWeapon(playerid, 3,4);
@@ -677,6 +679,47 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			return 1;
 		}
 	}
+    if(!Lockpick[playerid][lpActive])
+        return 1;
+    if(newkeys & KEY_SECONDARY_ATTACK)
+    {
+        if(Lockpick[playerid][lpPos] >= Lockpick[playerid][lpZoneStart] && Lockpick[playerid][lpPos] <= Lockpick[playerid][lpZoneEnd])
+        {
+            Lockpick[playerid][lpStep]++;
+            if(Lockpick[playerid][lpStep] >= Lockpick[playerid][lpRequiredPins])
+            {
+                KillTimer(Lockpick[playerid][lpTimer]);
+                Lockpick[playerid][lpActive] = false;
+                SendServerMessage(playerid,"Lock successfully opened!");
+                TogglePlayerControllable(playerid, 1);
+                new id = -1;
+                if ((id = Storage_Nearest(playerid)) != -1)
+                {
+                    storageData[id][storagesLock] = 0;
+                    storages_Save(id);
+                    SendServerMessage(playerid,"The storage lock is broken, use /storage install a new lock");
+                }
+                return 1;
+            }
+            Lockpick[playerid][lpZoneStart] = random(14)+3;
+            Lockpick[playerid][lpZoneEnd] = Lockpick[playerid][lpZoneStart] +Lockpick[playerid][lpZoneSize];
+        }
+        else
+        {
+            KillTimer(Lockpick[playerid][lpTimer]);
+            Lockpick[playerid][lpActive] = false;
+            SendServerMessage(playerid,"You failed the lockpick.");
+            TogglePlayerControllable(playerid, 1);
+            switch (random(8))
+            {
+                case 0:
+                {
+                    pData[playerid][inv][10] -= 1;
+                    SendServerMessage(playerid,"Your lockpick has broken!");
+                }
+            }
+        }
+    }
 	//deer
 	if(PRESSED(KEY_WALK))
 	{
@@ -1111,6 +1154,7 @@ public OnPlayerSelectedMenuRow(playerid, row)
 				{
                     pData[playerid][inv][9] -= 2;
                     GivePlayerWeapon(playerid,25,random(2)+1);
+                    GiveWeaponWithReplace(playerid,25,random(2)+1);
                     SendServerMessage(playerid, "Thanks for the purchase meat bag.");
                 }
                 else SendServerMessage(playerid, "You don't have 2 golds.");

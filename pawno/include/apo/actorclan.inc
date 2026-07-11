@@ -377,7 +377,6 @@ script mapping()
 	CreateDynamicObject(3461, 2510.54, -1722.74, 779.89,   0.00, 0.00, 0.00);
 	CreateDynamicObject(3461, 2510.54, -1723.16, 779.91,   0.00, 0.00, 0.00);
 	//entrainement swat
-	// [MAPPING] Swat Entrainement
 	CreateDynamicObject(14408, 1032.07, 1256.97, 1814.11,   0.00, 0.00, 0.00);
 	CreateDynamicObject(14412, 1085.99, 1252.99, 1816.30,   0.00, 0.00, 0.00);
 	CreateDynamicObject(1649, 1042.02, 1256.66, 1806.18,   0.00, 0.00, 90.00);
@@ -582,6 +581,5 @@ script mapping()
 	CreateDynamicObject(3020, 1014.49, 1267.61, 1809.24,   0.00, 0.00, 90.00);
 	CreateDynamicObject(3018, 1014.43, 1267.64, 1809.17,   0.00, 0.00, 90.00);
 	CreateDynamicObject(3019, 1014.45, 1267.64, 1809.20,   0.00, 0.00, 90.00);
-	CreateDynamicObject(2611, 1564.65, -1669.43, 0.69,   0.00, 0.00, 1.44);
     return 1;
 }
