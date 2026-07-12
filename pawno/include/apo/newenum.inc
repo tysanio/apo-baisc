@@ -129,6 +129,7 @@ enum clan
     idclan,
     owner[26],
     clanname[26],
+	clanexists,
     maxrank,    //1-15
 	clanlock, //interior lock
     Float:enterpos[3],

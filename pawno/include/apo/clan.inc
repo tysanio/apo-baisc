@@ -20,6 +20,8 @@ CMD:clanchest(playerid, params[])
 			new id = clans[pData[playerid][idclan]][idclan];	
 			if(IsNearChest(playerid))
 			{
+				if (pData[playerid][clanrank] < clans[pData[playerid][idclan]][maxrank] - 1)
+					return SendServerMessage(playerid, "You must be at least rank %d to use that command.", clans[pData[playerid][idclan]][maxrank] - 1);
 				Dialog_Show(playerid, CLANDIALOG10, DIALOG_STYLE_TABLIST, "Clan Chest \tAmount","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\n\
 				Gun Powder(s) : \t%d\nOre(s) :\t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
 				Repair kit(s) : \t%d\nMed Kit(s) : \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n\
@@ -158,16 +160,13 @@ CMD:clanwar(playerid, params[])
 CMD:clanres(playerid, params[])
 {
     new attackerTeam = pData[playerid][idclan];
-
     for (new i = 0; i < TotalGZ; i++)
     {
         if (IsPlayerInZone(playerid, GangZones[i][gMinX], GangZones[i][gMinY], GangZones[i][gMaxX], GangZones[i][gMaxY]))
         {
-			if (GangZones[i][gTeamID] != attackerTeam) return SendServerMessage(playerid, "[CLAN] You don't own this zone.");
-		
+			if (GangZones[i][gTeamID] != attackerTeam) return SendServerMessage(playerid, "[CLAN] You don't own this zone.");		
 			if (pData[playerid][clanrank] < clans[pData[playerid][idclan]][maxrank] - 1)
-			return SendServerMessage(playerid, "You must be at least rank %d to use that command.", clans[pData[playerid][idclan]][maxrank] - 1);
-			
+			return SendServerMessage(playerid, "You must be at least rank %d to use that command.", clans[pData[playerid][idclan]][maxrank] - 1);			
 			Dialog_Show(playerid, Ressources,DIALOG_STYLE_LIST,"Convert ressources ","Point(s) remaining:%d\n10 Meat(s) for 5\n10 Wood(s) for 2\n5 Metal(s) for 3\n5 Cloth(s) for 3\n5 Plastic(s) for 3\n10 Gun Powder(s) for 5\n2 Water Bottle for 1\n2 Canned Food for 1", "Convert", "Close",GangZones[i][gressources]);  
 			return 1;
 		}

@@ -164,11 +164,11 @@ CMD:editstorage(playerid, params[])
     new subcmd[16], args[32],item_id, amount;
 	static id = -1;
     if (sscanf(params, "s[16]S()[32]",subcmd, args)) {
-        SendCommandMessage(playerid, "Usage: /editstorage <withdraw|give|view> [item_id] [amount]");
+        SendCommandMessage(playerid, "Usage: /editstorage <withdraw|give|view|upgrade> [item_id] [amount]");
 		SendServerMessage(playerid, "1: Meat(s), 2: Wood(s), 3: Metal(s),4: Cloth(s), 5: Plastic(s),6: Gun Powder(s)");
 		SendServerMessage(playerid, "7: Ore(s), 8: Iron(s), 9: Gold(s), 10: Lockpick(s), 11: Repair kit(s), 12: Med Kit(s),13: Jerrycan(s) ");
 		SendServerMessage(playerid, "14: 9mm Bullet(s), 15: 00' Buck's, 16: 308(s), 17: Armor Plate(s), 18: Water Bottle, 19: Canned Food");
-		SendServerMessage(playerid, "20: inv20, 21: inv21, 22: inv22, 23: inv23, 24: inv24,25: inv25");
+		SendServerMessage(playerid, "20: inv20, 21: inv21, 22: inv22, 23: inv23, 24: inv24, 25: inv25");
         return 1;
     }
     if (!strcmp(subcmd, "withdraw", true))
@@ -231,6 +231,25 @@ CMD:editstorage(playerid, params[])
 		}
 		else SendServerMessage(playerid,"You're not near a storage that you own.");
 	}
+    else if (!strcmp(subcmd, "upgrade", true))
+    {
+        if ((id = Storage_Nearest(playerid)) != -1)
+		{
+			if (storageData[id][storagesInv][2] < GetStorageCapacity(id))
+				return SendServerMessage(playerid, "The storage is not full of %s for upgrade (%d).",ItemNames[2],GetStorageCapacity(id));
+			if (storageData[id][storagesInv][3] < GetStorageCapacity(id))
+				return SendServerMessage(playerid, "The storage is not full of %s for upgrade (%d).",ItemNames[3],GetStorageCapacity(id));
+			if (storageData[id][storagesInv][5] < GetStorageCapacity(id))
+				return SendServerMessage(playerid, "The storage is not full of %s for upgrade (%d).",ItemNames[5],GetStorageCapacity(id));
+			storageData[id][storagesInv][2] -= GetStorageCapacity(id);
+			storageData[id][storagesInv][3] -= GetStorageCapacity(id);
+			storageData[id][storagesInv][5] -= GetStorageCapacity(id);
+            storageData[id][storagesInv][0] += 1;
+            SendServerMessage(playerid,"You upgrade your storage to level %d capacity : (%d).",storageData[id][storagesInv][0],GetStorageCapacity(id));
+            storages_Save(id);
+        }
+        else SendServerMessage(playerid,"You're not near a storage that you own.");
+    }
 	else return SendServerMessage(playerid, "Invalid option to choose from.");
 	return 1;
 }

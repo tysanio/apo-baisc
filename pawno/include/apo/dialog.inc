@@ -396,7 +396,7 @@ Dialog:CLANDIALOG00(playerid, response, listitem, inputtext[])
 	{
 		new Float:x,Float:y,Float:z;
 		GetPlayerPos(playerid, x, y, z);
-		new facass = clans[pData[playerid][idclan]][idclan];
+		new facass = clans[pData[playerid][idclan]][idclan],slot = GetClanByID(pData[playerid][idclan]);
         switch (listitem)
         {
 			case 0:
@@ -408,7 +408,7 @@ Dialog:CLANDIALOG00(playerid, response, listitem, inputtext[])
 			{
 				if (pData[playerid][idclan] !=0)
 				{
-					Dialog_Show(playerid, CLANDIALOG01, DIALOG_STYLE_MSGBOX, "Clan Stats","Database ID %d\nMax Rank %d\nChest Location\n%.2f %.2f %.2f\n\nEntry location\n%.2f %.2f %.2f\n\nClan Exp 0 %d\nClan Exp 1 %d\nClan Exp 2 %d\nClan Exp 3 %d\nClan Exp 4 %d\n", "OK", "",clans[facass][idclan],clans[facass][maxrank],clans[facass][chestpos][0],clans[facass][chestpos][1],clans[facass][chestpos][2],clans[facass][enterpos][0],clans[facass][enterpos][1],clans[facass][enterpos][2],clans[facass][clanexp][0],clans[facass][clanexp][1],clans[facass][clanexp][2],clans[facass][clanexp][3],clans[facass][clanexp][4]);  		
+					Dialog_Show(playerid, CLANDIALOG01, DIALOG_STYLE_MSGBOX, "Clan Stats","Database ID %d (%d)\nClan level %d\nMax Rank %d\n\nChest Location\n%.2f %.2f %.2f\n\nEntry location\n%.2f %.2f %.2f\n\nClan Exp 0 %d\nClan Exp 1 %d\nClan Exp 2 %d\nClan Exp 3 %d\nClan Exp 4 %d\n", "OK", "",clans[facass][idclan],slot,clans[facass][inv][0],clans[facass][maxrank],clans[facass][chestpos][0],clans[facass][chestpos][1],clans[facass][chestpos][2],clans[facass][enterpos][0],clans[facass][enterpos][1],clans[facass][enterpos][2],clans[facass][clanexp][0],clans[facass][clanexp][1],clans[facass][clanexp][2],clans[facass][clanexp][3],clans[facass][clanexp][4]);  		
 				}
 			}
 			case 2:
@@ -430,6 +430,8 @@ Dialog:CLANDIALOG00(playerid, response, listitem, inputtext[])
 			}
 			case 3:
 			{
+					if (pData[playerid][clanrank] < clans[pData[playerid][idclan]][maxrank] - 1)
+						return SendServerMessage(playerid, "You must be at least rank %d to use that command.", clans[pData[playerid][idclan]][maxrank] - 1);
 					clans[facass][enterpos][0] = x;
 					clans[facass][enterpos][1] = y;
 					clans[facass][enterpos][2] = z;
@@ -447,6 +449,8 @@ Dialog:CLANDIALOG00(playerid, response, listitem, inputtext[])
 			}
 			case 4:
 			{
+				if (pData[playerid][clanrank] < clans[pData[playerid][idclan]][maxrank] - 1)
+					return SendServerMessage(playerid, "You must be at least rank %d to use that command.", clans[pData[playerid][idclan]][maxrank] - 1);
 				clans[facass][exitpos][0] = x;
 				clans[facass][exitpos][1] = y;
 				clans[facass][exitpos][2] = z;
@@ -484,13 +488,20 @@ Dialog:CLANDIALOG00(playerid, response, listitem, inputtext[])
 				}
 				else SendServerMessage(playerid, "You don't have 25 Metal(s) or/and 25 plastic(s) or/and 25 wood(s).");
 			}
-			case 6: Dialog_Show(playerid, CLANDIALOG02, DIALOG_STYLE_INPUT, "Max rank", "Put maximum ranks for the member your clan.", "Set", "Back");
+			case 6:
+			{
+				if (pData[playerid][clanrank] < clans[pData[playerid][idclan]][maxrank])
+					return SendServerMessage(playerid, "You must be at least rank %d to use that command.", clans[pData[playerid][idclan]][maxrank] );
+				Dialog_Show(playerid, CLANDIALOG02, DIALOG_STYLE_INPUT, "Max rank", "Put maximum ranks for the member your clan.", "Set", "Back");
+			}
 			case 7: 
 			{
 				if (pData[playerid][idclan] !=0)
 				{
 					if(IsNearChest(playerid))
 					{
+						if (pData[playerid][clanrank] < clans[pData[playerid][idclan]][maxrank])
+							return SendServerMessage(playerid, "You must be at least rank %d to use that command.", clans[pData[playerid][idclan]][maxrank]);
 						pData[playerid][inv][1] += clans[facass][inv][1];
 						pData[playerid][inv][2] += clans[facass][inv][2];
 						pData[playerid][inv][3] += clans[facass][inv][3];

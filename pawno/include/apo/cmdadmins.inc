@@ -747,6 +747,33 @@ CMD:gzreload(playerid, params[])
     SendServerMessage(playerid,"[GangZone] Zones reloaded.");
     return 1;
 }
+CMD:editclan(playerid,params[])
+{
+	static id,type[24],string[128];
+	if(pData[playerid][Admin] < 2) return SendServerMessage(playerid, "Only admin level 2+ can use this cmd.");
+	if (sscanf(params, "ds[24]S()[128]", id, type, string))
+ 	{
+	 	SendCommandMessage(playerid, "/editclan [id] [name]");
+	    SendServerMessage(playerid, "[NAMES]:{FFFFFF} level, owner, entrance, exit, chest");
+		return 1;
+	}
+	if (!clans[id][idclan])
+	    return SendServerMessage(playerid, "You have specified an invalid clan ID.");
+	if (!strcmp(type, "level", true))
+	{
+	    static model;
+		if (sscanf(string, "d", model))
+		    return SendCommandMessage(playerid, "/editclan [id] [level] [level]");
+		if ((id < 0 || id >= MAX_CLANS) || !clans[id][clanexists])
+		    return SendServerMessage(playerid, "You have specified an invalid clans ID.");
+        clans[id][inv][0] = model;
+		SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has change clan id %d level to %d",GetName(playerid),playerid,id,model);
+		mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv0` = '%d' WHERE `idclan` = '%d'",model,clans[id][idclan]);
+		mysql_tquery(mysql, query);
+		return 1;
+	}
+	return 1;
+}
 //admin 3
 CMD:resetplayer(playerid, params[])
 {

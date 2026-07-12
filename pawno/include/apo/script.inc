@@ -309,8 +309,9 @@ script loadclans()
 {
     new rows,fields;
     cache_get_data(rows, fields);
-    for (new f = 0; f < rows; f ++) if (f < MAX_CLANS)
-    {
+	for (new f = 0; f < rows; f ++) if (f < MAX_CLANS)
+	{
+	    clans[f][clanexists] = true;
 		clans[f][idclan] = cache_get_field_content_int(f,"idclan");
         cache_get_field_content(f, "clanname", clans[f][clanname],.max_len = MAX_PLAYER_NAME);
 		cache_get_field_content(f, "Owner", clans[f][owner],.max_len = MAX_PLAYER_NAME);

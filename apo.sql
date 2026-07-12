@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 08, 2026 at 03:06 PM
+-- Generation Time: Jul 12, 2026 at 12:32 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.30
 
@@ -20,6 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `apo`
 --
+
 -- --------------------------------------------------------
 
 --
@@ -36,6 +37,13 @@ CREATE TABLE `bans` (
   `duration` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `bans`
+--
+
+INSERT INTO `bans` (`id`, `player_name`, `ip`, `admin_name`, `reason`, `ban_time`, `duration`) VALUES
+(3, 'burger', '127.0.0.1', 'Ela_Bosak', 'derp', 1748541266, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -46,53 +54,54 @@ CREATE TABLE `clans` (
   `idclan` int NOT NULL,
   `clanname` varchar(24) NOT NULL,
   `Owner` varchar(24) NOT NULL,
-  `maxrank` int NOT NULL,
+  `maxrank` int NOT NULL DEFAULT '5',
   `clancolor` int NOT NULL DEFAULT '0',
-  `enterposx` float NOT NULL,
-  `enterposy` float NOT NULL,
-  `enterposz` float NOT NULL,
-  `enterinterior` int NOT NULL,
-  `entervw` int NOT NULL,
-  `exitposx` float NOT NULL,
-  `exitposy` float NOT NULL,
-  `exitposz` float NOT NULL,
-  `exitinterior` int NOT NULL,
-  `exitvw` int NOT NULL,
-  `chestposx` float NOT NULL,
-  `chestposy` float NOT NULL,
-  `chestposz` float NOT NULL,
-  `clanexp0` int NOT NULL,
-  `clanexp1` int NOT NULL,
-  `clanexp2` int NOT NULL,
-  `clanexp3` int NOT NULL,
-  `clanexp4` int NOT NULL,
-  `inv0` int NOT NULL,
-  `inv1` int NOT NULL,
-  `inv2` int NOT NULL,
-  `inv3` int NOT NULL,
-  `inv4` int NOT NULL,
-  `inv5` int NOT NULL,
-  `inv6` int NOT NULL,
-  `inv7` int NOT NULL,
-  `inv8` int NOT NULL,
-  `inv9` int NOT NULL,
-  `inv10` int NOT NULL,
-  `inv11` int NOT NULL,
-  `inv12` int NOT NULL,
-  `inv13` int NOT NULL,
-  `inv14` int NOT NULL,
-  `inv15` int NOT NULL,
-  `inv16` int NOT NULL,
-  `inv17` int NOT NULL,
-  `inv18` int NOT NULL,
-  `inv19` int NOT NULL,
-  `inv20` int NOT NULL,
-  `inv21` int NOT NULL,
-  `inv22` int NOT NULL,
-  `inv23` int NOT NULL,
-  `inv24` int NOT NULL,
-  `inv25` int NOT NULL
+  `enterposx` float NOT NULL DEFAULT '0',
+  `enterposy` float NOT NULL DEFAULT '0',
+  `enterposz` float NOT NULL DEFAULT '-10',
+  `enterinterior` int NOT NULL DEFAULT '0',
+  `entervw` int NOT NULL DEFAULT '0',
+  `exitposx` float NOT NULL DEFAULT '0',
+  `exitposy` float NOT NULL DEFAULT '0',
+  `exitposz` float NOT NULL DEFAULT '-20',
+  `exitinterior` int NOT NULL DEFAULT '0',
+  `exitvw` int NOT NULL DEFAULT '0',
+  `chestposx` float NOT NULL DEFAULT '0',
+  `chestposy` float NOT NULL DEFAULT '0',
+  `chestposz` float NOT NULL DEFAULT '-30',
+  `clanexp0` int NOT NULL DEFAULT '0',
+  `clanexp1` int NOT NULL DEFAULT '0',
+  `clanexp2` int NOT NULL DEFAULT '0',
+  `clanexp3` int NOT NULL DEFAULT '0',
+  `clanexp4` int NOT NULL DEFAULT '0',
+  `inv0` int NOT NULL DEFAULT '0',
+  `inv1` int NOT NULL DEFAULT '0',
+  `inv2` int NOT NULL DEFAULT '0',
+  `inv3` int NOT NULL DEFAULT '0',
+  `inv4` int NOT NULL DEFAULT '0',
+  `inv5` int NOT NULL DEFAULT '0',
+  `inv6` int NOT NULL DEFAULT '0',
+  `inv7` int NOT NULL DEFAULT '0',
+  `inv8` int NOT NULL DEFAULT '0',
+  `inv9` int NOT NULL DEFAULT '0',
+  `inv10` int NOT NULL DEFAULT '0',
+  `inv11` int NOT NULL DEFAULT '0',
+  `inv12` int NOT NULL DEFAULT '0',
+  `inv13` int NOT NULL DEFAULT '0',
+  `inv14` int NOT NULL DEFAULT '0',
+  `inv15` int NOT NULL DEFAULT '0',
+  `inv16` int NOT NULL DEFAULT '0',
+  `inv17` int NOT NULL DEFAULT '0',
+  `inv18` int NOT NULL DEFAULT '0',
+  `inv19` int NOT NULL DEFAULT '0',
+  `inv20` int NOT NULL DEFAULT '0',
+  `inv21` int NOT NULL DEFAULT '0',
+  `inv22` int NOT NULL DEFAULT '0',
+  `inv23` int NOT NULL DEFAULT '0',
+  `inv24` int NOT NULL DEFAULT '0',
+  `inv25` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 
@@ -189,6 +198,8 @@ CREATE TABLE `objects` (
   `objectsInterior` int DEFAULT '0',
   `objectsWorld` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 -- --------------------------------------------------------
 
 --
@@ -273,6 +284,7 @@ CREATE TABLE `players` (
   `AWeap12` int NOT NULL DEFAULT '0',
   `discordid` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 -- --------------------------------------------------------
 
 --
@@ -284,8 +296,6 @@ CREATE TABLE `spawnpos` (
   `posy` float NOT NULL,
   `posz` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `storages`
@@ -330,6 +340,7 @@ CREATE TABLE `storages` (
   `inv24` int NOT NULL DEFAULT '0',
   `inv25` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 -- --------------------------------------------------------
 
@@ -436,6 +447,7 @@ ALTER TABLE `weapon_drops`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
 --
 -- AUTO_INCREMENT for table `bans`
 --

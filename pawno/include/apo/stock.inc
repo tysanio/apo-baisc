@@ -36,7 +36,7 @@ stock mysql_Init()
 		printf("[MySQL] Error number: %d", mysql_errno(mysql));
 	}
 	else {printf("Successfully connected on DB %s",db);}
-	mysql_log(LOG_ALL );
+	mysql_log(LOG_ALL);
 }
 stock IsNearChest(playerid)
 {
@@ -63,6 +63,13 @@ ClanExit_Nearest(playerid, Float:radius = 1.5)
 		if (GetPlayerInterior(playerid) == clans[i][exitinterior] && GetPlayerVirtualWorld(playerid) == clans[i][exitvw])
 			return i;
 	}
+	return -1;
+}
+stock GetClanByID(sqlid)
+{
+	for (new i = 0; i != MAX_CLANS; i ++) if (clans[i][clanexists] && clans[i][idclan] == sqlid)
+	    return i;
+
 	return -1;
 }
 //clan ressource
