@@ -158,13 +158,9 @@ script OnAccountLoad(playerid)
     pData[playerid][inv][24] =	cache_get_field_content_int(0, "inv24");
     pData[playerid][inv][25] =	cache_get_field_content_int(0, "inv25");
 	cache_get_field_content(0, "discordid", pData[playerid][pDiscordID],mysql,24);
- 	pData[playerid][Score] = cache_get_field_content_int(0, "Score");
- 	SetPlayerScore(playerid, pData[playerid][Score]);
-    //vie armure skin interior et pos
-	SetPlayerHealth(playerid,pData[playerid][Life]);
-	SetPlayerArmour(playerid,pData[playerid][Armor]);
-    SetPlayerSkin(playerid,pData[playerid][skin]);
-    SetPlayerInterior(playerid,pData[playerid][interior]);
+ 	pData[playerid][Score] = cache_get_field_content_int(0, "Score"); 
+	if(pData[playerid][Life] <= 0.0) pData[playerid][Life] = 100.0;
+	SetPlayerHealth(playerid,pData[playerid][Life]);	
 	if(pData[playerid][Pos][0] == 0 && pData[playerid][Pos][1] == 0 && pData[playerid][Pos][2] == 0)
 	{
 		switch (random(8))
@@ -180,10 +176,10 @@ script OnAccountLoad(playerid)
 		}
 	}
 	else SetPlayerPos(playerid,pData[playerid][Pos][0],pData[playerid][Pos][1],pData[playerid][Pos][2]);
- 	//For player's position, set it once they spawn(OnPlayerSpawn)
-	SpawnPlayer(playerid);
-    //SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0], pData[playerid][Pos][0], pData[playerid][Pos][0], 0.0, 0, 0, 0, 0, 0, 0);
+	SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0], pData[playerid][Pos][1], pData[playerid][Pos][2], 0.0, 0, 0, 0, 0, 0, 0);
+	KillTimer(LoginCameraTimer[playerid]);
 	TogglePlayerSpectating(playerid, 0);
+	SpawnPlayer(playerid);
 	TogglePlayerControllable(playerid, 1);
 	SetCameraBehindPlayer(playerid);
 	SendServerMessage(playerid,"Successfully logged in"); //tell them that they have successfully logged in
@@ -197,6 +193,8 @@ script OnAccountLoad(playerid)
         pData[playerid][Ammo][i] = cache_get_field_content_int(0 , szTmp);
 		AllowWeapon(playerid, pData[playerid][Guns][i],pData[playerid][Ammo][i]);
 	}
+    SendServerMessage(playerid,"Hello player this server is on very-very early stage keep that in mind");
+    SendServerMessage(playerid,"Command /help and /howto at your service!");
     ShowPlayerProgressBar(playerid, pData[playerid][Foodbar]);
     ShowPlayerProgressBar(playerid, pData[playerid][Waterbar]);
     SetPlayerProgressBarColour(playerid, pData[playerid][Foodbar], 0x33CC33BB);
@@ -276,7 +274,8 @@ script OnAccountRegister(playerid)
     ResetPlayerWeapons(playerid);
     SetPlayerHealth(playerid,pData[playerid][Life]);
 	SetPlayerArmour(playerid,pData[playerid][Armor]);
-    SetPlayerSkin(playerid,pData[playerid][skin]);
+    pData[playerid][skin] = Skinsskins[random(sizeof(Skinsskins))];
+	SetPlayerSkin(playerid, pData[playerid][skin]);
     mysql_format(mysql, query, sizeof(query),"SELECT `IP`, `Password`, `ID` FROM `players` WHERE `Username` = '%e' LIMIT 1", Name[playerid]);
     mysql_tquery(mysql, query, "OnAccountCheck", "i", playerid);
 	//SpawnPlayer(playerid);
@@ -1177,5 +1176,20 @@ script LockpickUpdate(playerid)
     }
 	TogglePlayerControllable(playerid, 0);
     GameTextForPlayer(playerid, bar, 100, 3);
+    return 1;
+}
+//change camera
+script LoginCamera(playerid)
+{
+    if(!IsPlayerConnected(playerid)) return 0;
+
+    new id = LoginCameraStep[playerid];
+
+    SetPlayerCameraPos(playerid,CamPos[id][0],CamPos[id][1],CamPos[id][2]);
+    SetPlayerCameraLookAt(playerid,CamLook[id][0],CamLook[id][1],CamLook[id][2]);
+    LoginCameraStep[playerid]++;
+    if(LoginCameraStep[playerid] >= MAX_LOGIN_CAMERAS) LoginCameraStep[playerid] = 0;
+    LoginCameraTimer[playerid] =SetTimerEx("LoginCamera",15000, false, "i", playerid);
+
     return 1;
 }

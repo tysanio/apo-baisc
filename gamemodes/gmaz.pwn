@@ -1,4 +1,4 @@
-//total lines 8285
+//total lines 8340
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -40,7 +40,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.19.8285");
+	SetGameModeText("Apo 0.19.8340");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -133,7 +133,8 @@ public OnPlayerConnect(playerid)
     pData[playerid][Waterbar] = CreatePlayerProgressBar(playerid, 505.0, 115.0, 100.0, 5.0, 0xFF0000AA, 100.0);
 
     for (new i = 0; i < TotalGZ; i++) GangZoneShowForPlayer(playerid, GangZones[i][gZoneID], GetTeamZoneColor(GangZones[i][gTeamID]));
-
+    LoginCameraStep[playerid] = 0;
+    LoginCameraTimer[playerid] = SetTimerEx("LoginCamera", 1000, false, "i", playerid);
 	return 1;
 }
 public OnPlayerDisconnect(playerid, reason)
@@ -561,6 +562,9 @@ public OnPlayerSpawn(playerid)
     //vie armure
 	SetPlayerHealth(playerid,pData[playerid][Life]);
 	SetPlayerArmour(playerid,pData[playerid][Armor]);
+    SetPlayerSkin(playerid,pData[playerid][skin]);
+    SetPlayerInterior(playerid,pData[playerid][interior]);
+    SetPlayerScore(playerid, pData[playerid][Score]);
     if(Death[playerid] == 1)
 	{
         SetPlayerInterior(playerid,0);
@@ -590,13 +594,11 @@ public OnPlayerSpawn(playerid)
             AllowWeapon(playerid, pData[playerid][Guns][i], pData[playerid][Ammo][i]);
         }
     }
-    SendServerMessage(playerid,"Hello player this server is on very-very early stage keep that in mind");
-    SendServerMessage(playerid,"Command /help and /howto at your service!");
     return 1;
 }
 public OnPlayerRequestClass(playerid, classid)
 {
-    SetSpawnInfo(playerid,0,0,0,0,0,0,0,0,0,0,0,0), SpawnPlayer(playerid);
+    SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0], pData[playerid][Pos][0], pData[playerid][Pos][0], 0.0, 0, 0, 0, 0, 0, 0);
 	SetPlayerColor(playerid, 0xFFFFFFFF);
 	return 1;
 }

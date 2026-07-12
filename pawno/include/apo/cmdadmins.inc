@@ -5,8 +5,8 @@ CMD:ahelp(playerid, params[])
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/kick, /mute, /unmute, /freeze, /unfreeze /setskin, /sethp, /setarmor, /resetweapons");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/goto, /zoneinfo, /addpoint, /resetintvw");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/banperm, /bantemp, /unban, /banlist, /editveh, /editstation /stationlist");
-    SendClientMessage(playerid, COLOR_LIGHTRED, "/createobject, /editobject, /delobject");
-    SendClientMessage(playerid, COLOR_LIGHTRED, "/setvip /setscore, /createspawn, /createveh, /createentrance, /delentrance, /editentrance");
+    SendClientMessage(playerid, COLOR_LIGHTRED, "/createobject, /editobject, /delobject, /editclan");
+    SendClientMessage(playerid, COLOR_LIGHTRED, "/setvip /setlevel, /createspawn, /createveh, /createentrance, /delentrance, /editentrance");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/deleteveh, /createstation, /delstation, /gzcreate, /gzdelete, /gzreload");
     SendClientMessage(playerid, COLOR_PURPLE, "/setadmin, /flushpoint, /flushspawn, /resetplayer");
     return 1;
@@ -437,13 +437,13 @@ CMD:setvip(playerid, params[])
     }
 	return 1;
 }
-CMD:setscore(playerid, params[])
+CMD:setlevel(playerid, params[])
 {
 	new lookupid, amount;
 	if(pData[playerid][Admin] < 2) return SendServerMessage(playerid, "Only admin level 2+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setscore <playerid/Name> <amount>");
+	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setlevel <playerid/Name> <amount>");
 	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) score count to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
+	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) level to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
 	SetPlayerScore(lookupid, amount);
 	pData[lookupid][Score] = amount;
 	return 1;
@@ -754,7 +754,7 @@ CMD:editclan(playerid,params[])
 	if (sscanf(params, "ds[24]S()[128]", id, type, string))
  	{
 	 	SendCommandMessage(playerid, "/editclan [id] [name]");
-	    SendServerMessage(playerid, "[NAMES]:{FFFFFF} level, owner, entrance, exit, chest");
+	    SendServerMessage(playerid, "[NAMES]:{FFFFFF} level, name, owner");//, entrance, exit, chest
 		return 1;
 	}
 	if (!clans[id][idclan])
@@ -771,6 +771,36 @@ CMD:editclan(playerid,params[])
 		mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv0` = '%d' WHERE `idclan` = '%d'",model,clans[id][idclan]);
 		mysql_tquery(mysql, query);
 		return 1;
+	}
+	else if (!strcmp(type, "name", true))
+	{
+	    new name[32];
+	    if (sscanf(string, "s[32]", name))
+	        return SendCommandMessage(playerid, "/editclan [id] [name] [new name]");
+	    format(clans[id][clanname], 32, name);
+		mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `clanname` = '%s' WHERE `idclan` = '%d'",name,clans[id][idclan]);
+		mysql_tquery(mysql, query);
+		SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s has adjusted the name of clan ID: %d to \"%s\".", Name[playerid], id, name);
+	}
+	else if (!strcmp(type, "owner", true))
+	{
+		new name[32],targetid;
+		if (sscanf(string, "s[32]", name))
+			return SendCommandMessage(playerid, "/editclan [id] [owner] [new name]");
+		format(clans[id][owner], 32, name);
+		mysql_format(mysql, query, sizeof(query),"UPDATE `clans` SET `Owner` = '%s' WHERE `idclan` = '%d'",name, clans[id][idclan]);
+		mysql_tquery(mysql, query);
+
+		mysql_format(mysql, query, sizeof(query),"UPDATE `players` SET `idclan` = '%d', `clanrank` = '%d' WHERE `Username` = '%s'",clans[id][idclan],clans[id][maxrank],name);
+		mysql_tquery(mysql, query);
+
+		if(targetid != INVALID_PLAYER_ID)
+		{
+			pData[targetid][idclan] = clans[id][idclan];
+			pData[targetid][clanrank] = clans[id][maxrank];
+			SendServerMessage(targetid,"You are now the owner of clan ID %d.",clans[id][idclan]);
+		}
+		SendAdminAlert(COLOR_LIGHTRED,"[ADMIN]: %s has adjusted the owner of clan ID: %d to \"%s\".", Name[playerid],clans[id][idclan],GetName(targetid));
 	}
 	return 1;
 }

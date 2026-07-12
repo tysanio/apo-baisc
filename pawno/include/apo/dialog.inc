@@ -1545,10 +1545,7 @@ Dialog:CHANGEWEAPON(playerid, response, listitem, inputtext[])
             ReplaceWeapon(playerid,ChangeWeaponOld[playerid],ChangeWeaponNew[playerid]);
             SendServerMessage(playerid,"Weapon replaced.");
         }
-        else
-        {
-            SendServerMessage(playerid,"You kept your current weapon.");
-        }
+        else SendServerMessage(playerid,"You kept your current weapon.");
         return 1;
     }
     return 0;

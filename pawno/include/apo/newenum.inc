@@ -511,3 +511,28 @@ new Lockpick[MAX_PLAYERS][E_LOCKPICK_DATA];
 //weapons change
 new ChangeWeaponOld[MAX_PLAYERS];
 new ChangeWeaponNew[MAX_PLAYERS];
+//camera
+new LoginCameraStep[MAX_PLAYERS],LoginCameraTimer[MAX_PLAYERS];
+new Float:CamPos[MAX_LOGIN_CAMERAS][3] =
+{
+    {319.78, 1759.40, 71.61},
+    {-473.00, 2118.08, 103.09},
+    {-395.99, 2598.31, 137.53},
+    {432.80, 2481.46, 47.72},
+    {667.61, 781.77, -4.49},
+    {-485.32, -25.10, 82.27},
+    {-1772.82, -1766.63, 82.17},
+    {-868.99, -451.18, 56.22}
+};
+
+new Float:CamLook[MAX_LOGIN_CAMERAS][3] =
+{
+    {319.06, 1760.10, 71.27},
+    {-472.42, 2118.90, 102.65},
+    {-395.18, 2598.90, 137.05},
+    {432.05, 2482.13, 47.27},
+    {666.95, 782.52, -4.81},
+    {-485.77, -25.99, 82.00},
+    {-1773.46, -1765.86, 81.65},
+    {-869.69, -451.89, 55.87}
+};
