@@ -384,11 +384,11 @@ CMD:mine(playerid, params[])
 //anims
 CMD:animcmds(playerid, params[])
 {
-	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /dance, /handsup, /bat, /slap, /bar, /wash, /lay, /workout, /blowjob, /bomb.");
-	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /carry, /crack, /sleep, /jump, /deal, /dancing, /eating, /puke, /gsign, /chat.");
-	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /goggles, /spray, /throw, /swipe, /office, /kiss, /knife, /cpr, /scratch, /point.");
-	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /cheer, /wave, /strip, /smoke, /reload, /taichi, /wank, /cower, /skate, /drunk.");
-	SendAnimsMessage(playerid,"ANIMATION:{FFFFFF} /cry, /tired, /assis, /crossarms, /fucku, /walk, /piss, /stopanim.");
+	SendAnimsMessage(playerid,"{FFFFFF} /dance, /handsup, /bat, /slap, /bar, /wash, /lay, /workout, /blowjob, /bomb.");
+	SendAnimsMessage(playerid,"{FFFFFF} /carry, /crack, /sleep, /jump, /deal, /dancing, /eating, /puke, /gsign, /chat.");
+	SendAnimsMessage(playerid,"{FFFFFF} /goggles, /spray, /throw, /swipe, /office, /kiss, /knife, /cpr, /scratch, /point.");
+	SendAnimsMessage(playerid,"{FFFFFF} /cheer, /wave, /strip, /smoke, /reload, /taichi, /wank, /cower, /skate, /drunk.");
+	SendAnimsMessage(playerid,"{FFFFFF} /cry, /tired, /assis, /crossarms, /fucku, /walk, /piss, /stopanim.");
 	return 1;
 }
 CMD:dance(playerid, params[])
@@ -396,11 +396,11 @@ CMD:dance(playerid, params[])
 	new type;
 
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/dance [1-4]");
 	if (type < 1 || type > 4)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE1);
 	    case 2: SetPlayerSpecialAction(playerid, SPECIAL_ACTION_DANCE2);
@@ -412,14 +412,14 @@ CMD:dance(playerid, params[])
 CMD:handsup(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_HANDSUP);
 	return 1;
 }
 CMD:piss(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	SetPlayerSpecialAction(playerid, 68);
 	return 1;
 }
@@ -427,11 +427,11 @@ CMD:bat(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/bat [1-5]");
 	if (type < 1 || type > 5)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimation(playerid, "BASEBALL", "Bat_1", 4.1, 0, 1, 1, 0, 0, 1);
 	    case 2: ApplyAnimation(playerid, "BASEBALL", "Bat_2", 4.1, 0, 1, 1, 0, 0, 1);
@@ -444,7 +444,7 @@ CMD:bat(playerid, params[])
 CMD:slap(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "BASEBALL", "Bat_M", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -452,11 +452,11 @@ CMD:bar(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/bar [1-8]");
 	if (type < 1 || type > 8)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimation(playerid, "BAR", "Barserve_bottle", 4.1, 0, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimation(playerid, "BAR", "Barserve_give", 4.1, 0, 0, 0, 0, 0, 1);
@@ -472,7 +472,7 @@ CMD:bar(playerid, params[])
 CMD:wash(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "BD_FIRE", "wash_up", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -480,11 +480,11 @@ CMD:lay(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/lay [1-5]");
 	if (type < 1 || type > 5)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "BEACH", "bather", 4.1, 1, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "BEACH", "Lay_Bac_Loop", 4.1, 1, 0, 0, 0, 0, 1);
@@ -498,11 +498,11 @@ CMD:workout(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/workout [1-7]");
 	if (type < 1 || type > 7)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimation(playerid, "benchpress", "gym_bp_celebrate", 4.1, 0, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "benchpress", "gym_bp_down", 4.1, 0, 0, 0, 1, 0, 1);
@@ -518,11 +518,11 @@ CMD:blowjob(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/blowjob [1-4]");
 	if (type < 1 || type > 4)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "BLOWJOBZ", "BJ_COUCH_LOOP_W", 4.1, 1, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "BLOWJOBZ", "BJ_COUCH_LOOP_P", 4.1, 1, 0, 0, 0, 0, 1);
@@ -534,7 +534,7 @@ CMD:blowjob(playerid, params[])
 CMD:bomb(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "BOMBER", "BOM_Plant", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -542,11 +542,11 @@ CMD:carry(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/carry [1-6]");
 	if (type < 1 || type > 6)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimation(playerid, "CARRY", "liftup", 4.1, 0, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimation(playerid, "CARRY", "liftup05", 4.1, 0, 0, 0, 0, 0, 1);
@@ -561,11 +561,11 @@ CMD:crack(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/crack [1-6]");
 	if (type < 1 || type > 6)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "CRACK", "crckdeth1", 4.1, 0, 0, 0, 1, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "CRACK", "crckdeth2", 4.1, 1, 0, 0, 0, 0, 1);
@@ -580,11 +580,11 @@ CMD:sleep(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/sleep [1-2]");
 	if (type < 1 || type > 2)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "CRACK", "crckdeth4", 4.1, 0, 0, 0, 1, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "CRACK", "crckidle4", 4.1, 0, 0, 0, 1, 0, 1);
@@ -594,7 +594,7 @@ CMD:sleep(playerid, params[])
 CMD:jump(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "DODGE", "Crush_Jump", 4.1, 0, 1, 1, 0, 0, 1);
 	return 1;
 }
@@ -602,11 +602,11 @@ CMD:deal(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/deal [1-6]");
 	if (type < 1 || type > 6)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimation(playerid, "DEALER", "DEALER_DEAL", 4.1, 0, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimation(playerid, "DEALER", "DRUGS_BUY", 4.1, 0, 0, 0, 0, 0, 1);
@@ -621,11 +621,11 @@ CMD:dancing(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/dancing [1-10]");
 	if (type < 1 || type > 10)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "DANCING", "dance_loop", 4.1, 1, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "DANCING", "DAN_Left_A", 4.1, 1, 0, 0, 0, 0, 1);
@@ -644,11 +644,11 @@ CMD:eating(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/eating [1-3]");
 	if (type < 1 || type > 3)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimation(playerid, "FOOD", "EAT_Burger", 4.1, 0, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimation(playerid, "FOOD", "EAT_Chicken", 4.1, 0, 0, 0, 0, 0, 1);
@@ -659,7 +659,7 @@ CMD:eating(playerid, params[])
 CMD:puke(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "FOOD", "EAT_Vomit_P", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -667,11 +667,11 @@ CMD:gsign(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/gsign [1-15]");
 	if (type < 1 || type > 15)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimation(playerid, "GHANDS", "gsign1", 4.1, 0, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimation(playerid, "GHANDS", "gsign1LH", 4.1, 0, 0, 0, 0, 0, 1);
@@ -695,11 +695,11 @@ CMD:chat(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/chat [1-6]");
 	if (type < 1 || type > 6)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimation(playerid, "GANGS", "prtial_gngtlkA", 4.1, 0, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimation(playerid, "GANGS", "prtial_gngtlkB", 4.1, 0, 0, 0, 0, 0, 1);
@@ -713,28 +713,28 @@ CMD:chat(playerid, params[])
 CMD:goggles(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "goggles", "goggles_put_on", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
 CMD:spray(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
  	ApplyAnimationEx(playerid, "GRAFFITI", "spraycan_fire", 4.1, 1, 0, 0, 0, 0, 1);
 	return 1;
 }
 CMD:throw(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "GRENADE", "WEAPON_throw", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
 CMD:swipe(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "HEIST9", "Use_SwipeCard", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -742,11 +742,11 @@ CMD:office(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/office [1-6]");
 	if (type < 1 || type > 6)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimationEx(playerid, "INT_OFFICE", "OFF_Sit_Bored_Loop", 4.1, 1, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimationEx(playerid, "INT_OFFICE", "OFF_Sit_Crash", 4.1, 1, 0, 0, 0, 0, 1);
@@ -761,11 +761,11 @@ CMD:kiss(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/kiss [1-6]");
 	if (type < 1 || type > 6)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimation(playerid, "KISSING", "Grlfrd_Kiss_01", 4.1, 0, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimation(playerid, "KISSING", "Grlfrd_Kiss_02", 4.1, 0, 0, 0, 0, 0, 1);
@@ -780,11 +780,11 @@ CMD:knife(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/knife [1-8]");
 	if (type < 1 || type > 8)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimation(playerid, "KNIFE", "knife_1", 4.1, 0, 1, 1, 0, 0, 1);
 		case 2: ApplyAnimation(playerid, "KNIFE", "knife_2", 4.1, 0, 1, 1, 0, 0, 1);
@@ -800,7 +800,7 @@ CMD:knife(playerid, params[])
 CMD:cpr(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "MEDIC", "CPR", 4.1, 0, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -808,11 +808,11 @@ CMD:scratch(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/scratch [1-4]");
 	if (type < 1 || type > 4)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
     	case 1: ApplyAnimationEx(playerid, "SCRATCHING", "scdldlp", 4.1, 1, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimationEx(playerid, "SCRATCHING", "scdlulp", 4.1, 1, 0, 0, 0, 0, 1);
@@ -825,11 +825,11 @@ CMD:point(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/point [1-4]");
 	if (type < 1 || type > 4)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "PED", "ARRESTgun", 4.1, 0, 0, 0, 1, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "SHOP", "ROB_Loop_Threat", 4.1, 1, 0, 0, 0, 0, 1);
@@ -842,11 +842,11 @@ CMD:cheer(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/cheer [1-8]");
 	if (type < 1 || type > 8)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimation(playerid, "ON_LOOKERS", "shout_01", 4.1, 0, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimation(playerid, "ON_LOOKERS", "shout_02", 4.1, 0, 0, 0, 0, 0, 1);
@@ -863,11 +863,11 @@ CMD:strip(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/strip [1-7]");
 	if (type < 1 || type > 7)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimationEx(playerid, "STRIP", "strip_A", 4.1, 1, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimationEx(playerid, "STRIP", "strip_B", 4.1, 1, 0, 0, 0, 0, 1);
@@ -883,11 +883,11 @@ CMD:wave(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/wave [1-3]");
 	if (type < 1 || type > 3)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimation(playerid, "PED", "endchat_03", 4.1, 0, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimation(playerid, "KISSING", "gfwave2", 4.1, 0, 0, 0, 0, 0, 1);
@@ -899,11 +899,11 @@ CMD:smoke(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/smoke [1-3]");
 	if (type < 1 || type > 3)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimation(playerid, "SMOKING", "M_smk_drag", 4.1, 0, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "SMOKING", "M_smklean_loop", 4.1, 1, 0, 0, 0, 0, 1);
@@ -915,11 +915,11 @@ CMD:reload(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/reload [1-4]");
 	if (type < 1 || type > 4)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimation(playerid, "BUDDY", "buddy_reload", 4.1, 0, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimation(playerid, "UZI", "UZI_reload", 4.1, 0, 0, 0, 0, 0, 1);
@@ -931,7 +931,7 @@ CMD:reload(playerid, params[])
 CMD:taichi(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimationEx(playerid, "PARK", "Tai_Chi_Loop", 4.1, 1, 0, 0, 0, 0, 1);
 	return 1;
 }
@@ -939,11 +939,11 @@ CMD:wank(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/wank [1-3]");
 	if (type < 1 || type > 3)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimationEx(playerid, "PAULNMAC", "wank_loop", 4.1, 1, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimation(playerid, "PAULNMAC", "wank_in", 4.1, 0, 0, 0, 0, 0, 1);
@@ -955,7 +955,7 @@ CMD:wank(playerid, params[])
 CMD:cower(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimationEx(playerid, "PED", "cower", 4.1, 0, 0, 0, 1, 0, 1);
 	return 1;
 }
@@ -963,11 +963,11 @@ CMD:skate(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/skate [1-2]");
 	if (type < 1 || type > 2)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimationEx(playerid, "SKATE", "skate_idle", 4.1, 1, 0, 0, 0, 0, 1);
 		case 2: ApplyAnimationEx(playerid, "SKATE", "skate_run", 4.1, 1, 1, 1, 1, 1, 1);
@@ -977,14 +977,14 @@ CMD:skate(playerid, params[])
 CMD:drunk(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimationEx(playerid, "PED", "WALK_drunk", 4.1, 1, 1, 1, 1, 1, 1);
 	return 1;
 }
 CMD:cry(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimationEx(playerid, "GRAVEYARD", "mrnF_loop", 4.1, 1, 0, 0, 0, 0, 1);
     return 1;
 }
@@ -992,11 +992,11 @@ CMD:tired(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/tired [1-2]");
 	if (type < 1 || type > 2)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "PED", "IDLE_tired", 4.1, 1, 0, 0, 0, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "FAT", "IDLE_tired", 4.1, 1, 0, 0, 0, 0, 1);
@@ -1007,11 +1007,11 @@ CMD:assis(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/assis [1-6]");
 	if (type < 1 || type > 6)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 		case 1: ApplyAnimationEx(playerid, "CRIB", "PED_Console_Loop", 4.1, 1, 0, 0, 0, 0);
 		case 2: ApplyAnimationEx(playerid, "INT_HOUSE", "LOU_In", 4.1, 0, 0, 0, 1, 0);
@@ -1026,11 +1026,11 @@ CMD:crossarms(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/crossarms [1-4]");
 	if (type < 1 || type > 4)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "COP_AMBIENT", "Coplook_loop", 4.1, 0, 1, 1, 1, 0, 1);
 	    case 2: ApplyAnimationEx(playerid, "GRAVEYARD", "prst_loopa", 4.1, 1, 0, 0, 0, 0, 1);
@@ -1042,7 +1042,7 @@ CMD:crossarms(playerid, params[])
 CMD:fucku(playerid, params[])
 {
     if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	ApplyAnimation(playerid, "PED", "fucku", 4.1, 0, 0, 0, 0, 0);
 	return 1;
 }
@@ -1050,11 +1050,11 @@ CMD:walk(playerid, params[])
 {
     new type;
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid,"Tu ne peut faire cette animation en se moment.");
+	    return SendServerMessage(playerid,"You can't to thids animations right now.");
 	if (sscanf(params, "d", type))
 	    return SendCommandMessage(playerid,"/walk [1-16]");
 	if (type < 1 || type > 17)
-	    return SendServerMessage(playerid,"Invalide type spécifié.");
+	    return SendServerMessage(playerid,"Type invalid.");
 	switch (type) {
 	    case 1: ApplyAnimationEx(playerid, "FAT", "FatWalk", 4.1, 1, 1, 1, 1, 1, 1);
 	    case 2: ApplyAnimationEx(playerid, "MUSCULAR", "MuscleWalk", 4.1, 1, 1, 1, 1, 1, 1);
@@ -1078,9 +1078,9 @@ CMD:walk(playerid, params[])
 CMD:stopanim(playerid, params[])
 {
 	if (!AnimationCheck(playerid))
-	    return SendServerMessage(playerid, "Tu a pas besoin de cette commande maintenant.");
+	    return SendServerMessage(playerid, "You don't need to do this command right now.");
 	ClearAnimations(playerid, 1);
 	SetPlayerSpecialAction(playerid, SPECIAL_ACTION_NONE);
-	SendServerMessage(playerid, "Vous avez stop une animation.");
+	SendServerMessage(playerid, "You stop an animation.");
 	return 1;
 }

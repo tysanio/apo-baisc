@@ -13,7 +13,7 @@ Dialog:discordid(playerid, response, listitem, inputtext[])
 		if(GUILD_ID1 == DCC_INVALID_GUILD) 
 			return Dialog_Show(playerid, discordid1, DIALOG_STYLE_INPUT, "Assing role on discord", "Error 2 ID discord", "There", "Close");
 		if(RoleJoueur == DCC_INVALID_ROLE) 
-			return Dialog_Show(playerid, discordid1, DIALOG_STYLE_INPUT, "Assing role on discord", "Erreur 3 ID role", "There", "Close");
+			return Dialog_Show(playerid, discordid1, DIALOG_STYLE_INPUT, "Assing role on discord", "Error 3 ID role", "There", "Close");
 		DCC_AddGuildMemberRole(GUILD_ID1,user1,RoleJoueur);
 		format(pData[playerid][pDiscordID],24,inputtext);
 		
@@ -172,7 +172,6 @@ script OnPlayerDiscordStats( playerid, params[ ] )
 		VIP1   			= cache_get_field_content_int( 0, "VIP");
 		Score1           = cache_get_field_content_int( 0, "Score");
         Skin1           = cache_get_field_content_int( 0, "skin");
- 		clanexpj[0]           = cache_get_field_content_int( 0, "clanexp0");
 		clanexpj[1]           = cache_get_field_content_int( 0, "clanexp1");
 		clanexpj[2]           = cache_get_field_content_int( 0, "clanexp2");
 		clanexpj[3]           = cache_get_field_content_int( 0, "clanexp3");
@@ -181,7 +180,7 @@ script OnPlayerDiscordStats( playerid, params[ ] )
 		DCC_TriggerBotTypingIndicator(discordlog);
 		format(string1, sizeof(string1), "**Joueur %s**",params);
 		format(string4, sizeof(string4), "Admin: %s	VIP: %s	Score: %d",(Admin1) ? ("Oui") : ("Non"),(VIP1) ? ("Oui") : ("Non"),Score1);
-        format(string2, sizeof(string2), "Clan Exp 1: %d/5000	Clan Exp 2: %d/5000	Clan Exp 3: %d/5000",clanexpj[0],clanexpj[1],clanexpj[2]);
+        format(string2, sizeof(string2), "Clan Exp 2: %d/5000	Clan Exp 3: %d/5000",clanexpj[1],clanexpj[2]);
         format(string3, sizeof(string3), "Clan Exp 4: %d/5000	Clan Exp 5: %d/5000",clanexpj[3],clanexpj[4]);
 		Embed = DCC_CreateEmbed(string1,string99);
 		DCC_AddEmbedField(Embed ,string4,"");

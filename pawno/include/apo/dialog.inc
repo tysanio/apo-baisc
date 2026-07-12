@@ -254,11 +254,79 @@ Dialog:UseItem(playerid, response, listitem, inputtext[])
     if (response)
 	{
 		static Float:health;
-        switch (listitem)
+		new weapon, ammo;
+		switch (listitem)
         {
-            case 0: {}
-            case 1: {}
-            case 2: {}
+			case 0:
+			{
+				if (pData[playerid][inv][14] < 5)
+					return SendServerMessage(playerid, "You don't have 5 9mm bullets to reload your weapon.");
+
+				for(new i = 0; i < 13; i++)
+				{
+					GetPlayerWeaponData(playerid, i, weapon, ammo);
+
+					if(weapon == 22 || weapon == 23 || weapon == 24)
+					{
+						AllowWeapon(playerid, weapon, ammo + 5);
+						GivePlayerWeapon(playerid, weapon, 5);
+
+						pData[playerid][inv][14] -= 5;
+		
+						SendServerMessage(playerid, "You reloaded your pistol with 5 rounds.");
+						return 1;
+					}
+				}
+
+				SendServerMessage(playerid, "You don't have a pistol.");
+				return 1;
+			}
+            case 1:
+			{
+				if (pData[playerid][inv][15] < 5)
+					return SendServerMessage(playerid, "You don't have 5 00' Buck's to reload your weapon.");
+
+				for(new i = 0; i < 13; i++)
+				{
+					GetPlayerWeaponData(playerid, i, weapon, ammo);
+
+					if(weapon == 25 || weapon == 26 || weapon == 27)
+					{
+						AllowWeapon(playerid, weapon, ammo + 5);
+						GivePlayerWeapon(playerid, weapon, 5);
+
+						pData[playerid][inv][15] -= 5;
+		
+						SendServerMessage(playerid, "You reloaded your shotgun with 5 rounds.");
+						return 1;
+					}
+				}
+				SendServerMessage(playerid, "You don't have a shotgun.");
+				return 1;
+			}
+            case 2:
+			{
+				if (pData[playerid][inv][16] < 5)
+					return SendServerMessage(playerid, "You don't have 5 .308 to reload your weapon.");
+
+				for(new i = 0; i < 13; i++)
+				{
+					GetPlayerWeaponData(playerid, i, weapon, ammo);
+
+					if(weapon == 33 || weapon == 34)
+					{
+						AllowWeapon(playerid, weapon, ammo + 5);
+						GivePlayerWeapon(playerid, weapon, 5);
+
+						pData[playerid][inv][16] -= 5;
+		
+						SendServerMessage(playerid, "You reloaded your rifle with 5 rounds.");
+						return 1;
+					}
+				}
+				SendServerMessage(playerid, "You don't have a rifle.");
+				return 1;
+			}
             case 3: 
 			{
 				if (pData[playerid][inv][12] >= 1)

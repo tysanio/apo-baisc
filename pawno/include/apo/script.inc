@@ -96,8 +96,7 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 		new ores = pData[playerid][inv][7];
 		if (ores <= 0)
 			return SendServerMessage(playerid, "You have no ores to convert.");
-		new iron = ores / 2;
-		new gold = ores / 6;
+		new iron = ores / 2,gold = ores / 6;
 		if (pData[playerid][inv][8] + iron > GetBackpackCapacity(playerid))
 			return SendServerMessage(playerid, "Not enough backpack space for iron.");
 		if (pData[playerid][inv][9] + gold > GetBackpackCapacity(playerid))
