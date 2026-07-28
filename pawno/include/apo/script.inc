@@ -63,11 +63,11 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
         ShowMenuForPlayer(Armory, playerid);
         TogglePlayerControllable(playerid, 0);
     }
-    if (newtarget == missionactor[1])
+    if (newtarget == missionactor[1]) //canibal
     {
-        Dialog_Show(playerid, Missionclan00, DIALOG_STYLE_LIST, "Mission", "Go get some meat!\nChop Chop!\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
+        Dialog_Show(playerid, Missionclan00, DIALOG_STYLE_LIST, "Mission", "Go get some meat!\nChop Chop!\nGo see what going on there!\nSabotage Antenna\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
     }
-    if (newtarget == missionactor[2])
+    if (newtarget == missionactor[2]) //police
     {
         Dialog_Show(playerid, Missionclan10, DIALOG_STYLE_LIST, "Mission", "Quest 1\n{0f5900}Quest validation.{FFFFFF}\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
     }
@@ -76,15 +76,15 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
         ShowMenuForPlayer(PoliceArmory, playerid);
         TogglePlayerControllable(playerid, 0);
     }
-    if (newtarget == missionactor[4])
+    if (newtarget == missionactor[4]) //army
     {
-        Dialog_Show(playerid, Missionclan20, DIALOG_STYLE_LIST, "Mission", "Requesting Food and water.\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
+        Dialog_Show(playerid, Missionclan20, DIALOG_STYLE_LIST, "Mission", "Requesting Food and water.\nRepair the antenna.\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
     }
     if (newtarget == missionactor[5])
     {
         Dialog_Show(playerid, Missionclan22, DIALOG_STYLE_LIST, "Armory", "", "OK", "Quit");
     }
-    if (newtarget == missionactor[6] && pData[playerid][Score] >= 5)
+    if (newtarget == missionactor[6] && pData[playerid][Score] >= 5) //secret army
     {
         Dialog_Show(playerid, Missionclan222, DIALOG_STYLE_MSGBOX, "Secret Quest", "You seems a good call.\nCan you check on my sister?\nShe is probably somewhere with a bunch of wierdos.\nPlease go look out for here.", "OK", "Quit");
 		missioncheck = 333;
@@ -1275,5 +1275,17 @@ script AntennaFuel()
             SaveAntenna(i);
         }
     }
+    return 1;
+}
+script FinishSabotage(playerid,id)
+{
+    TogglePlayerControllable(playerid,1);
+    Antenna[id][aHealth] -= 40.0;
+    if(Antenna[id][aHealth] < 0.0) Antenna[id][aHealth] = 0.0;
+    if(Antenna[id][aHealth] == 0.0) Antenna[id][aPowered] = 0;
+    UpdateAntennaVisual(id);
+    SaveAntenna(id);
+    missioncheck = 55;
+    SendTWMessage(playerid, "Talkie-Walkie : Go back to me to do your report.");
     return 1;
 }

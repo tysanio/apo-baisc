@@ -24,13 +24,13 @@ script actorclanc()
 	//sciene and army
 	CreateActor(179,282.4752,1872.3901,8.7578,102.7513);
 	CreateActor(179,282.5449,1866.9982,8.7578,87.5662);
-	missionactor[6] = CreateActor(191,273.4673,1864.6194,8.7578,4.8688); // spécial faction
 	CreateActor(287,279.8940,1864.6954,8.7578,7.8572); 
 	CreateActor(287,301.1192,1857.5419,7.7266,180.6506);
 	CreateActor(287,301.0567,1853.2960,7.7266,352.9856); 
 	CreateActor(287,295.7274,1857.1534,7.8281,263.2263);
 	missionactor[4] = CreateActor(70,272.2670,1854.0015,8.7649,171.0822); // science
 	missionactor[5] = CreateActor(70,279.6077,1855.4661,8.7649,296.1035); // science
+	missionactor[6] = CreateActor(191,273.4673,1864.6194,8.7578,4.8688); // spécial faction
 	//other NPC
 	missionactor[7] = CreateActor(26702,584.7945,870.1245,-42.4973,283.6910); //miner
     return 1;
@@ -79,7 +79,25 @@ Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 					missioncheck = 1;
 				}
 			}
-            case 7:
+			case 3:
+			{
+				if(missioncheck == 55)
+				{
+					pData[playerid][clanexp][1] += 50;
+					pData[playerid][inv][14] += 5;
+					missioncheck = 0;
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 4 done", "Thank for the sabotage of the antenna.\n{0f5900}Exp clan + 50 and 5 9mm bullet(s)", "OK", "");
+				}
+				else
+				{				
+					new antenna = GetHighestHealthAntenna();
+					if(antenna == -1) return SendServerMessage(playerid,"No antenna available.");
+					SetPlayerCheckpoint(playerid, Antenna[antenna][aPosX],Antenna[antenna][aPosY],Antenna[antenna][aPosZ], 5.0);												
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 4", "Go sabotage some antenna!", "OK", "");
+					missioncheck = 5;
+				}
+			}
+            case 6:
             {
                 if(pData[playerid][clanexp][1] >= 2500)
                 {
@@ -143,11 +161,39 @@ Dialog:Missionclan20(playerid, response, listitem, inputtext[])
 	{
         switch (listitem)
         {
-            case 0: {			}
-            case 1: {			}
-            case 2: {			}
-			case 3: {			}
-			case 4:
+            case 0:
+			{
+				if(pData[playerid][inv][18] <= 0 && pData[playerid][inv][19] <= 0) return Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1", "Hey civilians our guys need food for the barrack.\nThe water is for the coffee addict please bring some.", "OK", "");
+				else 
+				{
+					new food1 = pData[playerid][inv][19],exp1 = food1*2;
+					new water1 = pData[playerid][inv][18],exp2 = water1*2;
+					pData[playerid][clanexp][3] += exp1+exp2;
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1 done", "Thank for the food and water civilian.\n{0f5900}Exp clan + %d", "OK", "", exp1+exp2);
+					pData[playerid][inv][19] = 0;
+					pData[playerid][inv][18] = 0;
+				}
+			}
+            case 1: 
+			{
+				if(missioncheck == 0)
+				{
+					new antenna = GetLowestHealthAntenna();
+					if(antenna == -1) return Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2", "All antenna is repair good job civilian.", "OK", "");
+					missioncheck = 4;
+					SetPlayerCheckpoint( playerid,Antenna[antenna][aPosX],Antenna[antenna][aPosY],Antenna[antenna][aPosZ],5.0);
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2", "Hey civilians one of our antenna need repair go repair it!", "OK", "");
+				}
+				if(missioncheck == 44)
+				{
+					missioncheck = 0;
+					pData[playerid][clanexp][3] += 50;
+					//reward XP clan and food/water ??
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2 done", "Thank for the repair on that antenna civilian.\n{0f5900}Exp clan + 50", "OK", "");
+				}
+
+			}
+			case 2:
 			{
 				if(missioncheck == 33)
 				{
@@ -163,7 +209,7 @@ Dialog:Missionclan20(playerid, response, listitem, inputtext[])
 					missioncheck = 3;
 				}
 			}
-            case 9:
+            case 7:
             {
                 if(pData[playerid][clanexp][3] >= 2500)
                 {

@@ -1621,7 +1621,7 @@ Dialog:CHANGEWEAPON(playerid, response, listitem, inputtext[])
     return 0;
 }
 //antenna
-Dialog:Antenna(playerid, response, listitem, inputtext[])
+Dialog:AntennaDialog(playerid, response, listitem, inputtext[])
 {
     if (response)
 	{

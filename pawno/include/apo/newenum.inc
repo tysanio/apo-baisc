@@ -552,9 +552,7 @@ enum e_Antenna
     Float:aRange,
     aPowered,
     aFuel,
-    aRepairLevel,
-    Text3D:aLabel,
-    aMapIcon
+    Text3D:aLabel
 };
 new Antenna[MAX_ANTENNAS][e_Antenna];
 enum

@@ -622,6 +622,37 @@ stock RadioCanReach(sender,receiver)
     }
     return 0;
 }
+stock GetLowestHealthAntenna()
+{
+    new id = -1,Float:lowest = 101.0;
+    for(new i; i < MAX_ANTENNAS; i++)
+    {
+        if(!Antenna[i][aExists]) continue;
+        if(!Antenna[i][aPowered]) continue;
+        if(Antenna[i][aHealth] >= 100.0) continue;
+        if(Antenna[i][aHealth] < lowest)
+        {
+            lowest = Antenna[i][aHealth];
+            id = i;
+        }
+    }
+    return id;
+}
+stock GetHighestHealthAntenna()
+{
+    new id = -1,Float:highest = -1.0;
+    for(new i; i < MAX_ANTENNAS; i++)
+    {
+        if(!Antenna[i][aExists]) continue;
+        if(!Antenna[i][aPowered]) continue;
+        if(Antenna[i][aHealth] > highest)
+        {
+            highest = Antenna[i][aHealth];
+            id = i;
+        }
+    }
+    return id;
+}
 stock SendClientMessageEx(playerid, color, const text[], {Float, _}:...)
 {
 	static args,str[144];

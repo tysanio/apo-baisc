@@ -1,4 +1,4 @@
-//total lines 8914
+//total lines 9014
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -27,10 +27,7 @@
 #include <apo/clan>
 #include <apo/cmdadmins>
 #include <apo/cmddebug>
-#define discordonline
-#if defined discordonline
 #include <apo/dc>
-#endif
 
 main(){}
 
@@ -40,7 +37,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.19.8914");
+	SetGameModeText("Apo 0.20.9014");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -71,9 +68,7 @@ public OnGameModeInit()
         DB_Vehicle[i] = INVALID_VEHICLE_ID;
         DB_VehicleID[i] = 0;
     }
-    #if defined discordonline
     loaddiscord();
-    #endif
     SetTimer("CheckUnoccupiedVehicleTeleport", 3000, true); //antitpveh
     SetTimer("GangZoneResourceTick", GANG_RESOURCE_TIME, true);  //timer reward
     SetTimer("CheckGangZones", 60000, true); // after 7 day gones
@@ -889,7 +884,6 @@ public OnPlayerEnterCheckpoint(playerid)
         return 1;
     index++;
     PlayerCurrentCheckpoint[playerid] = index;
-
     if (index < MAX_MISSION_CHECKPOINTS)
     {
         SetPlayerCheckpoint(playerid,PlayerMissionCheckpoints[playerid][index][0],PlayerMissionCheckpoints[playerid][index][1],PlayerMissionCheckpoints[playerid][index][2],3.0);
@@ -912,6 +906,38 @@ public OnPlayerEnterCheckpoint(playerid)
             SendTWMessage(playerid, "Talkie-Walkie : Go back to me to do your report soldier.");
             missioncheck = 33;
         }
+    }
+    if(missioncheck == 4)
+    {
+        new id = GetLowestHealthAntenna();
+        if(GetPlayerDistanceFromPoint(playerid, Antenna[id][aPosX],Antenna[id][aPosY], Antenna[id][aPosZ]) < 5.0)
+        {
+			if (pData[playerid][inv][3] >= 5 && pData[playerid][inv][11] >= 1)
+			{
+				pData[playerid][inv][3] -= 5;
+				pData[playerid][inv][11] -= 1;
+				Antenna[id][aHealth] += 40.0;
+				if(Antenna[id][aHealth] > 100.0) Antenna[id][aHealth] = 100.0;
+                UpdateAntennaVisual(id);
+                SaveAntenna(id);
+                DisablePlayerCheckpoint(playerid);
+                missioncheck = 44;
+                SendTWMessage(playerid, "Talkie-Walkie : Go back to me to do your report civilian.");
+			}
+			else SendServerMessage(playerid, "You don't have 5 metals or/and 1 repair kit.");
+        }
+    }
+    if(missioncheck == 5)
+    {
+        new id = GetHighestHealthAntenna();
+		if (pData[playerid][inv][6] >= 10 && pData[playerid][inv][13] >= 1)
+		{
+            DisablePlayerCheckpoint(playerid);
+            TogglePlayerControllable(playerid,0);
+            ApplyAnimation(playerid, "BOMBER","BOM_Plant",4.1,0,0,0,0,0);
+            SetTimerEx("FinishSabotage",8000,false,"ii",playerid,id);
+		}
+		else SendServerMessage(playerid, "You don't have 10 gun powder(s) or/and 1 jerrycan.");
     }
     return 1;
 }
