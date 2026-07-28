@@ -2,8 +2,8 @@ CMD:help(playerid, params[])
 {
     SendServerMessage(playerid, "---List of commands for this server---");
 	SendCommandMessage(playerid, "/howto, /me, /do, /stats, /craft, /use, /suggest, /levelup");
-    SendCommandMessage(playerid, "/dwep, /swep, /pwep, /storage, /editstorage, /animcmds, /dc");
-	SendCommandMessage(playerid, "/clan, /clanchest, /clanwar, /claninvite, /clanremove, /clanrank, /clanres");
+    SendCommandMessage(playerid, "/dwep, /swep, /pwep, /storage, /editstorage, /animcmds, /dc, /admins");
+	SendCommandMessage(playerid, "/clan, /clanchest, /clanwar, /claninvite, /clanremove, /clanrank, /clanres, /clans");
     SendCommandMessage(playerid, "/repairleak, /repair, /refuel, /virtualworld, /discordconfirm");
     SendCommandMessage(playerid, "Admin Commands : /ahelp");
     SendServerMessage(playerid, "To pickup and item crouch and press ~k~~CONVERSATION_NO~");
@@ -380,6 +380,80 @@ CMD:mine(playerid, params[])
 		SendServerMessage(playerid,"Vous n'êtes pas à côté d'un rocher exploitable.");
     }
     return 1;
+}
+CMD:admins(playerid, params[])
+{
+    new count = 0;
+    SendServerMessage(playerid, "========== Online Admins ==========");
+    for(new i = 0; i < MAX_PLAYERS; i++)
+    {
+        if(!IsPlayerConnected(i)) continue;
+        if(pData[i][Admin] > 0)
+        {
+            SendServerMessage(playerid, "Level %d - %s (ID: %d)",pData[i][Admin],Name[i],i);
+            count++;
+        }
+    }
+    if(count == 0) SendServerMessage(playerid, "There are currently no admins online."); 
+    return 1;
+}
+CMD:clans(playerid, params[])
+{
+    new count = 0;
+    SendServerMessage(playerid, "========== Clan List ==========");
+    for(new i = 0; i < MAX_CLANS; i++)
+    {
+        if(!clans[i][clanexists]) continue;
+        SendServerMessage(playerid, "Server ID: %d | %s",i,clans[i][clanname]);
+        count++;
+    }
+    if(count == 0) SendServerMessage(playerid, "There are no clans created.");
+    return 1;
+}
+//antenna
+CMD:freq(playerid, params[])
+{
+    new freq;
+    if(sscanf(params, "d", freq)) return SendCommandMessage(playerid, "/freq [1-250]");
+    if(freq < 1 || freq > MAX_FREQUENCY) return SendRadioMessage(playerid, "Frequency must be between 1 and 250.");
+    //regarde si radio ou non
+    pData[playerid][pFrequency] = freq;
+    SendRadioMessage(playerid, "Radio frequency changed to %d.", freq);
+    return 1;
+}
+CMD:r(playerid, params[])
+{
+    new message[144],msg[160];
+    if(sscanf(params,"s[144]",message)) return SendCommandMessage(playerid, "/r [message]");
+
+    if(!pData[playerid][pHasRadio]) return SendRadioMessage(playerid,"You don't have a radio.");
+    if(pData[playerid][pFrequency] == 0) return SendRadioMessage(playerid, "Select a frequency first.");
+    foreach(new i : Player)
+    {
+		new quality = GetSignalQuality(i);
+        if(!pData[i][pHasRadio]) continue;
+
+        if(pData[i][pFrequency] != pData[playerid][pFrequency]) continue;
+		if(!RadioCanReach(playerid,i))
+		{
+			SendRadioMessage(i,"<< STATIC >>");
+			continue;
+		}
+        if(quality == SIGNAL_NONE)
+        {
+            SendRadioMessage(i,"<< STATIC >>");
+            continue;
+        }
+        format(msg,sizeof(msg),"%s",message);
+        CorruptRadioMessage(msg,quality);
+        SendRadioMessage(i,"[RADIO %d] %s: %s",pData[playerid][pFrequency],Name[playerid],msg);
+    }
+    return 1;
+}
+CMD:antenna(playerid,params[])
+{
+	Dialog_Show(playerid,AntennaDialog,DIALOG_STYLE_LIST,"Action you can perfom","Repair\nRefuel","Ok","");
+	return 1;
 }
 //anims
 CMD:animcmds(playerid, params[])

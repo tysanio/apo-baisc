@@ -83,6 +83,7 @@ stock ConvertZoneResource(playerid, resourceIndex, give, take)
 		{
 			if (GangZones[i][gTeamID] != idd) return SendServerMessage(playerid, "This zone does not belong to your clan.");
 			if (GangZones[i][gressources] <= take) return SendServerMessage(playerid, "Not enough resources in this zone.");
+			if (clans[id][inv][resourceIndex] + take > GetClanCapacity(id)) return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			clans[id][inv][resourceIndex] += give;
 			GangZones[i][gressources] -= take;
 			SendServerMessage(playerid,"Ressources converted!"); 
@@ -120,7 +121,6 @@ stock ResetAllowedWeapons(playerid)
         AllowedWeapons[playerid][i] = 0;
         AllowedAmmo[playerid][i] = 0;
     }
-    AimbotFlags[playerid] = 0;
 }
 stock AllowWeapon(playerid, weaponid, ammo)
 {
@@ -491,6 +491,136 @@ stock GiveWeaponWithReplace(playerid, weaponid, ammo)
 	AllowWeapon(playerid, weaponid,ammo);
     GivePlayerWeapon(playerid, weaponid, ammo);
     return 1;
+}
+//anetenna
+stock SaveAntenna(id)
+{
+    mysql_format(mysql,query,sizeof(query),"UPDATE antennas SET health='%.2f',fuel='%d',powered='%d' WHERE id='%d'",
+	Antenna[id][aHealth],
+    Antenna[id][aFuel],
+    Antenna[id][aPowered],
+    Antenna[id][aSQLID]);
+    mysql_tquery(mysql,query);
+    return 1;
+}
+stock CreateAntennaVisual(id)
+{
+    if(!Antenna[id][aExists]) return 0;
+    if(IsValidDynamic3DTextLabel(Antenna[id][aLabel])) DestroyDynamic3DTextLabel(Antenna[id][aLabel]);
+    new string[128],status[16];
+    if(Antenna[id][aPowered] == 1)  format(status, sizeof(status), "ONLINE");
+    else format(status, sizeof(status), "OFFLINE");
+    format(string, sizeof(string), "Radio Tower\nStatus: %s",status);
+    Antenna[id][aLabel] = CreateDynamic3DTextLabel(string,0x00FF00FF,Antenna[id][aPosX],Antenna[id][aPosY],Antenna[id][aPosZ] + 2.0,15.0);
+    return 1;
+}
+stock UpdateAntennaVisual(id)
+{
+    if(!Antenna[id][aExists]) return 0;
+    if(IsValidDynamic3DTextLabel(Antenna[id][aLabel])) DestroyDynamic3DTextLabel(Antenna[id][aLabel]);
+    new string[128],status[16];
+    if(Antenna[id][aPowered] == 1)  format(status, sizeof(status), "ONLINE");
+    else format(status, sizeof(status), "OFFLINE");
+    format(string, sizeof(string), "Radio Tower\nStatus: %s",status);
+    Antenna[id][aLabel] = CreateDynamic3DTextLabel(string,0x00FF00FF,Antenna[id][aPosX],Antenna[id][aPosY],Antenna[id][aPosZ] + 2.0,15.0);
+    return 1;
+}
+stock GetNearestAntenna(playerid)
+{
+    new id=-1,Float:dist=999999.0,Float:px,Float:py,Float:pz;
+    GetPlayerPos(playerid,px,py,pz);
+    for(new i;i<MAX_ANTENNAS;i++)
+    {
+        if(!Antenna[i][aExists]) continue;
+
+        new Float:d=GetPlayerDistanceFromPoint(playerid,Antenna[i][aPosX],Antenna[i][aPosY],Antenna[i][aPosZ]);
+        if(d<dist)
+        {
+            dist=d;
+            id=i;
+        }
+    }
+    return id;
+}
+stock CorruptRadioMessage(text[], quality)
+{
+    new len = strlen(text);
+    switch(quality)
+    {
+        case SIGNAL_PERFECT: return 1;
+        case SIGNAL_GOOD: { for(new i=0;i<len;i++)  if(random(18)==0) text[i]='-'; }
+        case SIGNAL_MEDIUM: {for(new i=0;i<len;i++) if(random(6)==0) text[i]='-';}
+        case SIGNAL_POOR: {for(new i=0;i<len;i++) if(random(2)==0) text[i]='-';}
+    }
+    return 1;
+}
+stock GetSignalQuality(playerid)
+{
+    new antenna = GetNearestAntenna(playerid),Float:health = Antenna[antenna][aHealth];
+    if(antenna == -1) return SIGNAL_NONE;
+    if(!Antenna[antenna][aPowered]) return SIGNAL_NONE;
+    if(Antenna[antenna][aHealth] <= 0.0) return SIGNAL_NONE;
+    new Float:distance = GetPlayerDistanceFromPoint(playerid,Antenna[antenna][aPosX],Antenna[antenna][aPosY],Antenna[antenna][aPosZ]);
+	
+    if(distance > Antenna[antenna][aRange]) return SIGNAL_NONE;
+    if(health <= 20) return SIGNAL_POOR;
+    if(health <= 45) return SIGNAL_MEDIUM;
+    if(health <= 75) return SIGNAL_GOOD;
+
+    return SIGNAL_PERFECT;
+}
+stock IsAntennaWorking(id)
+{
+    if(id < 0 || id >= MAX_ANTENNAS) return 0;
+    if(!Antenna[id][aExists]) return 0;
+    if(!Antenna[id][aPowered]) return 0;
+    if(Antenna[id][aHealth] <= 0.0) return 0;
+    if(Antenna[id][aFuel] <= 0) return 0;
+    return 1;
+}
+stock GetNearestWorkingAntenna(playerid)
+{
+    new antenna = -1;
+    new Float:best = 999999.0;
+    for(new i; i < MAX_ANTENNAS; i++)
+    {
+        if(!IsAntennaWorking(i)) continue;
+        new Float:d =  GetPlayerDistanceFromPoint(playerid,Antenna[i][aPosX],Antenna[i][aPosY], Antenna[i][aPosZ]);
+        if(d < best)
+        {
+            best = d;
+            antenna = i;
+			SendRadioMessage(playerid, "Health: %.2f",Antenna[i][aHealth]);
+			SendRadioMessage(playerid, "Range: %.0fm",Antenna[i][aRange]);
+			SendRadioMessage(playerid, "Fuel: %d",Antenna[i][aFuel]);
+        }
+    }
+    return antenna;
+}
+stock CanRelayTo(from,to)
+{
+    if(!IsAntennaWorking(from)) return 0;
+    if(!IsAntennaWorking(to)) return 0;
+    new Float:distance =
+        floatsqroot(floatpower(Antenna[from][aPosX]-Antenna[to][aPosX],2.0)+ floatpower(Antenna[from][aPosY]-Antenna[to][aPosY],2.0)+ floatpower(Antenna[from][aPosZ]-Antenna[to][aPosZ],2.0));
+    if(distance <= Antenna[from][aRange])return 1;
+    return 0;
+}
+stock RadioCanReach(sender,receiver)
+{
+    new a1 = GetNearestWorkingAntenna(sender);
+    new a2 = GetNearestWorkingAntenna(receiver);
+    if(a1 == -1) return 0;
+    if(a2 == -1) return 0;
+    if(a1 == a2) return 1;
+    if(CanRelayTo(a1,a2)) return 1;
+
+    for(new i; i < MAX_ANTENNAS; i++)
+    {
+        if(!IsAntennaWorking(i))  continue;
+        if(CanRelayTo(a1,i) && CanRelayTo(i,a2)) return 1;
+    }
+    return 0;
 }
 stock SendClientMessageEx(playerid, color, const text[], {Float, _}:...)
 {

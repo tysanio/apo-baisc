@@ -47,6 +47,23 @@ do admin edit stuff discord
 	SendClientMessageEx(%0, COLOR_PURPLE, "[COMMAND]:{FFFFFF} "%1)
 #define SendAnimsMessage(%0,%1) \
 	SendClientMessageEx(%0, COLOR_LIGHTBLUE, "[Anims]:{FFFFFF} "%1)
+#define SendRadioMessage(%0,%1) \
+	SendClientMessageEx(%0, COLOR_GREEN, "[Radio]:{FFFFFF} "%1)
 
 //timer first value minute(s)
 #define GANG_RESOURCE_TIME (30 * 60 * 1000) // 30 minutes
+
+//antenna
+#define MAX_ANTENNAS           128
+
+#define ANTENNA_SMALL_RANGE    250.0
+#define ANTENNA_MEDIUM_RANGE   1000.0
+#define ANTENNA_LARGE_RANGE    2000.0
+
+#define ANTENNA_MAX_HEALTH     100.0
+
+#define ANTENNA_SMALL          0
+#define ANTENNA_MEDIUM         1
+#define ANTENNA_LARGE          2
+
+#define MAX_FREQUENCY          250

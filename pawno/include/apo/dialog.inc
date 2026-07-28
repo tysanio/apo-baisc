@@ -240,7 +240,7 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][3] -= 1;
 					SendServerMessage(playerid, "You craft one can of food.");
 				}
-				else SendServerMessage(playerid, "You don't have 1 metals or/and 2 meats.");
+				else SendServerMessage(playerid, "You don't have 1 metal or/and 2 meats.");
 			}
 			case 5: ShowModelSelectionMenu(playerid, "Crafting Barricades", MODEL_SELECTION_CRAFT, CraftBarridaces, sizeof(CraftBarridaces), -12.0, 0.0, 0.0);
 		}
@@ -392,7 +392,9 @@ Dialog:UseItem(playerid, response, listitem, inputtext[])
 							SendServerMessage(playerid, "This water bottle was not so good.");
 							if(pData[playerid][Water] > 101) pData[playerid][Water] = 100;
 						}						
-					}				
+					}
+					SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
+					SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], pData[playerid][Water]);
 					pData[playerid][inv][18] -= 1;
 				}
 				else SendServerMessage(playerid, "You don't have a water bottle(s).");
@@ -1617,4 +1619,51 @@ Dialog:CHANGEWEAPON(playerid, response, listitem, inputtext[])
         return 1;
     }
     return 0;
+}
+//antenna
+Dialog:Antenna(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+        new id = GetNearestAntenna(playerid);
+        switch (listitem)
+        {
+            case 0:
+            {
+				if(id==-1) return SendRadioMessage(playerid, "No nearby antenna.");
+				if(GetPlayerDistanceFromPoint(playerid, Antenna[id][aPosX], Antenna[id][aPosY], Antenna[id][aPosZ])>5) return SendRadioMessage(playerid, "Move closer.");
+				if(Antenna[id][aHealth]>=100.0) return SendRadioMessage(playerid,"Already repaired.");
+				if (pData[playerid][inv][3] >= 5 && pData[playerid][inv][11] >= 1)
+				{
+					pData[playerid][clanexp][0] += 50;
+					pData[playerid][inv][3] -= 5;
+					pData[playerid][inv][11] -= 1;
+					Antenna[id][aHealth] += 20.0;
+					if(Antenna[id][aHealth]>100.0) Antenna[id][aHealth] = 100.0;
+					UpdateAntennaVisual(id);
+					SaveAntenna(id);
+					SendRadioMessage(playerid,"Antenna repaired. (+50 exp)");
+				}
+				else SendServerMessage(playerid, "You don't have 5 metals or/and 1 repair kit.");
+			}
+			case 1:
+            {
+				if(id==-1) return SendRadioMessage(playerid, "No nearby antenna.");
+				if(GetPlayerDistanceFromPoint(playerid, Antenna[id][aPosX], Antenna[id][aPosY], Antenna[id][aPosZ])>5) return SendRadioMessage(playerid, "Move closer.");
+				if(Antenna[id][aHealth]>=100.0) return SendRadioMessage(playerid,"Already max fuel.");
+				if (pData[playerid][inv][13] >= 1)
+				{
+					pData[playerid][clanexp][0] += 50;
+					pData[playerid][inv][13] -= 1;
+					Antenna[id][aFuel] += 20;
+					if(Antenna[id][aFuel] > 100) Antenna[id][aFuel]=100;
+					UpdateAntennaVisual(id);
+					SaveAntenna(id);
+					SendRadioMessage(playerid,"Antenna refueled. (+50 exp)");
+				}
+				else SendServerMessage(playerid, "You don't have 1 jerrycan to refuel.");
+			}
+		}
+	}
+	return 1;
 }

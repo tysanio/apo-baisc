@@ -50,7 +50,11 @@ enum DATAX
 	pFreeze,
 	pFreezeTimer,
 	pLockpickStorage, //because derp
-	pDiscordID
+	pDiscordID,
+	//antenna
+	pHasRadio,
+    pFrequency,
+    pCurrentAntenna
 }
 new pData[MAX_PLAYERS][DATAX];
 
@@ -390,7 +394,8 @@ enum GZInfo {
     Float:gMaxY,
     gZoneID,
     gTeamID, // New
-	gressources
+	gressources,
+	gCaptureTime
 };
 new GangZones[MAX_GZONES][GZInfo],TotalGZ = 0,Float:gZonePointA[MAX_PLAYERS][2],bool:gPointASet[MAX_PLAYERS],bool:ZoneInWar[MAX_GZONES],WarTimer[MAX_GZONES];
 new WarCheckTimer[MAX_GZONES],GlobalZoneCooldown = 0; // Stores the timestamp until which zone is on cooldown
@@ -438,8 +443,8 @@ new ItemNames[26][24] =
     "00' Buck's",
     ".308(s)",
     "Armor Plate(s)",
-    "Water Bottle(s)",
-    "Canned Food",
+    "Water Bottle(s)", //18
+    "Canned Food",  //19
     "inv20",
     "inv21",
     "inv22",
@@ -524,7 +529,6 @@ new Float:CamPos[MAX_LOGIN_CAMERAS][3] =
     {-1772.82, -1766.63, 82.17},
     {-868.99, -451.18, 56.22}
 };
-
 new Float:CamLook[MAX_LOGIN_CAMERAS][3] =
 {
     {319.06, 1760.10, 71.27},
@@ -535,4 +539,29 @@ new Float:CamLook[MAX_LOGIN_CAMERAS][3] =
     {-485.77, -25.99, 82.00},
     {-1773.46, -1765.86, 81.65},
     {-869.69, -451.89, 55.87}
+};
+enum e_Antenna
+{
+    bool:aExists,
+    aSQLID,
+    aType,
+    Float:aPosX,
+    Float:aPosY,
+    Float:aPosZ,
+    Float:aHealth,
+    Float:aRange,
+    aPowered,
+    aFuel,
+    aRepairLevel,
+    Text3D:aLabel,
+    aMapIcon
+};
+new Antenna[MAX_ANTENNAS][e_Antenna];
+enum
+{
+    SIGNAL_NONE,
+    SIGNAL_POOR,
+    SIGNAL_MEDIUM,
+    SIGNAL_GOOD,
+    SIGNAL_PERFECT
 };

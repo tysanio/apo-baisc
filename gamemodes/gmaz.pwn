@@ -1,4 +1,4 @@
-//total lines 8407
+//total lines 8914
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -40,7 +40,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.19.8407");
+	SetGameModeText("Apo 0.19.8914");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -64,6 +64,7 @@ public OnGameModeInit()
     mysql_tquery(mysql, "SELECT * FROM `fuel_stations`", "OnFuelStationsLoaded");
 	mysql_tquery(mysql, "SELECT * FROM gang_zones", "LoadGangZones");
     mysql_tquery(mysql, "SELECT * FROM `entrances`", "Entrance_Load", "");
+    mysql_tquery(mysql, "SELECT * FROM antennas", "LoadAntennas");
     FuelStationCount = 0;
     for (new i = 0; i < MAX_SERVER_VEHICLES; i++)
     {
@@ -75,6 +76,9 @@ public OnGameModeInit()
     #endif
     SetTimer("CheckUnoccupiedVehicleTeleport", 3000, true); //antitpveh
     SetTimer("GangZoneResourceTick", GANG_RESOURCE_TIME, true);  //timer reward
+    SetTimer("CheckGangZones", 60000, true); // after 7 day gones
+    SetTimer("AntennaDecay",600000,true);
+	SetTimer("AntennaFuel",300000,true);
 	return 1;
 }
 public OnGameModeExit()
@@ -275,7 +279,6 @@ public OnPlayerUpdate(playerid)
             }
         }
     }
-    CheckPlayerWeapons(playerid);
     return 1;
 }
 public OnPlayerText(playerid, text[])
@@ -678,6 +681,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			SendClientMessage(playerid, COLOR_GREEN, "You have picked up an object.");
             pData[playerid][Food] -= random(2);
             pData[playerid][Water] -= random(2);
+            SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
+            SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], pData[playerid][Water]);
 			return 1;
 		}
 	}

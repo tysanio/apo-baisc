@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 12, 2026 at 12:32 AM
+-- Generation Time: Jul 28, 2026 at 03:17 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.30
 
@@ -24,6 +24,24 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `antennas`
+--
+
+CREATE TABLE `antennas` (
+  `id` int NOT NULL,
+  `type` int DEFAULT NULL,
+  `x` float DEFAULT NULL,
+  `y` float DEFAULT NULL,
+  `z` float DEFAULT NULL,
+  `health` float DEFAULT NULL,
+  `powered` int DEFAULT NULL,
+  `fuel` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bans`
 --
 
@@ -37,12 +55,6 @@ CREATE TABLE `bans` (
   `duration` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `bans`
---
-
-INSERT INTO `bans` (`id`, `player_name`, `ip`, `admin_name`, `reason`, `ban_time`, `duration`) VALUES
-(3, 'burger', '127.0.0.1', 'Ela_Bosak', 'derp', 1748541266, 0);
 
 -- --------------------------------------------------------
 
@@ -102,7 +114,9 @@ CREATE TABLE `clans` (
   `inv25` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
+--
+-- Dumping data for table `clans`
+--
 -- --------------------------------------------------------
 
 --
@@ -142,15 +156,6 @@ CREATE TABLE `fuel_stations` (
   `price_per_liter` int DEFAULT '10'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `fuel_stations`
---
-
-INSERT INTO `fuel_stations` (`id`, `pos_x`, `pos_y`, `pos_z`, `stock`, `price_per_liter`) VALUES
-(2, 1958.38, 1343.16, 15.375, 500, 5),
-(3, -19.072, -0.088, 3.11, 538, 10),
-(4, -13.771, 37.033, 3.11, 890, 5);
-
 -- --------------------------------------------------------
 
 --
@@ -164,7 +169,8 @@ CREATE TABLE `gang_zones` (
   `maxx` float NOT NULL,
   `maxy` float NOT NULL,
   `team_id` int DEFAULT '0',
-  `ressources` int NOT NULL DEFAULT '0'
+  `ressources` int NOT NULL DEFAULT '0',
+  `capturetime` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -199,7 +205,6 @@ CREATE TABLE `objects` (
   `objectsWorld` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
 -- --------------------------------------------------------
 
 --
@@ -217,9 +222,9 @@ CREATE TABLE `players` (
   `Life` float NOT NULL DEFAULT '100',
   `Armor` float NOT NULL,
   `skin` int NOT NULL DEFAULT '5',
-  `posx` float NOT NULL,
-  `posy` float NOT NULL,
-  `posz` float NOT NULL,
+  `posx` float NOT NULL DEFAULT '20',
+  `posy` float NOT NULL DEFAULT '20',
+  `posz` float NOT NULL DEFAULT '4',
   `interior` int NOT NULL DEFAULT '0',
   `food` int NOT NULL DEFAULT '100',
   `water` int NOT NULL DEFAULT '100',
@@ -284,7 +289,6 @@ CREATE TABLE `players` (
   `AWeap12` int NOT NULL DEFAULT '0',
   `discordid` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 -- --------------------------------------------------------
 
 --
@@ -296,6 +300,8 @@ CREATE TABLE `spawnpos` (
   `posy` float NOT NULL,
   `posz` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `storages`
@@ -341,7 +347,6 @@ CREATE TABLE `storages` (
   `inv25` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
 -- --------------------------------------------------------
 
 --
@@ -377,10 +382,15 @@ CREATE TABLE `weapon_drops` (
   `pos_y` float NOT NULL,
   `pos_z` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `antennas`
+--
+ALTER TABLE `antennas`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `bans`
@@ -447,6 +457,12 @@ ALTER TABLE `weapon_drops`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `antennas`
+--
+ALTER TABLE `antennas`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `bans`

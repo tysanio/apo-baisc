@@ -3,7 +3,7 @@ CMD:ahelp(playerid, params[])
     if(!pData[playerid][Admin]) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
     SendServerMessage(playerid, "---List of commands admins  for this server---");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/kick, /mute, /unmute, /freeze, /unfreeze /setskin, /sethp, /setarmor, /resetweapons");
-    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/goto, /zoneinfo, /addpoint, /resetintvw");
+    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/goto, /zoneinfo, /addpoint, /resetintvw, /setthirst, /sethunger");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/banperm, /bantemp, /unban, /banlist, /editveh, /editstation /stationlist");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/createobject, /editobject, /delobject, /editclan");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/setvip /setlevel, /createspawn, /createveh, /createentrance, /delentrance, /editentrance");
@@ -62,6 +62,28 @@ CMD:setskin(playerid, params[])
 	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) skin to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
 	SetPlayerSkin(lookupid, amount);
 	pData[lookupid][skin] = amount;
+	return 1;
+}
+CMD:setthirst(playerid, params[])
+{
+	new lookupid, amount;
+    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
+	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setthirst <playerid/Name> <amount>");
+	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
+	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) thirst to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
+	pData[lookupid][Water] = amount;
+    SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], amount);
+	return 1;
+}
+CMD:sethunger(playerid, params[])
+{
+	new lookupid, amount;
+    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
+	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /sethunger <playerid/Name> <amount>");
+	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
+	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) hunger to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
+	pData[lookupid][Food] = amount;
+    SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], amount);
 	return 1;
 }
 CMD:setarmor(playerid, params[])
@@ -235,6 +257,15 @@ CMD:goto(playerid, params[])
 		return 1;
 	}
 	else return SendServerMessage(playerid, "Invalide name to goto.");
+}
+CMD:gotoantenna(playerid,params[])
+{
+    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
+    new id;
+    if(sscanf(params,"d",id)) return SendCommandMessage(playerid, "/gotoantenna [id]");
+    if(!Antenna[id][aExists])  return SendServerMessage(playerid,"Invalid antenna.");
+    SetPlayerPos(playerid, Antenna[id][aPosX],Antenna[id][aPosY],Antenna[id][aPosZ]+2);
+    return 1;
 }
 SendPlayerToActor(playerid, actorid)
 {
@@ -918,5 +949,72 @@ CMD:flushpoint(playerid, params[])
     mysql_format(mysql, query, sizeof(query), "DELETE FROM missions");
     mysql_tquery(mysql, query);
     SendServerMessage(playerid, "[ADMIN] Checkpoint mission table has been flushed effective next reboot.");
+    return 1;
+}
+//antenna
+CMD:createantenna(playerid, params[])
+{
+    if (pData[playerid][Admin] < 3) return SendServerMessage(playerid, "Only admin level 3 can use this command.");
+    new type,id = -1;
+    if(sscanf(params,"d",type)) return SendCommandMessage(playerid,  "/createantenna [0=Small 1=Medium 2=Large]");
+    if(type < 0 || type > 2)
+        return SendServerMessage(playerid,"Invalid antenna type.");
+    for(new i; i < MAX_ANTENNAS; i++)
+    {
+        if(!Antenna[i][aExists])
+        {
+            id=i;
+            break;
+        }
+    }
+    if(id==-1) return SendServerMessage(playerid,"No free antenna slots.");
+    GetPlayerPos(playerid, Antenna[id][aPosX],Antenna[id][aPosY],Antenna[id][aPosZ]);
+    Antenna[id][aExists]=true;
+    Antenna[id][aType]=type;
+    Antenna[id][aPowered]=true;
+    Antenna[id][aHealth]=100.0;
+    Antenna[id][aFuel]=100;
+    switch(type)
+    {
+        case ANTENNA_SMALL:  Antenna[id][aRange] = 250.0;
+        case ANTENNA_MEDIUM: Antenna[id][aRange] = 1000.0;
+        case ANTENNA_LARGE:  Antenna[id][aRange] = 2000.0;
+    }
+    CreateAntennaVisual(id);
+
+    mysql_format(mysql,query,sizeof(query), "INSERT INTO antennas (type,x,y,z,health,powered,fuel) VALUES(%d,'%f','%f','%f','100','1','100')",type, Antenna[id][aPosX], Antenna[id][aPosY], Antenna[id][aPosZ]);
+    mysql_tquery(mysql,query);
+    SendServerMessage(playerid, "Created antenna ID %d.",id);
+    return 1;
+}
+CMD:deleteantenna(playerid,params[])
+{
+    if (pData[playerid][Admin] < 3) return SendServerMessage(playerid, "Only admin level 3 can use this command.");
+    new id;
+    if(sscanf(params,"d",id)) return SendCommandMessage(playerid, "/deleteantenna [id]");
+    if(id<0||id>=MAX_ANTENNAS) return 1;
+    if(!Antenna[id][aExists]) return SendServerMessage(playerid, "Invalid antenna.");
+    if(IsValidDynamic3DTextLabel(Antenna[id][aLabel])) DestroyDynamic3DTextLabel(Antenna[id][aLabel]);
+    if(IsValidDynamicMapIcon(Antenna[id][aMapIcon])) DestroyDynamicMapIcon(Antenna[id][aMapIcon]);
+    mysql_format(mysql,query,sizeof(query), "DELETE FROM antennas WHERE id=%d", Antenna[id][aSQLID]);
+    mysql_tquery(mysql,query);
+    Antenna[id][aExists]=false;
+    SendServerMessage(playerid, "Antenna removed.");
+    return 1;
+}
+CMD:editantenna(playerid,params[])
+{
+    if (pData[playerid][Admin] < 3) return SendServerMessage(playerid, "Only admin level 3 can use this command.");
+    new id,type,value;
+    if(sscanf(params,"ddd",id,type,value)) return SendServerMessage(playerid,"1=Health 2=Fuel 3=Power");
+    if(!Antenna[id][aExists]) return 1;
+    switch(type)
+    {
+        case 1: Antenna[id][aHealth] = float(value);
+        case 2: Antenna[id][aFuel] = value;
+        case 3: Antenna[id][aPowered] = value;
+    }
+    UpdateAntennaVisual(id);
+    SaveAntenna(id);
     return 1;
 }

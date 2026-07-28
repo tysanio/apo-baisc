@@ -10,7 +10,14 @@ CMD:near(playerid, params[])
     if ((id = ClanExit_Nearest(playerid)) != -1)
 		SendServerMessage(playerid, "You're near clan entrance (ID: %d.)", id);		
     if ((id = Entrance_Nearest(playerid)) != -1)
-		SendServerMessage(playerid, "You're near entrance (ID: %d.)", id);			
+		SendServerMessage(playerid, "You're near entrance (ID: %d.)", id);	
+    if ((id = GetNearestWorkingAntenna(playerid)) != -1)
+		SendServerMessage(playerid, "You're near antenna (ID: %d.)", id);			
+	return 1;
+}
+CMD:giveradio(playerid,params[])
+{
+	pData[playerid][pHasRadio] = 1;
 	return 1;
 }
 CMD:sobject(playerid,params[])

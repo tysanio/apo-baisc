@@ -78,7 +78,7 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
     }
     if (newtarget == missionactor[4])
     {
-        Dialog_Show(playerid, Missionclan20, DIALOG_STYLE_LIST, "Mission", "Quest 1\n{0f5900}Quest validation.{FFFFFF}\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
+        Dialog_Show(playerid, Missionclan20, DIALOG_STYLE_LIST, "Mission", "Requesting Food and water.\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
     }
     if (newtarget == missionactor[5])
     {
@@ -200,6 +200,7 @@ script OnAccountLoad(playerid)
     SetPlayerProgressBarColour(playerid, pData[playerid][Waterbar], 0x2641FEBB);
     SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
     SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], pData[playerid][Water]);
+	CheckPlayerWeapons(playerid);
 	return 1;
 }
 
@@ -300,7 +301,7 @@ script loadspawnpos()
             case 5: dspawnpos[f][Objects] = CreateDynamicObject(1580, dspawnpos[f][Pos][0], dspawnpos[f][Pos][1], dspawnpos[f][Pos][2]-1.0, 0, 0, 0,-1,-1,-1);
         }
     }
-	printf("[Loot] %d loaded lootable objects positions", rows);
+	printf("[Loot] loaded %d lootable objects positions", rows);
     return true;
 }
 script loadclans()
@@ -363,7 +364,7 @@ script loadclans()
         clans[f][pickup][1] =  CreateDynamicPickup(19132, 23, clans[f][exitpos][0], clans[f][exitpos][1],clans[f][exitpos][2], clans[f][exitvw], clans[f][exitinterior], -1, 50);
         clans[f][pickup][2] =  CreateDynamicPickup(964, 23, clans[f][chestpos][0], clans[f][chestpos][1],clans[f][chestpos][2], -1, -1, -1, 50);
     }
-	printf("[Clans] %d loaded clans", rows);
+	printf("[Clans] loaded %d clans", rows);
     return true;
 }
 script UnMutedTimer(playerid)
@@ -457,7 +458,7 @@ script objects_Load()
 	    objectsData[i][objectsPos][5] = cache_get_field_content_float(i, "objectsRZ");
 	    objectsData[i][objectsOb] = CreateDynamicObject(objectsData[i][objectsModel], objectsData[i][objectsPos][0], objectsData[i][objectsPos][1], objectsData[i][objectsPos][2], objectsData[i][objectsPos][3], objectsData[i][objectsPos][4], objectsData[i][objectsPos][5], objectsData[i][objectsWorld], objectsData[i][objectsInterior]);
 	}
-	printf("[Objects] %d loaded objects", rows);
+	printf("[Objects] loaded %d objects", rows);
 	return 1;
 }
 script OnobjectsCreated(objectsid)
@@ -623,7 +624,7 @@ script storages_Load()
         storageData[i][storagesInv][25] = cache_get_field_content_int(i, "inv25");
 	    storageData[i][storagesOb] = CreateDynamicObject(storageData[i][storagesModel], storageData[i][storagesPos][0], storageData[i][storagesPos][1], storageData[i][storagesPos][2], storageData[i][storagesPos][3], storageData[i][storagesPos][4], storageData[i][storagesPos][5], storageData[i][storagesWorld], storageData[i][storagesInterior]);
 	}
-	printf("[Storages] %d loaded storages", rows);
+	printf("[Storages] loaded %d storages", rows);
 	return 1;
 }
 script OnstoragesCreated(storagesid)
@@ -866,7 +867,7 @@ script OnVehiclesLoaded()
 		g_LastVehiclePos[DB_Vehicle[i]][1] = y;
 		g_LastVehiclePos[DB_Vehicle[i]][2] = z;
     }
-	printf("[Vehicles] %d loaded vehicles", rows);
+	printf("[Vehicles] loaded %d vehicles", rows);
     return 1;
 }
 script OnLoadModsForVehicle(playerid, vehicleid)
@@ -963,6 +964,7 @@ script LoadGangZones()
         GangZones[i][gMaxY] = cache_get_field_content_float(i, "maxy");
         GangZones[i][gTeamID] = cache_get_field_content_int(i, "team_id");
 		GangZones[i][gressources] = cache_get_field_content_int(i, "ressources");
+		GangZones[i][gCaptureTime] = cache_get_field_content_int(i, "capturetime");
         GangZones[i][gZoneID] = GangZoneCreate(GangZones[i][gMinX], GangZones[i][gMinY], GangZones[i][gMaxX], GangZones[i][gMaxY]);
         GangZoneShowForAll(GangZones[i][gZoneID], COLOR_GRAY);
         TotalGZ++;		
@@ -1013,8 +1015,11 @@ script EndZoneWar(zoneIndex)///re check for attacker print doenst match up
 		if (attackers > defenders && attackerTeam != -1)
 		{
 			GangZones[zoneIndex][gTeamID] = attackerTeam;
-			mysql_format(mysql, query, sizeof(query), "UPDATE gang_zones SET team_id = %d WHERE id = %d", attackerTeam, GangZones[zoneIndex][gID]);
+			GangZones[zoneIndex][gCaptureTime] = gettime();
+			mysql_format(mysql, query, sizeof(query),"UPDATE gang_zones SET team_id='%d', capturetime='%d' WHERE id='%d'",attackerTeam,GangZones[zoneIndex][gCaptureTime],GangZones[zoneIndex][gID]);
 			mysql_tquery(mysql, query);
+			
+			
 			GangZoneHideForAll(GangZones[zoneIndex][gZoneID]);
 			pData[attackers][clanexp][0] += 50;
 			GangZoneShowForAll(GangZones[zoneIndex][gZoneID], GetTeamZoneColor(attackerTeam));
@@ -1065,15 +1070,30 @@ script GangZoneResourceTick()
 {
     for (new i = 0; i < TotalGZ; i++)
     {
-        // Skip unowned gang zones
         if (GangZones[i][gTeamID] == 0)
             continue;
         // Give 1 resource
         GangZones[i][gressources]++;
-        // Save to database
         mysql_format(mysql, query, sizeof(query), "UPDATE gang_zones SET ressources = %d WHERE id = %d",GangZones[i][gressources],GangZones[i][gID]);
         mysql_tquery(mysql, query);
-		printf("Ressources zone clan reward");
+    }
+    return 1;
+}
+script CheckGangZones()
+{
+    new current = gettime();
+
+    for(new i = 0; i < MAX_GANG_ZONES; i++)
+    {
+        if(GangZones[i][gTeamID] == 0) continue;
+        if(current - GangZones[i][gCaptureTime] >= 604800) // 7 days
+        {
+            GangZones[i][gTeamID] = 0;
+            GangZones[i][gCaptureTime] = 0;
+            GangZoneShowForAll( GangZones[i][gZoneID], COLOR_GRAY); // Neutral color
+            mysql_format(mysql, query, sizeof(query), "UPDATE `gang_zones` SET `team_id`='0', `capturetime`='0' WHERE `id`='%d'", GangZones[i][gID]);
+            mysql_tquery(mysql, query);
+        }
     }
     return 1;
 }
@@ -1143,7 +1163,7 @@ script Entrance_Load()
 	    EntranceData[i][entranceWorld] = cache_get_field_content_int(i, "entranceWorld");
 	    Entrance_Refresh(i);
 	}
-	printf("[Entrances] %d loaded entrances", rows);
+	printf("[Entrances] loaded %d entrances", rows);
 	return 1;
 }
 //mining
@@ -1190,5 +1210,70 @@ script LoginCamera(playerid)
     if(LoginCameraStep[playerid] >= MAX_LOGIN_CAMERAS) LoginCameraStep[playerid] = 0;
     LoginCameraTimer[playerid] =SetTimerEx("LoginCamera",15000, false, "i", playerid);
 
+    return 1;
+}
+//antenna
+script LoadAntennas()
+{
+    new rows, fields;
+
+    cache_get_data(rows, fields);
+
+    for(new i; i < rows && i < MAX_ANTENNAS; i++)
+    {
+        Antenna[i][aExists] = true;
+        Antenna[i][aSQLID] = cache_get_field_content_int(i,"id");
+        Antenna[i][aType] = cache_get_field_content_int(i,"type");
+        Antenna[i][aPosX] = cache_get_field_content_float(i,"x");
+        Antenna[i][aPosY] = cache_get_field_content_float(i,"y");
+        Antenna[i][aPosZ] = cache_get_field_content_float(i,"z");
+        Antenna[i][aHealth] = cache_get_field_content_float(i,"health");
+        Antenna[i][aPowered] = cache_get_field_content_int(i,"powered");
+        Antenna[i][aFuel] = cache_get_field_content_int(i,"fuel");
+        switch(Antenna[i][aType])
+        {
+            case ANTENNA_SMALL: Antenna[i][aRange]=ANTENNA_SMALL_RANGE;
+            case ANTENNA_MEDIUM: Antenna[i][aRange]=ANTENNA_MEDIUM_RANGE;
+            case ANTENNA_LARGE: Antenna[i][aRange]=ANTENNA_LARGE_RANGE;
+        }
+        CreateAntennaVisual(i);
+    }
+    printf("[Radio] Loaded %d antennas.",rows);
+    return 1;
+}
+script AntennaDecay()
+{
+    for(new i;i<MAX_ANTENNAS;i++)
+    {
+        if(!Antenna[i][aExists]) continue;
+        if(!Antenna[i][aPowered]) continue;
+        if(Antenna[i][aHealth]>0.0)
+        {
+            Antenna[i][aHealth]-=0.5;
+            if(Antenna[i][aHealth]<0.0) Antenna[i][aHealth]=0.0;
+            UpdateAntennaVisual(i);
+            SaveAntenna(i);
+        }
+    }
+    return 1;
+}
+script AntennaFuel()
+{
+    for(new i; i < MAX_ANTENNAS; i++)
+    {
+        if(!Antenna[i][aExists]) continue;
+        if(!Antenna[i][aPowered]) continue;
+        if(Antenna[i][aFuel] > 0)
+        {
+            Antenna[i][aFuel]--;
+            SaveAntenna(i);
+        }
+        else
+        {
+            Antenna[i][aPowered]=false;
+            UpdateAntennaVisual(i);
+            SaveAntenna(i);
+        }
+    }
     return 1;
 }
