@@ -201,10 +201,15 @@
 .territory-marker
 {
     background:transparent !important;
-
     border:none !important;
-
     font-size:20px;
+}
+.clan-marker
+{
+    background:transparent !important;
+    border:none !important;
+    font-size:30px;
+    text-align:center;
 }
 /* ==========================================================
    Pulse Animation

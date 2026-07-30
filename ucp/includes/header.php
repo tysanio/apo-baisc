@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>User Control Panel</title>
+<title><?php echo htmlspecialchars($SERVER_NAME); ?> </title>
 
 <link rel="stylesheet" href="assets/css/style.css">
 
@@ -31,6 +31,8 @@
     <a href="clans.php">🏰 Clan</a>
 
 	<a href="map.php"> 🗺️ Map </a>
+
+	<a href="suggestions.php"> 💡 Suggestions </a>
 
 	<?php if($player["Admin"] >= 1 && $player["Admin"] <= 3) { ?>
 	<a href="admin.php">🛠️ Admin Control Panel </a>	

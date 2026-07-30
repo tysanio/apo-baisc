@@ -20,3 +20,4 @@ catch(PDOException $e)
 {
     die("Database connection failed.");
 }
+$SERVER_NAME = "Your Apocalypse Server";

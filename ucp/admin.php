@@ -22,6 +22,7 @@ require_once "includes/header.php";
 
 <div class="admin-menu">
 <a href="admin_bans.php"> 🚫 Bans </a><br>
+<a href="admin_suggestions.php"> 💡 Players Suggestions </a><br>
 <a href="admin_antennas.php"> 📡 Antennas </a><br>
 <a href="admin_entrances.php"> 🚪 Entrances </a><br>
 <a href="admin_fuel.php"> ⛽ Fuel Stations </a><br>

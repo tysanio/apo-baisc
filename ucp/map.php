@@ -4,8 +4,6 @@ require_once "includes/auth.php";
 require_once "includes/player.php";
 require_once "includes/header.php";
 
-
-
 // =====================================
 // Load Antennas
 // =====================================
@@ -41,8 +39,17 @@ $territories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // =====================================
 
 $playerClan = (int)$player["idclan"];
+$clanLocation = null;
+if($player["idclan"] > 0)
+{
+$stmt = $pdo->prepare(" SELECT  enterposx, enterposy,enterposz,chestposx,chestposy,chestposz FROM clans WHERE idclan = ?");
+$stmt->execute([ $player["idclan"]]);$clanLocation = $stmt->fetch(PDO::FETCH_ASSOC);
 
+}
 ?>
+
+
+
 
 <link
 rel="stylesheet"
@@ -71,12 +78,15 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <div> 🟢 Active Antenna </div>
 
     <div> 🔴 Offline Antenna  </div>
-
+	
     <div> ⛽ Fuel Station </div>
 	
     <div> 🟩 Your Territory </div>
     <div> 🟥 Enemy Territory </div>
     <div> ⬜ Neutral Territory </div>
+	
+	<div> 🚪 Clan Entrance </div>
+	<div> 📦 Clan Chest </div>
 
 </div>
 
@@ -118,7 +128,13 @@ echo json_encode(
     JSON_PRETTY_PRINT
 );
 ?>;
-
+const CLAN_LOCATION =
+<?php
+echo json_encode(
+    $clanLocation,
+    JSON_PRETTY_PRINT
+);
+?>;
 </script>
 
 

@@ -438,6 +438,85 @@ button:hover
     margin-top:10px;
     margin-bottom:20px;
 }
+/* admin */
+.action-button:hover
+{
+    opacity:0.85;
+}
+.action-button
+{
+    width:120px;
+    height:38px;
+    padding:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+    margin:3px;
+}
+.success-button
+{
+    background:#28a745;
+    color:white;
+}
+.danger-button
+{
+    background:#dc3545;
+    color:white;
+}
+.warning-button
+{
+    background:#ffc107;
+    color:black;
+}
+.error-box
+{
+    text-align:center;
+    background:#3b1f1f;
+    border:1px solid #ff4444;
+    color:#ff7777;
+    padding:25px;
+    border-radius:10px;
+    margin-top:30px;
+}
+.error-box h2
+{
+    color:#ff4444;
+}
+.delete-button
+{
+    width:260px !important;
+    height:45px;
+    background:#dc3545;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:15px;
+    margin-top:15px;
+}
+.delete-button:hover
+{
+    opacity:0.85;
+}
+/* footer */
+.footer
+{
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    color: #9aa0a6;
+    font-size: 14px;
+    border-top: 1px solid #2f3542;
+    background: #1b1f27;
+}
+.footer strong
+{
+    color: #ffffff;
+}
 /*  MOBILE RESPONSIVE */
 @media screen and (max-width: 768px)
 {

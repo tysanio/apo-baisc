@@ -118,6 +118,24 @@ L.divIcon(
 	iconAnchor:[12,12]
 
 });
+const clanEntranceIcon =
+L.divIcon(
+{
+    className:"clan-marker",
+    html:"🚪",
+    iconSize:[35,35],
+    iconAnchor:[17,17]
+});
+
+
+const clanChestIcon =
+L.divIcon(
+{
+    className:"clan-marker",
+    html:"📦",
+    iconSize:[35,35],
+    iconAnchor:[17,17]
+});
 // ========================================================
 // Antennas
 // ========================================================
@@ -248,3 +266,62 @@ TERRITORIES.forEach(function(zone)
     )
     .addTo(map);
 });
+// ========================================================
+// Player Clan Locations
+// ========================================================
+if(CLAN_LOCATION != null)
+{
+    // Clan Entrance
+    let entrance =
+    SAtoMap(
+        parseFloat(CLAN_LOCATION.enterposx),
+        parseFloat(CLAN_LOCATION.enterposy)
+    );
+    L.marker(
+        entrance,
+        {
+            icon:clanEntranceIcon
+        }
+    )
+    .addTo(map)
+    .bindPopup(`
+	
+        <h3>🚪 Clan Entrance</h3>
+		<b>Coordinates</b>
+		<br>
+        X: ${CLAN_LOCATION.enterposx} 
+		<br>
+		Y: ${CLAN_LOCATION.enterposy}
+		<br>
+		Z: ${CLAN_LOCATION.enterposz}
+
+    `);
+    // Clan Chest
+    let chest =
+    SAtoMap(
+        parseFloat(CLAN_LOCATION.chestposx),
+        parseFloat(CLAN_LOCATION.chestposy)
+    );
+    L.marker(
+
+        chest,
+        {
+            icon:clanChestIcon
+        }
+    )
+    .addTo(map)
+    .bindPopup(`
+        <h3>📦 Clan Chest</h3>
+		<b>Coordinates</b>
+		<br>
+        X: ${CLAN_LOCATION.chestposx}
+		<br>
+		Y: ${CLAN_LOCATION.chestposy}
+		<br>
+		Z: ${CLAN_LOCATION.chestposz}
+
+    `);
+
+
+
+}

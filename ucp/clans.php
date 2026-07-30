@@ -22,6 +22,7 @@ exit;
 $stmt = $pdo->prepare("SELECT * FROM clans WHERE idclan = ? ");
 $stmt->execute([$player["idclan"] ]);
 $clan = $stmt->fetch();
+
 if(!$clan)
 {
     echo "Clan not found.";
