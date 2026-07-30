@@ -369,7 +369,6 @@ enum E_FUEL_STATION {
     Float:fsPosY,
     Float:fsPosZ,
     fsStock,
-    fsPricePerLiter,
     Text3D:fsLabel,
     fsMapIcon
 }

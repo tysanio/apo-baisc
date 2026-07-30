@@ -1,0 +1,312 @@
+<style>
+/* index */
+*
+{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+body
+{
+    background:#1e1e1e;
+    color:#FFF;
+    font-family:Arial, Helvetica, sans-serif;
+}
+.topbar
+{
+    height:60px;
+    background:#2c3e50;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+    font-size:22px;
+    font-weight:bold;
+}
+.wrapper
+{
+    display:flex;
+    min-height:calc(100vh - 60px);
+}
+.sidebar
+{
+    width:220px;
+    background:#252525;
+}
+.sidebar a
+{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 20px;
+    border-bottom:1px solid #333;
+}
+.sidebar a:hover
+{
+    background:#3498db;
+}
+.content
+{
+    flex:1;
+    padding:30px;
+}
+.card
+{
+    background:#2b2b2b;
+    padding:25px;
+    border-radius:8px;
+}
+.info
+{
+    margin:15px 0;
+    font-size:18px;
+	justify-content:flex-start;
+}
+.login-container
+{
+    min-height:100vh;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+.login-box
+{
+    width:400px;
+    background:#2b2b2b;
+    padding:30px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+/* inventory */
+.inventory-table
+{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+.inventory-table th
+{
+    background:#34495e;
+    padding:15px;
+    text-align:left;
+    font-size:16px;
+}
+.inventory-table td
+{
+    padding:15px;
+    border-bottom:1px solid #444;
+    color:#ddd;
+}
+.inventory-table tr:hover
+{
+    background:#333;
+}
+.inventory-table tr:last-child td
+{
+    border-bottom:none;
+}
+.item-progress
+{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+.item-count
+{
+    width:50px;
+    text-align:right;
+    color:#ddd;
+}
+.item-bar
+{
+    flex:1;
+    height:12px;
+    background:#111;
+    border-radius:10px;
+    overflow:hidden;
+}
+.item-fill
+{
+    height:100%;
+    background:#3498db;
+    border-radius:10px;
+}
+.item-fill.normal
+{
+    background:#3498db;
+}
+.item-fill.warning
+{
+    background:#f39c12;
+}
+.item-fill.danger
+{
+    background:#e74c3c;
+}
+/* setting change password */
+input
+{
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    background:#111;
+    border:1px solid #444;
+    color:white;
+    border-radius:5px;
+}
+button
+{
+    padding:12px 20px;
+    background:#3498db;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+button:hover
+{
+    background:#2980b9;
+}
+.error
+{
+    background:#c0392b;
+    padding:15px;
+    border-radius:5px;
+    margin-bottom:15px;
+}
+.success
+{
+    background:#27ae60;
+    padding:15px;
+    border-radius:5px;
+    margin-bottom:15px;
+}
+.password-success
+{
+    background:#1b5e20;
+    color:#ffffff;
+    padding:25px;
+    margin:0 auto 25px auto;
+    width:400px;
+    border-radius:12px;
+    text-align:center;
+    border:2px solid #4caf50;
+    box-shadow:0 0 15px rgba(76,175,80,0.5);
+}
+.password-success h2
+{
+    color:#7CFF7C;
+    font-size:28px;
+    margin-bottom:15px;
+}
+.password-success p
+{
+    color:#e8ffe8;
+    font-size:17px;
+    margin:8px 0;
+}
+/* character place */
+.character-card
+{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.character-details
+{
+    flex:1;
+}
+.character-skin
+{
+    width:200px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.character-skin img
+{
+    height:280px;
+    max-width:350px;
+    object-fit:contain;
+    filter:drop-shadow(0px 0px 10px black);
+}
+/* VEHICLES */
+.vehicle-card
+{
+    background:#222;
+    padding:20px;
+    margin-top:15px;
+    border-radius:10px;
+    border-left:4px solid #3498db;
+}
+.vehicle-info h3
+{
+    margin-top:0;
+    color:#4fc3f7;
+}
+.vehicle-info p
+{
+    line-height:1.6;
+}
+/*  MOBILE RESPONSIVE */
+@media screen and (max-width: 768px)
+{
+	.wrapper
+	{
+		flex-direction:column;
+	}
+	.sidebar
+	{
+		width:100%;
+	}
+	.sidebar a
+	{
+		text-align:center;
+	}
+	.content
+	{
+		padding:15px;
+	}
+	.card
+	{
+		width:100%;
+		box-sizing:border-box;
+	}
+	.character-card
+	{
+		flex-direction:column;
+		text-align:center;
+	}
+	.character-skin
+	{
+		margin-top:20px;
+	}
+	.inventory-table
+	{
+		width:100%;
+		font-size:14px;
+	}
+	.item-progress
+	{
+		gap:8px;
+	}
+	.item-count
+	{
+		width:45px;
+	}
+	.vehicle-card
+	{
+		width:100%;
+	}
+	.login-box
+	{
+		width:90%;
+	}
+	.password-success
+	{
+		width:90%;
+	}
+}
+</style>

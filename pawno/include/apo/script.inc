@@ -809,7 +809,6 @@ script OnFuelStationsLoaded()
         FuelStation[i][fsPosY] = cache_get_row_float(i, 2);
         FuelStation[i][fsPosZ] = cache_get_row_float(i, 3);
         FuelStation[i][fsStock] = cache_get_row_int(i, 4);
-        FuelStation[i][fsPricePerLiter] = cache_get_row_int(i, 5);
     	if (IsValidDynamic3DTextLabel(FuelStation[i][fsLabel]))
        		DestroyDynamic3DTextLabel(FuelStation[i][fsLabel]);
     	if (IsValidDynamicMapIcon(FuelStation[i][fsMapIcon]))

@@ -7,6 +7,7 @@ command invite for clan stuff-----to test
 Secteur H , la meute, les évader et la zone---name D.rtto
 do admin edit player stuff
 do admin edit stuff discord
+chainsaw?
 */
 #define COLOR_WHITE       	0xFFFFFFBB
 #define COLOR_RED       	0xFF0000AA

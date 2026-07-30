@@ -202,7 +202,7 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					if (pData[playerid][inv][13] + 1 > GetBackpackCapacity(playerid))
 						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					FuelStation[stationid][fsStock] -= 5;
-					format(label, sizeof(label), "[ID %d] Fuel: %d liters",stationid,FuelStation[stationid][fsStock],FuelStation[stationid][fsPricePerLiter]);
+					format(label, sizeof(label), "[ID %d] Fuel: %d liters",stationid,FuelStation[stationid][fsStock]);
 					UpdateDynamic3DTextLabelText(FuelStation[stationid][fsLabel], 0x00FF00FF, label);
 					mysql_format(mysql, label, sizeof(label),"UPDATE fuel_stations SET stock = %d WHERE id = %d", FuelStation[stationid][fsStock], FuelStation[stationid][fsID]);
 					mysql_query(mysql, label);

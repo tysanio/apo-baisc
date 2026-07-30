@@ -152,8 +152,7 @@ CREATE TABLE `fuel_stations` (
   `pos_x` float DEFAULT NULL,
   `pos_y` float DEFAULT NULL,
   `pos_z` float DEFAULT NULL,
-  `stock` int DEFAULT '0',
-  `price_per_liter` int DEFAULT '10'
+  `stock` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

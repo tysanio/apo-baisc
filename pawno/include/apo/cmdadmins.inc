@@ -689,7 +689,7 @@ CMD:createstation(playerid, params[])
         return SendServerMessage(playerid, "[Fuel] Max station limit reached.");
     new Float:x, Float:y, Float:z;
     GetPlayerPos(playerid, x, y, z);
-    mysql_format(mysql, query, sizeof(query),"INSERT INTO fuel_stations (pos_x, pos_y, pos_z, stock, price_per_liter) VALUES (%.3f, %.3f, %.3f, 1000, 10)",x, y, z);
+    mysql_format(mysql, query, sizeof(query),"INSERT INTO fuel_stations (pos_x, pos_y, pos_z, stock) VALUES (%.3f, %.3f, %.3f, 1000)",x, y, z);
     mysql_query(mysql, query);
     SendServerMessage(playerid, "[Fuel] Station created.");
     mysql_tquery(mysql, "SELECT * FROM fuel_stations", "OnFuelStationsLoaded");
