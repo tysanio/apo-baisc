@@ -136,7 +136,7 @@ DISCORD:ping( DCC_Channel: channel, DCC_User: author, params[ ] )
 	if (sistaff1ok)
 	{
 		DCC_TriggerBotTypingIndicator(discordlog);
-		DCC_SendChannelMessage(discordlog, "Ping recus");
+		DCC_SendChannelMessage(discordlog, "Ping check");
 		DCC_SetBotPresenceStatus(DO_NOT_DISTURB);
 		DCC_SetBotActivity("Server Ping [DONE]");
 	}
@@ -178,8 +178,8 @@ script OnPlayerDiscordStats( playerid, params[ ] )
 		clanexpj[4]           = cache_get_field_content_int( 0, "clanexp4");
 
 		DCC_TriggerBotTypingIndicator(discordlog);
-		format(string1, sizeof(string1), "**Joueur %s**",params);
-		format(string4, sizeof(string4), "Admin: %s	VIP: %s	Score: %d",(Admin1) ? ("Oui") : ("Non"),(VIP1) ? ("Oui") : ("Non"),Score1);
+		format(string1, sizeof(string1), "**Player %s**",params);
+		format(string4, sizeof(string4), "Admin: %s	VIP: %s	Score: %d",(Admin1) ? ("Yes") : ("No"),(VIP1) ? ("Yes") : ("No"),Score1);
         format(string2, sizeof(string2), "Clan Exp 2: %d/5000	Clan Exp 3: %d/5000",clanexpj[1],clanexpj[2]);
         format(string3, sizeof(string3), "Clan Exp 4: %d/5000	Clan Exp 5: %d/5000",clanexpj[3],clanexpj[4]);
 		Embed = DCC_CreateEmbed(string1,string99);

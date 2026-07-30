@@ -30,6 +30,10 @@
 
     <a href="#">🛡️ Clan</a>
 
+	<?php if($player["Admin"] >= 1 && $player["Admin"] <= 3) { ?>
+	<a href="admin.php">🛠️ Admin Control Panel </a>	
+	<?php } ?>
+
     <a href="settings.php">⚙️ Settings</a>
 
     <a href="logout.php">🚪 Logout</a>

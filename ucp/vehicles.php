@@ -59,15 +59,9 @@ echo "
 <b>Position:</b><br>
 X: ".$vehicle["posX"]."<br>
 Y: ".$vehicle["posY"]."<br>
-Z: ".$vehicle["posZ"]."
+Z: ".$vehicle["posZ"]."<br>
+A: ".$vehicle["rot"]."
 </p>
-
-
-<p>
-<b>Rotation:</b>
-".$vehicle["rot"]."
-</p>
-
 
 <p>
 <b>Colors:</b>

@@ -205,7 +205,7 @@ CMD:goto(playerid, params[])
 	if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
 	if (sscanf(params, "s[24]S()[64]", type, string))
 	{
-		SendServerMessage(playerid, "[NAMES]: {FFFFFF}actor, interior, car, entrance, pos");
+		SendServerMessage(playerid, "[NAMES]: {FFFFFF}actor, interior, car, entrance, pos, antenna");
 		return 1;
 	}
 	else if (!strcmp(type, "actor", true))
@@ -257,16 +257,18 @@ CMD:goto(playerid, params[])
 		else SetPlayerPos(playerid, x, y, z + 1.0);
 		return 1;
 	}
+	else if (!strcmp(type, "antenna", true))
+	{
+		if (sscanf(string, "d", id)) return SendCommandMessage(playerid, "/goto antenna [ID]");
+		if(id < 0 || id >= MAX_ANTENNAS) return SendServerMessage(playerid, "Invalid antenna ID.");
+		if(!Antenna[id][aExists]) return SendServerMessage(playerid, "This antenna does not exist.");
+
+		SetPlayerInterior(playerid, 0);
+		SetPlayerVirtualWorld(playerid, 0);
+		SetPlayerPos(playerid,Antenna[id][aPosX], Antenna[id][aPosY],Antenna[id][aPosZ] + 2.0);
+		return 1;
+    }
 	else return SendServerMessage(playerid, "Invalide name to goto.");
-}
-CMD:gotoantenna(playerid,params[])
-{
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-    new id;
-    if(sscanf(params,"d",id)) return SendCommandMessage(playerid, "/gotoantenna [id]");
-    if(!Antenna[id][aExists])  return SendServerMessage(playerid,"Invalid antenna.");
-    SetPlayerPos(playerid, Antenna[id][aPosX],Antenna[id][aPosY],Antenna[id][aPosZ]+2);
-    return 1;
 }
 SendPlayerToActor(playerid, actorid)
 {
