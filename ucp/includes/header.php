@@ -37,6 +37,8 @@
 	<?php if($player["Admin"] >= 1 && $player["Admin"] <= 3) { ?>
 	<a href="admin.php">🛠️ Admin Control Panel </a>	
 	<?php } ?>
+	
+	<a href="faq.php"> ❓ FAQ </a>
 
     <a href="settings.php">⚙️ Settings</a>
 

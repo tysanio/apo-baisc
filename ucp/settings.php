@@ -3,7 +3,7 @@
 require_once "includes/auth.php";
 require_once "includes/player.php";
 require_once "includes/header.php";
-
+require_once "includes/discord.php";
 // ==========================
 // Reset Character
 // ==========================
@@ -22,6 +22,11 @@ if(isset($_POST["reset_player"]))
             AWeap10 = 0,AWeap11 = 0,AWeap12 = 0 WHERE Username = ? ");
 
     $stmt->execute([ $player["Username"] ]);
+	DiscordWebhook(
+	"🗑️ Character Reset",
+	"**Player:** ".$player["Username"]);
+	
+	
     header("Location: index.php?reset=1");
     exit;
 }

@@ -4,7 +4,34 @@ require_once "includes/auth.php";
 require_once "includes/player.php";
 
 require_once "includes/header.php";
+require_once "includes/discord.php";
 
+// ==============================
+// Add Suggestion
+// ==============================
+if(isset($_POST["add_suggestion"]))
+{
+    $suggestion = trim($_POST["suggestion"]);
+    if(strlen($suggestion) > 128)
+    {
+        $error = "Suggestion is limited to 128 characters.";
+    }
+    else
+    {
+
+        $stmt = $pdo->prepare(" INSERT INTO suggestions (Username, suggestions, Status) VALUES (?, ?, 0) ");
+        $stmt->execute([ $player["Username"], $suggestion ]);
+		DiscordWebhook(
+		"💡 New Suggestion From ".$player["Username"],
+		"**Suggestion:**\n".
+		$suggestion.
+		"\n\n".
+		"🔎 Check the UCP!");
+        header("Location: suggestions.php");
+        exit;
+    }
+
+}
 
 // ==============================
 // Pagination
@@ -27,10 +54,18 @@ $offset = ($page - 1) * $limit;
 
 
 // ==============================
-// Count Suggestions
+// Count Player Suggestions
 // ==============================
 
-$count = $pdo->query(" SELECT COUNT(*) FROM suggestions ")->fetchColumn();
+$countStmt = $pdo->prepare(" SELECT COUNT(*)  FROM suggestions WHERE Username = ? ");
+
+
+$countStmt->execute([
+    $player["Username"]
+]);
+
+
+$count = $countStmt->fetchColumn();
 
 
 
@@ -38,24 +73,30 @@ $totalPages = ceil($count / $limit);
 
 
 
+
 // ==============================
-// Load Suggestions
+// Load Player Suggestions
 // ==============================
 
-$stmt = $pdo->prepare("
-    SELECT * FROM suggestions ORDER BY id ASC LIMIT ? OFFSET ?
-");
+$stmt = $pdo->prepare("  SELECT * FROM suggestions WHERE Username = ? ORDER BY id ASC LIMIT ? OFFSET ? ");
 
 
 $stmt->bindValue(
     1,
+    $player["Username"],
+    PDO::PARAM_STR
+);
+
+
+$stmt->bindValue(
+    2,
     $limit,
     PDO::PARAM_INT
 );
 
 
 $stmt->bindValue(
-    2,
+    3,
     $offset,
     PDO::PARAM_INT
 );
@@ -70,14 +111,72 @@ $suggestions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-
-
 <div class="card">
 
 
 <h2>
-💡 Player Suggestions
+➕ Add Suggestion
 </h2>
+
+
+
+<?php
+
+if(isset($error))
+{
+
+echo "
+
+<p class='error-message'>
+".$error."
+</p>";
+
+}
+
+?>
+
+
+
+<form method="POST">
+
+
+<textarea
+name="suggestion"
+maxlength="128"
+required
+placeholder="Write your suggestion here..."
+style="width:100%; height:100px;">
+</textarea>
+
+
+<br><br>
+
+
+<button
+type="submit"
+name="add_suggestion"
+class="action-button success-button">
+
+💡 Submit Suggestion
+
+</button>
+
+
+</form>
+
+
+<p>
+Maximum characters: 128
+</p>
+
+
+</div>
+
+<div class="card">
+
+
+<h2> 💡 My Suggestions </h2>
+
 
 
 
@@ -88,11 +187,6 @@ $suggestions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <th>
 ID
-</th>
-
-
-<th>
-Username
 </th>
 
 
@@ -110,7 +204,30 @@ Status
 
 
 
+
 <?php
+
+
+if(count($suggestions) == 0)
+{
+
+?>
+
+<tr>
+
+<td colspan="3">
+
+No suggestions submitted yet.
+
+</td>
+
+</tr>
+
+
+<?php
+
+}
+
 
 
 foreach($suggestions as $row)
@@ -120,18 +237,31 @@ foreach($suggestions as $row)
 switch($row["Status"])
 {
 
-    case 1:$status = "✅ Yes";
+    case 1:
+
+        $status = "✅ Yes";
+
     break;
-    case 2: $status = "❌ No";
+
+
+    case 2:
+
+        $status = "❌ No";
+
     break;
-    default:$status = "⏳ Not Checked";
+
+
+    default:
+
+        $status = "⏳ Not Checked";
+
     break;
 
 }
 
 
-
 ?>
+
 
 
 <tr>
@@ -140,14 +270,6 @@ switch($row["Status"])
 <td>
 
 <?php echo $row["id"]; ?>
-
-</td>
-
-
-
-<td>
-
-<?php echo htmlspecialchars($row["Username"]); ?>
 
 </td>
 
@@ -181,6 +303,7 @@ switch($row["Status"])
 ?>
 
 
+
 </table>
 
 
@@ -191,7 +314,6 @@ switch($row["Status"])
 
 
 <?php
-
 
 
 if($page > 1)
@@ -236,7 +358,6 @@ else
 
 ?>
 
-
 <a href="suggestions.php?page=<?php echo $i; ?>">
 
 <?php echo $i; ?>
@@ -257,7 +378,6 @@ if($page < $totalPages)
 {
 
 ?>
-
 
 <a href="suggestions.php?page=<?php echo $page + 1; ?>">
 Next ➡

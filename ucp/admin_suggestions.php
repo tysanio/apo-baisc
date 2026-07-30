@@ -145,7 +145,7 @@ switch($row["Status"])
 
 <input  type="hidden" name="id" value="<?php echo $row["id"]; ?>">
 <button type="submit" name="update_status" class="action-button success-button" name="Status" value="1"> ✅ </button>
-<button type="submit" name="update_status" class="action-button danger-button" name="Status" > ❌ </button>
+<button type="submit" name="update_status" class="action-button danger-button" name="Status" value="2"> ❌ </button>
 <button type="submit" name="update_status" class="action-button warning-button" name="Status" value="0"> ⏳ </button>
 
 </form>

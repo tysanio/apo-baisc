@@ -9,7 +9,7 @@ require_once "includes/header.php";
 <div class="card">
 
     <h2>
-        Welcome <?php echo htmlspecialchars($player["Username"]); ?>
+        Welcome back <?php echo htmlspecialchars($player["Username"]); ?> !
     </h2>
 
     <br>

@@ -55,6 +55,13 @@ CREATE TABLE `bans` (
   `duration` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `suggestions` (
+  `id` int NOT NULL,
+  `Username` varchar(32) NOT NULL,
+  `suggestions` text NOT NULL,
+  `Status` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 -- --------------------------------------------------------
 
@@ -498,6 +505,14 @@ ALTER TABLE `missions`
 --
 ALTER TABLE `objects`
   MODIFY `objectsID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+
+ALTER TABLE `suggestions`
+  ADD PRIMARY KEY (`id`);
+
+--
+ALTER TABLE `suggestions`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+COMMIT;
 
 --
 -- AUTO_INCREMENT for table `players`
