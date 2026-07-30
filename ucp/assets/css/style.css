@@ -346,6 +346,98 @@ button:hover
 {
     background:#3498db;
 }
+/* clans*/
+.info-table
+{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+.info-table th
+{
+    width:220px;
+    background:#23272f;
+    color:#ffffff;
+    padding:14px;
+    text-align:left;
+    border-bottom:1px solid #3a3f48;
+}
+.info-table td
+{
+    background:#2d323c;
+    color:#e8e8e8;
+    padding:14px;
+    border-bottom:1px solid #3a3f48;
+}
+.info-table tr:hover td,
+.info-table tr:hover th
+{
+    background:#363c47;
+}
+.position-grid
+{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-top:20px;
+}
+.position-card
+{
+    background:#2d323c;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.position-card h3
+{
+    margin-top:0;
+    color:#4da3ff;
+    margin-bottom:15px;
+}
+.coord
+{
+    margin:8px 0;
+    font-size:15px;
+}
+.coord strong
+{
+    display:inline-block;
+    width:25px;
+    color:#7fb8ff;
+}
+.member-list
+{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+.member-box
+{
+    background:#2d323c;
+    padding:12px 18px;
+    border-radius:8px;
+    min-width:150px;
+    color:white;
+}
+.member-box strong
+{
+    color:#4da3ff;
+}
+/* Reset Character */
+.danger-card
+{
+    border-left:5px solid #c0392b;
+}
+.warning-text
+{
+    color:#ffb3b3;
+    line-height:1.7;
+}
+.warning-text ul
+{
+    margin-top:10px;
+    margin-bottom:20px;
+}
 /*  MOBILE RESPONSIVE */
 @media screen and (max-width: 768px)
 {

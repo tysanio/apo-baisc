@@ -28,7 +28,9 @@
 
     <a href="vehicles.php">🚗 Vehicles</a>
 
-    <a href="#">🛡️ Clan</a>
+    <a href="clans.php">🏰 Clan</a>
+
+	<a href="map.php"> 🗺️ Map </a>
 
 	<?php if($player["Admin"] >= 1 && $player["Admin"] <= 3) { ?>
 	<a href="admin.php">🛠️ Admin Control Panel </a>	

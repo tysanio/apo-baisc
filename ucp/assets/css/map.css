@@ -1,0 +1,230 @@
+/* ==========================================================
+   Tactical World Map
+========================================================== */
+#map
+{
+    width:100%;
+    height:900px;
+    border-radius:12px;
+    border:2px solid #3b4758;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(0,0,0,.45);
+    margin-top:20px;
+    position:relative;
+}
+/* ==========================================================
+   Leaflet
+========================================================== */
+.leaflet-container
+{
+    background:#1b1f24;
+    font-family:Arial, Helvetica, sans-serif;
+}
+/* ==========================================================
+   Dark Overlay
+========================================================== */
+.leaflet-pane.leaflet-overlay-pane
+{
+    filter:brightness(.70);
+}
+/* ==========================================================
+   Legend
+========================================================== */
+
+.map-legend
+{
+    position:absolute;
+    top:160px;
+    right:45px;
+    z-index:9999;
+    background:#23272f;
+    color:#ffffff;
+    padding:18px;
+    width:220px;
+    border-radius:10px;
+    border:1px solid #3c4658;
+    box-shadow:0 0 15px rgba(0,0,0,.35);
+}
+.map-legend h3
+{
+    margin-top:0;
+    margin-bottom:15px;
+    color:#4da3ff;
+}
+.map-legend div
+{
+    margin:10px 0;
+    font-size:14px;
+}
+/* ==========================================================
+   Popup
+========================================================== */
+.leaflet-popup-content-wrapper
+{
+    background:#2b313b;
+    color:white;
+    border-radius:10px;
+}
+.leaflet-popup-tip
+{
+    background:#2b313b;
+}
+.leaflet-popup-content
+{
+    font-size:14px;
+
+    line-height:1.6;
+}
+/* ==========================================================
+   Marker Glow
+========================================================== */
+.leaflet-marker-icon
+{
+    filter:drop-shadow(0 0 6px rgba(255,255,255,.25));
+    transition:.2s;
+}
+.leaflet-marker-icon:hover
+{
+    transform:scale(1.15);
+    filter:drop-shadow(0 0 12px rgba(77,163,255,.75));
+}
+/* ==========================================================
+   Card
+========================================================== */
+.card h2
+{
+    margin-bottom:8px;
+}
+.card p
+{
+    color:#c8d2df;
+}
+/* ==========================================================
+   Scrollbars
+========================================================== */
+::-webkit-scrollbar
+{
+    width:10px;
+}
+::-webkit-scrollbar-track
+{
+    background:#1b1f24;
+}
+::-webkit-scrollbar-thumb
+{
+    background:#4da3ff;
+    border-radius:8px;
+}
+/* ==========================================================
+   Mobile
+========================================================== */
+@media(max-width:900px)
+{
+#map
+{
+    height:650px;
+}
+.map-legend
+{
+    position:relative;
+    top:0;
+    right:0;
+    width:100%;
+    margin-top:20px;
+}
+}
+/* ==========================================================
+   Tactical Header
+========================================================== */
+.map-title
+{
+    color:#4da3ff;
+    font-size:24px;
+    font-weight:bold;
+}
+/* ==========================================================
+   Future Layers
+========================================================== */
+.layer-button
+{
+    background:#2b313b;
+    color:white;
+    border:1px solid #495364;
+    border-radius:6px;
+    padding:8px 12px;
+    cursor:pointer;
+}
+.layer-button:hover
+{
+    background:#3b4758;
+}
+.antenna-marker
+{
+    cursor:pointer;
+}
+.antenna-icon
+{
+    font-size:32px;
+    text-align:center;
+    line-height:40px;
+    filter:
+    drop-shadow(0 0 8px #00ff00);
+}
+.antenna-marker.offline .antenna-icon
+{
+    filter:
+    drop-shadow(0 0 8px red);
+}
+.antenna-marker:hover
+{
+    transform:scale(1.25);
+    transition:.2s;
+}
+.fuel-marker
+{
+    background:transparent !important;
+    border:none !important;
+}
+.fuel-icon
+{
+    font-size:32px;
+    text-align:center;
+    line-height:40px;
+    cursor:pointer;
+    filter: drop-shadow(0 0 8px orange);
+}
+.fuel-icon:hover
+{
+    transform:scale(1.25);
+    transition:.2s;
+}
+.territory-marker
+{
+    background:transparent !important;
+
+    border:none !important;
+
+    font-size:20px;
+}
+/* ==========================================================
+   Pulse Animation
+========================================================== */
+@keyframes pulse
+{
+0%
+{
+    transform:scale(1);
+}
+50%
+{
+    transform:scale(1.10);
+}
+100%
+{
+    transform:scale(1);
+}
+}
+.online-marker
+{
+    animation:pulse 2s infinite;
+}

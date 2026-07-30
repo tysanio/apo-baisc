@@ -4,6 +4,27 @@ require_once "includes/auth.php";
 require_once "includes/player.php";
 require_once "includes/header.php";
 
+// ==========================
+// Reset Character
+// ==========================
+
+if(isset($_POST["reset_player"]))
+{
+    $stmt = $pdo->prepare(" UPDATE players SET
+            Score = 0,
+            inv1 = 0,inv2 = 0,inv3 = 0,inv4 = 0,inv5 = 0,inv6 = 0,inv7 = 0,inv8 = 0,inv9 = 0,
+            inv10 = 0,inv11 = 0,inv12 = 0,inv13 = 0,inv14 = 0,inv15 = 0,inv16 = 0,inv17 = 0,inv18 = 0,inv19 = 0,
+            inv20 = 0,inv21 = 0,inv22 = 0,inv23 = 0,inv24 = 0,inv25 = 0,
+            clanexp0 = 0,clanexp1 = 0,clanexp2 = 0,clanexp3 = 0,clanexp4 = 0,
+            Weap1 = 0,Weap2 = 0,Weap3 = 0,Weap4 = 0, Weap5 = 0,Weap6 = 0,Weap7 = 0,Weap8 = 0,Weap9 = 0,
+            Weap10 = 0,Weap11 = 0,Weap12 = 0,
+            AWeap1 = 0,AWeap2 = 0,AWeap3 = 0,AWeap4 = 0,AWeap5 = 0,AWeap6 = 0,AWeap7 = 0,AWeap8 = 0,AWeap9 = 0,
+            AWeap10 = 0,AWeap11 = 0,AWeap12 = 0 WHERE Username = ? ");
+
+    $stmt->execute([ $player["Username"] ]);
+    header("Location: index.php?reset=1");
+    exit;
+}
 
 $message = "";
 
@@ -23,54 +44,33 @@ if(isset($_POST["change_password"]))
     }
     else
     {
-
         // Whirlpool encryption
         $oldHash = strtoupper(hash("whirlpool", $oldPassword));
-
-
         // Check old password
 		if($oldHash != $player["Password"])
 		{
-
 			echo "<pre>";
-
 			echo "Entered password hash:\n";
 			echo $oldHash;
-
 			echo "\n\nDatabase password:\n";
 			echo $player["Password"];
-
 			echo "</pre>";
-
 			exit;
 
 		}
         else
         {
-
             $newHash = strtoupper(hash("whirlpool", $newPassword));
-
-
             $stmt = $pdo->prepare(" UPDATE players SET Password = ? WHERE id = ? ");
-
-
             $stmt->execute([
                 $newHash,
                 $_SESSION["userid"]
             ]);
-
-
-            // Logout
             session_destroy();
-
-
             header("Location: index.php?password_changed=1");
             exit;
-
         }
-
     }
-
 }
 
 ?>
@@ -79,8 +79,6 @@ if(isset($_POST["change_password"]))
 <div class="card">
 
 <h2>⚙️ Settings</h2>
-
-
 <?php
 
 if($message != "")
@@ -93,57 +91,44 @@ if($message != "")
 }
 
 ?>
-
-
 <form method="POST">
-
-
 <div class="info">
-
-<label>
-Old Password
-</label>
-
+<label> Old Password</label>
 <input type="password" name="old_password" required>
-
 </div>
-
-
-
 <div class="info">
-
-<label>
-New Password
-</label>
-
+<label> New Password </label>
 <input type="password" name="new_password" required>
-
 </div>
-
-
-
 <div class="info">
-
-<label>
-Confirm Password
-</label>
-
+<label>Confirm Password</label>
 <input type="password" name="confirm_password" required>
-
 </div>
-
-
-
-<button type="submit" name="change_password">
-Change Password
-</button>
-
-
+<button type="submit" name="change_password"> Change Password </button>
 </form>
-
-
 </div>
 
+<div class="card danger-card">
+    <h2>⚠ Reset Character</h2>
+    <p class="warning-text">
+        <strong>Warning!</strong><br><br>
+        Resetting your character will permanently erase:
+        <ul>
+			<li>Your level</li>
+            <li>All inventory items</li>
+            <li>All equipped weapons</li>
+            <li>All weapon ammunition</li>
+            <li>All clan experience</li>
+        </ul>
+        <strong>This action cannot be undone.</strong>
+    </p>
+    <form method="POST"
+          onsubmit="return confirm('Are you absolutely sure? This will permanently reset your character.');">
+        <button  type="submit" name="reset_player" class="danger-button"> 🗑 Reset Character </button>
+
+    </form>
+
+</div>
 
 <?php
 
