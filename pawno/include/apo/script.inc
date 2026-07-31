@@ -112,6 +112,8 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 }
 script OnAccountLoad(playerid)
 {
+	format(query, sizeof(query), "UPDATE `players` SET `lasttime` = '%d' WHERE `Username` = '%s'", gettime(),Name[playerid]);
+	mysql_tquery(mysql, query, "", "");
  	pData[playerid][Admin] = cache_get_field_content_int(0, "Admin"); //we're getting a field 4 from row 0. And since it's an integer, we use cache_get_row_int
  	pData[playerid][VIP] = cache_get_field_content_int(0, "VIP"); //Above
 	pData[playerid][Life] =	cache_get_field_content_float(0, "Life");

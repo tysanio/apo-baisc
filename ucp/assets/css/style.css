@@ -346,7 +346,21 @@ button:hover
 {
     background:#3498db;
 }
+.dashboard-layout
+{
+    display:flex;
+    gap:20px;
+    display:flex;
+    gap:20px;
+    align-items:flex-start;
+}
 /* clans*/
+.info-line
+{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
 .info-table
 {
     width:100%;

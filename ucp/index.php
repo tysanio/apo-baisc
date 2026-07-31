@@ -58,55 +58,30 @@ if(isset($_POST["login"]))
 
     if($player)
     {
-
         if($passwordHash == $player["Password"])
         {
-
             $_SESSION["userid"] = $player["ID"];
-
             header("Location: dashboard.php");
             exit;
-
         }
         else
         {
-
-            $message = "
-
-            <div class='error'>
-                Invalid password.
-            </div>
-
-            ";
-
+            $message = " <div class='error'> Invalid password. </div> ";
         }
-
     }
     else
     {
-
-        $message = "
-
-        <div class='error'>
-            Account not found.
-        </div>
-
-        ";
+        $message = " <div class='error'> Account not found. </div> ";
 
     }
 
 }
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 		<meta charset="UTF-8">
-		<title>
-			User Control Panel
-		</title>
+		<title> <?php echo htmlspecialchars($SERVER_NAME); ?>  </title>
 	<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -114,7 +89,7 @@ if(isset($_POST["login"]))
 
 	<?php echo $message; ?>
 		<div class="login-box">
-		<h1>SA-MP UCP</h1>
+		<h1><?php echo htmlspecialchars($SERVER_NAME); ?> </h1>
 			<form method="POST">
 				<div class="info">
 					<label> Username </label>
