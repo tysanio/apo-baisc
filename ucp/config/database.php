@@ -21,7 +21,18 @@ catch(PDOException $e)
     die("Database connection failed.");
 }
 
-$DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1532483558780833924/rfq0SfuVdpy6cCgguRXKLBKTmqY6aah6u9WNsPp51nd7f9OVIefZUhw3zTmctp-ANZVG";
+$DISCORD_WEBHOOK = "";
 
+$DISCORD_CLIENT_ID = "";
+
+$DISCORD_CLIENT_SECRET = "";
+
+$DISCORD_REDIRECT = "http://localhost/ucp/discord_callback.php";
+
+$DISCORD_GUILD_ID = "";
+
+$DISCORD_UCP_ROLE = "";
+
+$DISCORD_BOT_TOKEN = "";
 
 $SERVER_NAME = "Your Apocalypse Server";

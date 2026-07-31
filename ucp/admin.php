@@ -28,6 +28,7 @@ require_once "includes/header.php";
 <a href="admin_fuel.php"> ⛽ Fuel Stations </a><br>
 <a href="admin_missions.php"> 📍 Missions Spawn </a><br>
 <a href="admin_objects.php"> 🏗️ Object Spawn </a><br>
+<a href="admin_tools.php"> ⚒️ Admins tools </a><br>
 </div>
 
 

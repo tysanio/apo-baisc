@@ -44,7 +44,7 @@ require_once "includes/header.php";
 
     <h3>Q: How do I report a bug?</h3>
 
-    <p> <strong>A:</strong> Use the Suggestions page and describe the bug as clearly as possible so the staff can investigate it. </p>
+    <p> <strong>A:</strong> Use the <a href="suggestions.php"><strong>Suggestions</strong></a> page and describe the bug as clearly as possible so the staff can investigate it. </p>
 
 </div>
 
