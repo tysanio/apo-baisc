@@ -32,6 +32,7 @@ $DISCORD_REDIRECT = "http://localhost/ucp/discord_callback.php";
 $DISCORD_GUILD_ID = "";
 
 $DISCORD_UCP_ROLE = "";
+$DISCORD_ADMIN = "";
 
 $DISCORD_BOT_TOKEN = "";
 

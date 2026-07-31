@@ -2,14 +2,11 @@
 
 require_once "includes/auth.php";
 require_once "includes/player.php";
-
-
+require_once "includes/discord.php";
 // Admin only
-
 if($player["Admin"] < 2)
 {
     require_once "includes/header.php";
-
     echo '
     <div class="card error-box"> <h2>🚫 Access Denied</h2> 
 	<p> You do not have permission to access this page. </p>
@@ -18,34 +15,64 @@ if($player["Admin"] < 2)
     require_once "includes/footer.php";
     exit;
 }
-
 require_once "includes/header.php";
-
 // ==============================
 // Delete Refused Suggestions
 // ==============================
-
 if(isset($_POST["delete_refused"]))
 {
     $stmt = $pdo->prepare(" DELETE FROM suggestions WHERE Status = 2");
     $stmt->execute();
-
     header("Location: admin_suggestions.php");
-
     exit;
 
 }
-
 // ==============================
 // Update Status
 // ==============================
-
 if(isset($_POST["update_status"]))
 {
-    $id = $_POST["id"];
-    $status = $_POST["update_status"];
+    $id = (int)$_POST["id"];
+    $status = (int)$_POST["update_status"];
+    // Update status
     $stmt = $pdo->prepare(" UPDATE suggestions SET Status = ? WHERE id = ? ");
     $stmt->execute([$status, $id]);
+    // Get suggestion information
+    $stmt = $pdo->prepare("SELECT Username, Suggestions FROM suggestions  WHERE id = ? ");
+    $stmt->execute([$id]);
+    $suggestion = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Discord webhook
+    if($suggestion)
+    {
+        if($status == 1)
+        {
+            DiscordWebhook(
+                "✅ Suggestion Accepted",
+                "**Player:** ".$suggestion["Username"].
+                "\n**Suggestion:** ".$suggestion["Suggestions"].
+                "\n\nReviewed by **".$player["Username"]."**"
+            );
+        }
+        elseif($status == 2)
+        {
+            DiscordWebhook(
+                "❌ Suggestion Denied",
+                "**Player:** ".$suggestion["Username"].
+                "\n**Suggestion:** ".$suggestion["Suggestions"].
+                "\n\nReviewed by **".$player["Username"]."**"
+            );
+        }
+        else
+        {
+            DiscordWebhook(
+                "⏳ Suggestion Set to Waiting",
+                "**Player:** ".$suggestion["Username"].
+                "\n**Suggestion:** ".$suggestion["Suggestions"].
+                "\n\nReviewed by **".$player["Username"]."**"
+            );
+        }
+    }
+
     header("Location: admin_suggestions.php");
     exit;
 }
@@ -65,28 +92,17 @@ $suggestions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <h3> Legend </h3>
 
-
 <p> ⏳ <b>Not Checked</b> - Waiting for review </p>
 <p> ✅ <b>Yes</b> - Accepted suggestion </p>
 <p> ❌ <b>No</b> - Refused suggestion </p>
-
 
 </div>
 
 <form method="POST" onsubmit="return confirm('Are you sure you want to delete all refused suggestions?');">
 
-<button
-type="submit"
-name="delete_refused"
-class="action-button delete-button">
-
-🗑️ Remove All Refused Suggestions
-
-</button>
+<button type="submit" name="delete_refused" class="action-button delete-button"> 🗑️ Remove All Refused Suggestions</button>
 
 </form>
-
-
 
 <table class="admin-table">
 
@@ -144,9 +160,9 @@ switch($row["Status"])
 <form method="POST">
 
 <input  type="hidden" name="id" value="<?php echo $row["id"]; ?>">
-<button type="submit" name="update_status" class="action-button success-button" name="Status" value="1"> ✅ </button>
-<button type="submit" name="update_status" class="action-button danger-button" name="Status" value="2"> ❌ </button>
-<button type="submit" name="update_status" class="action-button warning-button" name="Status" value="0"> ⏳ </button>
+<button type="submit" name="update_status"  value="1" class="action-button success-button"> ✅ </button>
+<button type="submit" name="update_status" value="2" class="action-button danger-button"> ❌ </button>
+<button type="submit" name="update_status" value="0" class="action-button warning-button"> ⏳ </button>
 
 </form>
 

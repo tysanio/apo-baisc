@@ -5,6 +5,7 @@ require_once "includes/player.php";
 require_once "config/database.php";
 require_once "includes/header.php";
 require_once "includes/discord.php";
+require_once "includes/discord_role.php";
 if($player["Admin"] < 2)
 {
     echo '
@@ -75,11 +76,27 @@ if(isset($_POST["update_player"]))
 				$stmt->execute([ $bonus,$bonus,$bonus,$bonus,$bonus, $username ]);
 				}
 			}
-	elseif($type == "Admin")
-	{
+		elseif($type == "Admin")
+		{
 		$value = max(0, min(3, $value));
-		$stmt = $pdo->prepare(" UPDATE players SET Admin = ? WHERE Username = ?  ");
-		$stmt->execute([ $value, $username]);
+    // Update database
+		$stmt = $pdo->prepare(" UPDATE players SET Admin = ? WHERE Username = ? ");
+		$stmt->execute([$value, $username]);
+    // Get player's Discord ID
+		$stmt = $pdo->prepare(" SELECT DiscordID FROM players WHERE Username = ? ");
+		$stmt->execute([$username]);
+		$target = $stmt->fetch(PDO::FETCH_ASSOC);
+		if(!empty($target["DiscordID"]))
+		{
+			if($value >= 1)
+			{
+				AddDiscordRole( $target["DiscordID"], $DISCORD_ADMIN );
+			}
+			else
+			{
+				RemoveDiscordRole( $target["DiscordID"],  $DISCORD_ADMIN );
+			}
+		}
 	}
 	elseif($type == "Life")
 	{
