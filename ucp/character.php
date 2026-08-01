@@ -28,6 +28,10 @@ $clanOwner = $stmt->fetch();
             <b>Name:</b>
             <?php echo htmlspecialchars($player["Username"]); ?>
         </p>
+		<p>
+            <b>Account ID:</b>
+            <?php echo $player["ID"]; ?>
+		</p>
         <p>
             <b>Admin Level:</b>
             <?php echo $player["Admin"]; ?>

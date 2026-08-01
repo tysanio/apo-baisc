@@ -25,8 +25,8 @@ CMD:clanchest(playerid, params[])
 				Dialog_Show(playerid, CLANDIALOG10, DIALOG_STYLE_TABLIST, "Clan Chest \tAmount","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\n\
 				Gun Powder(s) : \t%d\nOre(s) :\t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
 				Repair kit(s) : \t%d\nMed Kit(s) : \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n\
-				.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
-				inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d", "OK", "",clans[id][inv][1],clans[id][inv][2],clans[id][inv][3],clans[id][inv][4],clans[id][inv][5],        clans[id][inv][6],clans[id][inv][7],clans[id][inv][8],clans[id][inv][9],clans[id][inv][10],        clans[id][inv][11],clans[id][inv][12],clans[id][inv][13],clans[id][inv][14],clans[id][inv][15],        clans[id][inv][16],clans[id][inv][17],clans[id][inv][18],clans[id][inv][19],clans[id][inv][20],        clans[id][inv][21],clans[id][inv][22],clans[id][inv][23],clans[id][inv][24],clans[id][inv][25]); 
+				.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\nSeed(s) : \t%d\n\
+				Potato(es) : \t%d\ninv22 : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d", "OK", "",clans[id][inv][1],clans[id][inv][2],clans[id][inv][3],clans[id][inv][4],clans[id][inv][5],        clans[id][inv][6],clans[id][inv][7],clans[id][inv][8],clans[id][inv][9],clans[id][inv][10],        clans[id][inv][11],clans[id][inv][12],clans[id][inv][13],clans[id][inv][14],clans[id][inv][15],        clans[id][inv][16],clans[id][inv][17],clans[id][inv][18],clans[id][inv][19],clans[id][inv][20],        clans[id][inv][21],clans[id][inv][22],clans[id][inv][23],clans[id][inv][24],clans[id][inv][25]); 
 			}
 			else SendServerMessage(playerid,"You're not near your clan chest.");		
 		}
@@ -39,8 +39,8 @@ CMD:clanchest(playerid, params[])
 			if(IsNearChest(playerid))
 			{
 				Dialog_Show(playerid, CLANDIALOG20,DIALOG_STYLE_TABLIST,"Inventory","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\nOre(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
-				Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
-				inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d\
+				Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\nSeed(s): \t%d\n\
+				Potato(es) : \t%d\ninv22 : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d\
 				", "Close","",pData[playerid][inv][1],pData[playerid][inv][2],pData[playerid][inv][3],pData[playerid][inv][4],pData[playerid][inv][5],\
 				pData[playerid][inv][6],pData[playerid][inv][7],pData[playerid][inv][8],pData[playerid][inv][9],pData[playerid][inv][10],\
 				pData[playerid][inv][11],pData[playerid][inv][12],pData[playerid][inv][13],pData[playerid][inv][14],pData[playerid][inv][15],\

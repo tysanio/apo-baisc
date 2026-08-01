@@ -24,6 +24,7 @@ enum DATAX
 	ID,
 	Password[129],
 	Admin,
+	lasttime,
 	VIP,
 	Score,
     Exp,
@@ -444,10 +445,10 @@ new ItemNames[26][24] =
     "Armor Plate(s)",
     "Water Bottle(s)", //18
     "Canned Food",  //19
-    "inv20",
-    "inv21",
-    "inv22",
-    "inv23",
+    "seeds", //seeds
+    "potatoes", //potatoes
+    "inv22", //weed-drug
+    "tomatoes", //tomatoes
     "inv24",
     "inv25"
 };
@@ -562,3 +563,20 @@ enum
     SIGNAL_GOOD,
     SIGNAL_PERFECT
 };
+//plant
+enum ePlant
+{
+    plantExists,
+    plantSQLID,
+    plantOwner,
+    plantType,
+    Float:plantX,
+    Float:plantY,
+    Float:plantZ,
+    plantVW,
+    plantInterior,
+    plantTime,
+    plantObject,
+    Text3D:plantLabel
+};
+new Plant[MAX_PLANTS][ePlant];

@@ -31,7 +31,7 @@ if(isset($_POST["update_player"]))
 	if($type == "water") { $value = max(0, min(100, $value)); }
 	if($type == "Life") { $value = max(0, min(100, $value)); }
 	if($type == "Armor") { $value = max(0, min(100, $value)); }
-    if($type != "Admin" && $type != "VIP" && $type != "Score" && $type != "idclan" && $type != "clanrank" && $type != "Life" && $type != "Armor" && $type != "food" && $type != "water")
+    if($type != "Admin" && $type != "VIP" && $type != "Score" && $type != "idclan" && $type != "clanrank" && $type != "Life" && $type != "Armor" && $type != "food" && $type != "water" && $type != "skin")
     {
         $error = "Invalid selection.";
     }
@@ -122,6 +122,12 @@ if(isset($_POST["update_player"]))
 		$stmt = $pdo->prepare(" UPDATE players SET food = ? WHERE Username = ?  ");
 		$stmt->execute([ $value, $username]);
 	}
+	elseif($type == "skin")
+	{
+		$value = max(0, min(311, $value));
+		$stmt = $pdo->prepare(" UPDATE players SET skin = ? WHERE Username = ?  ");
+		$stmt->execute([ $value, $username]);
+	}
 // ==============================
 // NORMAL UPDATES
 // ==============================
@@ -174,6 +180,8 @@ if($error != "")
 
 <form method="POST">
 
+<h2>🚫 Player need to be not connected to the server to take effect 🚫</h2>
+
 <label>👤 Username</label>
 <input type="text" name="username" required>
 
@@ -191,7 +199,7 @@ if($error != "")
     <option value="Armor">🦺 Armor</option>
 	<option value="food">🍗 Hunger</option>
     <option value="water">💧 Thirst</option>
-	
+    <option value="skin">👕 Skin</option>
 </select>
 
 <br><br>

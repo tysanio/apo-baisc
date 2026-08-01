@@ -1,11 +1,4 @@
-/*
-==========================================================
-    SA-MP Tactical Map
-==========================================================
-*/
-// ========================================================
-// Map Settings
-// ========================================================
+/* SA-MP Tactical Map */
 // GTA SA world limits
 const SA_MIN_X = -3000;
 const SA_MAX_X = 3000;
@@ -133,6 +126,16 @@ L.divIcon(
 {
     className:"clan-marker",
     html:"📦",
+    iconSize:[35,35],
+    iconAnchor:[17,17]
+});
+const plantIcon =
+L.divIcon(
+{
+    className:"plant-marker",
+	html:`
+    <div class="plant-icon"> 🌱 </div>
+    `,
     iconSize:[35,35],
     iconAnchor:[17,17]
 });
@@ -319,9 +322,65 @@ if(CLAN_LOCATION != null)
 		Y: ${CLAN_LOCATION.chestposy}
 		<br>
 		Z: ${CLAN_LOCATION.chestposz}
+    `);
+}
+// =====================================
+// plants
+// =====================================
+plants.forEach(function(plant)
+{
+    console.log("Plant:", plant);
+    let pos = SAtoMap(
+        parseFloat(plant.x),
+        parseFloat(plant.y)
+    );
+    let plantType = "";
+    if(parseInt(plant.type) == 1)
+    {
+        plantType = "🥔 Potato";
+    }
+    else if(parseInt(plant.type) == 2)
+    {
+        plantType = "🍅 Tomato";
+    }
+    let status = "";
+    if(Math.floor(Date.now()/1000) >= parseInt(plant.planttime))
+    {
+        status = "🟢 Ready";
+    }
+    else
+    {
+        status = "🟡 Not Ready";
+    }
+    let plantss =
+    SAtoMap(
+        parseFloat(plant.x),
+        parseFloat(plant.y)
+    );
+    L.marker(
+
+        plantss,
+        {
+            icon:plantIcon
+        }
+    )
+	.addTo(map)
+    .bindPopup(`
+        <h2>Plant ID : ${plant.id}</h2>
+        <b>Type:</b>
+        ${plantType}
+        <hr>
+        <b>Coordinates</b>
+        <br>
+        X: ${plant.x}
+        <br>
+        Y: ${plant.y}
+        <br>
+        Z: ${plant.z}
+        <br>
+        <b>🕒 Status:</b>
+        ${status}
 
     `);
 
-
-
-}
+});

@@ -747,12 +747,12 @@ Dialog:CLANDIALOG10(playerid, response, listitem, inputtext[])
 			case 19:
 			{
 				claninv = 20;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv20", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Seeds", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 20:
 			{
 				claninv = 21;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv21", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Potatoes", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 21:
 			{
@@ -762,7 +762,7 @@ Dialog:CLANDIALOG10(playerid, response, listitem, inputtext[])
 			case 22:
 			{
 				claninv = 23;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv23", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Tomatoes", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 23:
 			{
@@ -994,23 +994,23 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		}
 		if(claninv == 20)
 		{
-			if (amount < 0 || amount >= clans[id][inv][20]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv20 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (amount < 0 || amount >= clans[id][inv][20]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Seeds ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
 			if (pData[playerid][inv][20] + amount > GetBackpackCapacity(playerid))
 				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][20] -= amount;
 			pData[playerid][inv][20] += amount;
-			SendServerMessage(playerid,"You take %d inv20 (s) from the clan chest.",amount);
+			SendServerMessage(playerid,"You take %d seed(s) from the clan chest.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv20` = '%d' WHERE `idclan` = '%d'", clans[id][inv][20], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 21)
 		{
-			if (amount < 0 || amount >= clans[id][inv][21]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv21 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (amount < 0 || amount >= clans[id][inv][21]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Potatoes", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
 			if (pData[playerid][inv][21] + amount > GetBackpackCapacity(playerid))
 				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][21] -= amount;
 			pData[playerid][inv][21] += amount;
-			SendServerMessage(playerid,"You take %d inv21 (s) from the clan chest.",amount);
+			SendServerMessage(playerid,"You take %d Potato(es) from the clan chest.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv21` = '%d' WHERE `idclan` = '%d'", clans[id][inv][21], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
@@ -1027,12 +1027,12 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		}
 		if(claninv == 23)
 		{
-			if (amount < 0 || amount >= clans[id][inv][23]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv23 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (amount < 0 || amount >= clans[id][inv][23]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Tomatoes ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
 			if (pData[playerid][inv][23] + amount > GetBackpackCapacity(playerid))
 				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][23] -= amount;
 			pData[playerid][inv][23] += amount;
-			SendServerMessage(playerid,"You take %d inv23 (s) from the clan chest.",amount);
+			SendServerMessage(playerid,"You take %d Tomato(es) from the clan chest.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv23` = '%d' WHERE `idclan` = '%d'", clans[id][inv][23], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
@@ -1065,8 +1065,8 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		Dialog_Show(playerid, CLANDIALOG10, DIALOG_STYLE_TABLIST, "Clan Chest\tAmount","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\n\
 		Gun Powder : \t%d\nOre(s) : \t%d\nIron(s): \t%d\nGold(s) : \t%d\nLockpick(s): \t%d\n\
 		Repair kit(s) : \t%d\nMed Kit(s) : \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n\
-		.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
-		inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d", "OK", "",clans[id][inv][1],clans[id][inv][2],clans[id][inv][3],clans[id][inv][4],clans[id][inv][5],        clans[id][inv][6],clans[id][inv][7],clans[id][inv][8],clans[id][inv][9],clans[id][inv][10],        clans[id][inv][11],clans[id][inv][12],clans[id][inv][13],clans[id][inv][14],clans[id][inv][15],        clans[id][inv][16],clans[id][inv][17],clans[id][inv][18],clans[id][inv][19],clans[id][inv][20],        clans[id][inv][21],clans[id][inv][22],clans[id][inv][23],clans[id][inv][24],clans[id][inv][25]); 
+		.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\nSeeds : \t%d\n\
+		Potato(es) : \t%d\ninv22 : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d", "OK", "",clans[id][inv][1],clans[id][inv][2],clans[id][inv][3],clans[id][inv][4],clans[id][inv][5],        clans[id][inv][6],clans[id][inv][7],clans[id][inv][8],clans[id][inv][9],clans[id][inv][10],        clans[id][inv][11],clans[id][inv][12],clans[id][inv][13],clans[id][inv][14],clans[id][inv][15],        clans[id][inv][16],clans[id][inv][17],clans[id][inv][18],clans[id][inv][19],clans[id][inv][20],        clans[id][inv][21],clans[id][inv][22],clans[id][inv][23],clans[id][inv][24],clans[id][inv][25]); 
 	}
 	return 1;
 }
@@ -1426,23 +1426,23 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		}
 		if(claninv == 20)
 		{
-			if (amount < 0 || amount >= pData[playerid][inv][20]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv20 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (amount < 0 || amount >= pData[playerid][inv][20]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Seed(s)", "Error on the quantity!\nHow much you want to give?", "give", "Back");
 			if (clans[id][inv][20] + amount > GetClanCapacity(id))
 				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][20] -= amount;
 			clans[id][inv][20] += amount;
-			SendServerMessage(playerid,"You give %d inv20 (s) into the chest clan.",amount);
+			SendServerMessage(playerid,"You give %d seed(s) into the chest clan.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv20` = '%d' WHERE `idclan` = '%d'",clans[id][inv][20], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
 		if(claninv == 21)
 		{
-			if (amount < 0 || amount >= pData[playerid][inv][21]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv21 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (amount < 0 || amount >= pData[playerid][inv][21]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Potato(es) ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
 			if (clans[id][inv][21] + amount > GetClanCapacity(id))
 				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][21] -= amount;
 			clans[id][inv][21] += amount;
-			SendServerMessage(playerid,"You give %d inv21 (s) into the chest clan.",amount);
+			SendServerMessage(playerid,"You give %d Potato(es) into the chest clan.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv21` = '%d' WHERE `idclan` = '%d'",clans[id][inv][21], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
@@ -1459,12 +1459,12 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		}
 		if(claninv == 23)
 		{
-			if (amount < 0 || amount >= pData[playerid][inv][23]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv23 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (amount < 0 || amount >= pData[playerid][inv][23]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Tomato(es) ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
 			if (clans[id][inv][23] + amount > GetClanCapacity(id))
 				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][23] -= amount;
 			clans[id][inv][23] += amount;
-			SendServerMessage(playerid,"You give %d inv23 (s) into the chest clan.",amount);
+			SendServerMessage(playerid,"You give %d Tomato(es) (s) into the chest clan.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv23` = '%d' WHERE `idclan` = '%d'",clans[id][inv][23], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
@@ -1495,8 +1495,8 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 	else
 	{
 		Dialog_Show(playerid, CLANDIALOG20,DIALOG_STYLE_TABLIST,"Inventory","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\nOre(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
-		Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\ninv20 : \t%d\n\
-		inv21 : \t%d\ninv22 : \t%d\ninv23 : \t%d\ninv24 : \t%d\ninv25 : \t%d\
+		Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\nSeed(s) : \t%d\n\
+		Potato(es) : \t%d\ninv22 : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d\
 		", "Close","",pData[playerid][inv][1],pData[playerid][inv][2],pData[playerid][inv][3],pData[playerid][inv][4],pData[playerid][inv][5],\
 		pData[playerid][inv][6],pData[playerid][inv][7],pData[playerid][inv][8],pData[playerid][inv][9],pData[playerid][inv][10],\
 		pData[playerid][inv][11],pData[playerid][inv][12],pData[playerid][inv][13],pData[playerid][inv][14],pData[playerid][inv][15],\

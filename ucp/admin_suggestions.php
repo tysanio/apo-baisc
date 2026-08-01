@@ -160,9 +160,9 @@ switch($row["Status"])
 <form method="POST">
 
 <input  type="hidden" name="id" value="<?php echo $row["id"]; ?>">
-<button type="submit" name="update_status"  value="1" class="action-button success-button"> ✅ </button>
-<button type="submit" name="update_status" value="2" class="action-button danger-button"> ❌ </button>
-<button type="submit" name="update_status" value="0" class="action-button warning-button"> ⏳ </button>
+<button type="submit" name="update_status"  value="1" class="action-button success-button">✅</button>
+<button type="submit" name="update_status" value="2" class="action-button danger-button">❌</button>
+<button type="submit" name="update_status" value="0" class="action-button warning-button">⏳</button>
 
 </form>
 

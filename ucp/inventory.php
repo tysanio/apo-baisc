@@ -40,10 +40,10 @@ function GetItemName($id)
 		case 17: return "Armor Plate(s)";
 		case 18: return "Water Bottle(s)";
 		case 19: return "Canned Food";
-		case 20: return "inv20";
-		case 21: return "inv21";
+		case 20: return "Seed(s)";
+		case 21: return "Potato(es)";
 		case 22: return "inv22";
-		case 23: return "inv23";
+		case 23: return "Tomato(es)";
 		case 24: return "inv24";
 		case 25: return "inv25";
         default: return "Unknown Item";

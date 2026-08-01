@@ -1,4 +1,4 @@
-//total lines 9018
+//total lines 9266
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -37,7 +37,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.20.9018");
+	SetGameModeText("Apo 0.21.9266");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -62,6 +62,7 @@ public OnGameModeInit()
 	mysql_tquery(mysql, "SELECT * FROM gang_zones", "LoadGangZones");
     mysql_tquery(mysql, "SELECT * FROM `entrances`", "Entrance_Load", "");
     mysql_tquery(mysql, "SELECT * FROM antennas", "LoadAntennas");
+    mysql_tquery(mysql, "SELECT * FROM plants", "LoadPlants");
     FuelStationCount = 0;
     for (new i = 0; i < MAX_SERVER_VEHICLES; i++)
     {
@@ -74,6 +75,7 @@ public OnGameModeInit()
     SetTimer("CheckGangZones", 60000, true); // after 7 day gones
     SetTimer("AntennaDecay",600000,true);
 	SetTimer("AntennaFuel",300000,true);
+    SetTimer("UpdatePlantLabels",60000,true);
 	return 1;
 }
 public OnGameModeExit()
@@ -655,6 +657,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                         return SendServerMessage(playerid, "Your backpack is full you tossed away.");
                     }
                     pData[playerid][inv][invIndex] += taking;
+                    SendServerMessage(playerid,"You pickup a(n) %s.", ItemNames[invIndex]);
                 }
                 case 32: ShowModelSelectionMenu(playerid, "Select your new clothes", MODEL_SELECTION_SKIN, Skinsskins, sizeof(Skinsskins), -16.0, 0.0, -55.0);
                 //grenade
@@ -673,7 +676,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             AllowWeapon(playerid, 18,1);
             pData[playerid][clanexp][0] += random(3)+1;
 			DestroyDynamicObject(dspawnpos[f][Objects]);
-			SendClientMessage(playerid, COLOR_GREEN, "You have picked up an object.");
             pData[playerid][Food] -= random(2);
             pData[playerid][Water] -= random(2);
             SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);

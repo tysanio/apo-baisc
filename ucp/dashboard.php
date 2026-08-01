@@ -18,24 +18,6 @@ $server = GetSAMPStatus($SERVER_IP, $SERVER_PORT);
             <h2> Welcome back <?php echo htmlspecialchars($player["Username"]); ?> ! </h2>
             <br>
             <div class="info">
-                <strong>Account ID:</strong>
-                <span>
-                    <?php echo $player["ID"]; ?>
-                </span>
-            </div>
-            <div class="info">
-                <strong>Admin Level:</strong>
-                <span>
-                    <?php echo $player["Admin"]; ?>
-                </span>
-            </div>
-            <div class="info">
-                <strong>VIP Level:</strong>
-                <span>
-                    <?php echo $player["VIP"]; ?>
-                </span>
-            </div>
-            <div class="info">
                 <strong>🕒 Last Login</strong>
                 <span>
                 <?php

@@ -459,7 +459,7 @@ button:hover
 }
 .action-button
 {
-    width:120px;
+    width:75px;
     height:38px;
     padding:0;
     display:inline-flex;
@@ -540,6 +540,12 @@ button:hover
 .footer strong
 {
     color: #ffffff;
+}
+.plant-icon
+{
+    font-size:35px;
+    line-height:35px;
+    filter:drop-shadow(0 0 5px black);
 }
 /*  MOBILE RESPONSIVE */
 @media screen and (max-width: 768px)

@@ -765,3 +765,108 @@ stock SendAdminAlert(color, const str[], {Float,_}:...)
 	}
 	return 1;
 }
+//plant
+stock GetFreePlantSlot()
+{
+    for(new i; i < MAX_PLANTS; i++)
+    {
+        if(!Plant[i][plantExists])
+            return i;
+    }
+    return -1;
+}
+stock GetNearestPlant(playerid)
+{
+    new id = -1,Float:dist = 99999.0;
+    for(new i; i < MAX_PLANTS; i++)
+    {
+        if(!Plant[i][plantExists])  continue;
+        new Float:d = GetPlayerDistanceFromPoint(playerid,  Plant[i][plantX],Plant[i][plantY],Plant[i][plantZ]);
+        if(d < dist)
+        {
+            dist = d;
+            id = i;
+        }
+    }
+    return id;
+}
+stock IsNearAnotherPlant(Float:x,Float:y,Float:z)
+{
+    for(new i; i < MAX_PLANTS; i++)
+    {
+        if(!Plant[i][plantExists]) continue;
+        if(GetDistance(x,y,z, Plant[i][plantX], Plant[i][plantY], Plant[i][plantZ]) < 3.0)
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+stock GetPlantName(type)
+{
+    static name[16];
+    switch(type)
+    {
+        case PLANT_POTATO: format(name,sizeof(name),"Potato");
+        case PLANT_TOMATO: format(name,sizeof(name),"Tomato");
+        default: format(name,sizeof(name),"Unknown");
+    }
+    return name;
+}
+stock IsPlantReady(id)
+{
+    if(gettime() - Plant[id][plantTime] >= PLANT_GROW_TIME)  return 1;
+    return 0;
+}
+stock GetPlantRemaining(id)
+{
+    new remain = PLANT_GROW_TIME - (gettime() - Plant[id][plantTime]);
+    if(remain < 0) remain = 0;
+    return remain;
+}
+stock UpdatePlantLabel(id)
+{
+    if(!Plant[id][plantExists])
+        return 0;
+    if(IsValidDynamic3DTextLabel(Plant[id][plantLabel]))
+        DestroyDynamic3DTextLabel(Plant[id][plantLabel]);
+    new string[128];
+    if(IsPlantReady(id))
+    {
+        format(string,sizeof(string),"%s Plant\n{00FF00}READY TO HARVEST", GetPlantName(Plant[id][plantType]));
+    }
+    else
+    {
+        new remain = GetPlantRemaining(id);
+        format(string,sizeof(string),"%s Plant\nGrowing...\n%d hour(s)",GetPlantName(Plant[id][plantType]),remain / 3600);
+    }
+    Plant[id][plantLabel] =
+    CreateDynamic3DTextLabel(string,-1,Plant[id][plantX], Plant[id][plantY],Plant[id][plantZ]+1.0,20.0);
+    return 1;
+}
+stock GetPlantModel(type)
+{
+    switch(type)
+    {
+        case PLANT_POTATO: return 804;
+        case PLANT_TOMATO: return 806;
+    }
+    return 806;
+}
+stock CreatePlant(id)
+{
+    Plant[id][plantObject] = CreateDynamicObject(GetPlantModel(Plant[id][plantType]),Plant[id][plantX],Plant[id][plantY], Plant[id][plantZ],0.0,0.0,random(360),Plant[id][plantVW],Plant[id][plantInterior]);
+    UpdatePlantLabel(id);
+    return 1;
+}
+stock DestroyPlant(id)
+{
+    if(!Plant[id][plantExists]) return 0;
+    if(IsValidDynamicObject(Plant[id][plantObject])) DestroyDynamicObject(Plant[id][plantObject]);
+    if(IsValidDynamic3DTextLabel(Plant[id][plantLabel])) DestroyDynamic3DTextLabel(Plant[id][plantLabel]);
+    Plant[id][plantExists] = false;
+    Plant[id][plantSQLID] = 0;
+    Plant[id][plantOwner] = 0;
+    Plant[id][plantType] = 0;
+    return 1;
+}

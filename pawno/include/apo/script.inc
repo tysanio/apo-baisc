@@ -1290,3 +1290,42 @@ script FinishSabotage(playerid,id)
     SendTWMessage(playerid, "Talkie-Walkie : Go back to me to do your report.");
     return 1;
 }
+//plant
+script LoadPlants()
+{
+    new rows, fields;
+    cache_get_data(rows, fields);
+    for(new i; i < rows && i < MAX_PLANTS; i++)
+    {
+        Plant[i][plantExists] = true;
+        Plant[i][plantSQLID] = cache_get_field_content_int(i,"id");
+        Plant[i][plantOwner] = cache_get_field_content_int(i,"owner");
+        Plant[i][plantType] =  cache_get_field_content_int(i,"type");
+        Plant[i][plantX] = cache_get_field_content_float(i,"x");
+        Plant[i][plantY] = cache_get_field_content_float(i,"y");
+        Plant[i][plantZ] = cache_get_field_content_float(i,"z");
+        Plant[i][plantVW] = cache_get_field_content_int(i,"world");
+        Plant[i][plantInterior] = cache_get_field_content_int(i,"interior");
+        Plant[i][plantTime] = cache_get_field_content_int(i,"planttime");
+        CreatePlant(i);
+    }
+    printf("[PLANTS] Loaded %d plants.", rows);
+    return 1;
+}
+script OnPlantCreated(slot)
+{
+    Plant[slot][plantSQLID] = cache_insert_id();
+    return 1;
+}
+script UpdatePlantLabels()
+{
+    for(new i; i < MAX_PLANTS; i++)
+    {
+        if(!Plant[i][plantExists])
+            continue;
+
+        UpdatePlantLabel(i);
+    }
+
+    return 1;
+}
