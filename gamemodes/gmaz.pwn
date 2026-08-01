@@ -1,4 +1,4 @@
-//total lines 9266
+//total lines 9287
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -37,7 +37,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.21.9266");
+	SetGameModeText("Apo 0.21.9287");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -240,7 +240,7 @@ public OnPlayerUpdate(playerid)
             gVehicleFuel[vehicleid] = 0.0;
             SetVehicleParamsEx(vehicleid, 0, 0, 0, 0, 0, 0, 0); // disable engine
         }
-   		if (health <= 650.0 && !FuelLeaking[vehicleid])
+   		if (health <= 550.0 && !FuelLeaking[vehicleid])
     	{
         	FuelLeaking[vehicleid] = true;
         	SendClientMessage(playerid, 0xFF6600FF, "[Fuel] Your vehicle has a fuel leak!");
@@ -318,7 +318,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
     if (newstate == PLAYER_STATE_DRIVER)
     {
         new vid = GetPlayerVehicleID(playerid);
-        if(IsAVelo(GetPlayerVehicleID(playerid)))
+        if(!IsAVelo(GetPlayerVehicleID(playerid)))
         {
             SetVehicleParamsEx(vid, false, 0, 0, 0, 0, 0, 0); // Always off
             EngineState[vid] = false;
@@ -326,6 +326,12 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
             ShowPlayerProgressBar(playerid, FuelBar[playerid]);
             ShowPlayerProgressBar(playerid, HealthBar[playerid]);
             PlayerTextDrawShow(playerid, txtSpeed[playerid]);
+        }
+        else SetVehicleParamsCarWindows(vid, 1, 0, 0, 0);
+        if(IsAVelo(GetPlayerVehicleID(playerid)))
+        {
+            SetVehicleParamsEx(vid, true, 0, 0, 0, 0, 0, 0); // Always off
+            EngineState[vid] = false;
         }
         else SetVehicleParamsCarWindows(vid, 1, 0, 0, 0);
     }

@@ -105,7 +105,7 @@ CMD:sethp(playerid, params[])
     if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
 	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /sethp <playerid/Name> <amount>");
 	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendAdminAlert(lookupid , "Admin %s (ID:%d) has setted %s (ID:%d) hp to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
+	SendAdminAlert(COLOR_RED ,"Admin %s (ID:%d) has setted %s (ID:%d) hp to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
 	SetPlayerHealth(lookupid, amount);
 	pData[lookupid][Life] = amount;
     if (amount >= 101.10) {SetPlayerHealth(lookupid, 100.0);}
@@ -205,7 +205,7 @@ CMD:goto(playerid, params[])
 	if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
 	if (sscanf(params, "s[24]S()[64]", type, string))
 	{
-		SendServerMessage(playerid, "[NAMES]: {FFFFFF}actor, interior, car, entrance, pos, antenna");
+		SendServerMessage(playerid, "[NAMES]: {FFFFFF}player, actor, interior, veh, entrance, pos, antenna");
 		return 1;
 	}
 	else if (!strcmp(type, "actor", true))
@@ -213,6 +213,22 @@ CMD:goto(playerid, params[])
 		if (sscanf(string, "d", id))
 			return SendCommandMessage(playerid, "/goto actor [ID]");
 		SendPlayerToActor(playerid, id);
+		return 1;
+	}
+	else if (!strcmp(type, "player", true))
+	{
+		if (sscanf(string, "u", id))
+			return SendCommandMessage(playerid, "/goto player [player]");
+		if (!IsPlayerConnected(id))
+			return SendServerMessage(playerid, "Invalid player.");
+		if (id == playerid)
+			return SendServerMessage(playerid, "You cannot teleport to yourself.");
+		new Float:x, Float:y, Float:z;
+		GetPlayerPos(id, x, y, z);
+		SetPlayerInterior(playerid, GetPlayerInterior(id));
+		SetPlayerVirtualWorld(playerid, GetPlayerVirtualWorld(id));
+		SetPlayerPos(playerid, x, y, z + 1.0);
+		SendServerMessage(playerid, "Teleported to %s.", Name[id]);
 		return 1;
 	}
 	else if (!strcmp(type, "interior", true))
@@ -226,10 +242,10 @@ CMD:goto(playerid, params[])
 	    Dialog_Show(playerid, TeleportInterior, DIALOG_STYLE_LIST, "Teleport: List interior", str, "OK", "Return");
 	    return 1;
 	}
-	else if (!strcmp(type, "car", true))
+	else if (!strcmp(type, "veh", true))
 	{
 		if (sscanf(string, "d", id))
-			return SendCommandMessage(playerid, "/goto car [id]");
+			return SendCommandMessage(playerid, "/goto veh [id]");
 		if (id < 1 || id > MAX_SERVER_VEHICLES || !IsValidVehicle(id))
 			return SendServerMessage(playerid, "ID invalid.");
 		static Float:x,Float:y,Float:z;
@@ -343,7 +359,7 @@ CMD:editveh(playerid, params[])
 	}
     else if (!strcmp(subcmd, "fuel", true))
     {
-        if (sscanf(params, "s[16]iii", subcmd, vehid, color1))
+        if (sscanf(params, "s[16]ii", subcmd, vehid, color1))
             return SendCommandMessage(playerid, "Usage: /editveh fuel [vehid] [amount]");
 		gVehicleFuel[vehid] = color1;
         mysql_format(mysql, query, sizeof(query),"UPDATE vehicles SET fuel = %d WHERE id = %d",color1, DB_VehicleID[index]);
@@ -496,13 +512,13 @@ CMD:createspawn(playerid,params[])
 CMD:createveh(playerid, params[])
 {
 	if(pData[playerid][Admin] < 2) return SendServerMessage(playerid, "Only admin level 2+ can use this cmd.");
-    new modelid, color1 = random(128), color2 = random(128),Float:x, Float:y, Float:z, Float:a; // random default colors
-    if (sscanf(params, "i[2]", modelid, color1, color2))
-        return SendCommandMessage(playerid, "Usage: /createveh [modelid] [color1] [color2]");
+    new modelid, color1 = random(128), color2 = random(128),Float:x, Float:y, Float:z, Float:a, fuel; // random default colors
+    if (sscanf(params, "i[2]i", modelid, color1, color2, fuel))
+        return SendCommandMessage(playerid, "Usage: /createveh [modelid] [color1] [color2] [fuel]");
     GetPlayerPos(playerid, x, y, z);
     GetPlayerFacingAngle(playerid, a);
-    mysql_format(mysql, query, sizeof(query),"INSERT INTO vehicles (model, posX, posY, posZ, rot,  color1, color2, fuel) VALUES (%d,%f,%f,%f,%f,%d,%d,100)",modelid, x, y, z, a, color1, color2);
-    mysql_tquery(mysql, query, "OnVehicleCreated", "iffffii", modelid, x, y, z, a, color1, color2);
+    mysql_format(mysql, query, sizeof(query),"INSERT INTO vehicles (model, posX, posY, posZ, rot,  color1, color2, fuel) VALUES (%d,%f,%f,%f,%f,%d,%d,100)",modelid, x, y, z, a, color1, color2, 100);
+    mysql_tquery(mysql, query, "OnVehicleCreated", "iffffiii", modelid, x, y, z, a, color1, color2, fuel);
     SendServerMessage(playerid, "Vehicle created and saved with color.");
     return 1;
 }
@@ -987,14 +1003,14 @@ CMD:setadmin(playerid, params[])
 		if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid, "Sorry this player isnt connected ");
 		if(level < pData[lookupid][Admin])
 		{
-			SendAdminAlert(COLOR_LIGHTRED, "Admin %s (ID:%d) has demoted you to level %d",GetName(playerid), playerid, level);
 			SendServerMessage(playerid,"You have demoted %s (ID:%d) to level %d",GetName(lookupid),lookupid,level);
+			SendServerMessage(lookupid,"Admin %s (ID:%d) has demoted you to level %d",GetName(playerid), playerid, level);
             pData[lookupid][Admin] = level;
 		}
 		if(level > pData[lookupid][Admin])
 		{
-			SendAdminAlert(COLOR_LIGHTRED, "Admin %s (ID:%d) has promoted you to level %d",GetName(playerid), playerid, level);
 			SendServerMessage(playerid, "You have promoted %s (ID:%d) to level %d",GetName(lookupid),lookupid,level);
+			SendServerMessage(lookupid,"Admin %s (ID:%d) has promoted you to level %d",GetName(playerid), playerid, level);
             pData[lookupid][Admin] = level;
 		}
 	}

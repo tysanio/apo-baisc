@@ -1,6 +1,6 @@
 CMD:clan(playerid,params[])
 {
-	if (pData[playerid][Score] <= 10)
+	if (pData[playerid][Score] < 10)
 	    return SendServerMessage(playerid, "You must be at least level 10 to use that command.");
 	Dialog_Show(playerid, CLANDIALOG00, DIALOG_STYLE_LIST, "Clan Setup", "Create Clan\nClan Stats\nMembers list\nEnter position\nExit position\nChest position\nMax Rank\nDelete Clan", "OK", "");
 	return 1;
@@ -67,7 +67,7 @@ CMD:claninvite(playerid, params[])
 	    return SendServerMessage(playerid, "That player is disconnected.");
 	if (pData[userid][idclan] == pData[playerid][idclan])
 	    return SendServerMessage(playerid, "That player is already part of your clan.");
-    if (pData[userid][idclan] != -1)
+    if (pData[userid][idclan] != 0)
 	    return SendServerMessage(playerid, "That player is already part of another clan.");
 	pData[userid][idclan] = pData[playerid][idclan];
     SendServerMessage(playerid, "You have %s to join your clan.", Name[userid]);

@@ -786,18 +786,18 @@ script Float:GetFuelConsumptionRate(vehicleid)
     switch (model)
     {
         case 402,409,411,415,424,429,434,451,480,506,533,534,536,541,555,602,662,794,796,1194,1195,1197,3141,4790,4799,5693,6528,6554,6558,6561,6575,6585,6594,6595,6615,6648,
-		6658,6660,6661,6664,6672,6673,6686,6700,25405,25435,25492,25539,25550,25602,25603,25614,25649: return 0.04;//executive
+		6658,6660,6661,6664,6672,6673,6686,6700,25405,25435,25492,25539,25550,25602,25603,25614,25649: return 0.004;//executive
 
         case 405,421,426,445,457,474,477,535,551,558..562,565,566,579,587,663,665,797,965,1199,3223,4775,4804,5090,5092,6258,6262,6578,6593,6610,6643,6655,6670,6701,
-		6762,25381,25385,25396,25466,25491,25522,25544,25547,25548,25551..25553,25557,25604,25605,25648,25650,25665,25666: return 0.05;//rich
+		6762,25381,25385,25396,25466,25491,25522,25544,25547,25548,25551..25553,25557,25604,25605,25648,25650,25665,25666: return 0.005;//rich
 
-        case 406,444,556,557,573,6526,6687,25360: return 0.07;//big like monster truc
+        case 406,444,556,557,573,6526,6687,25360: return 0.007;//big like monster truc
         case 481,509,510,6677,66778,25500..25510: return 0.00;//bicycle bmx
 
         case 448,461..463,468,471,521..523,581,586,793,1205,1206,2884,3136..3139,3222,3224,3247,4783..4787,6269,6270,6271,6600,6605,6629,6632,6640,6698,6702,6794,6795,
-		25394,25462,25499,25517,25576,25577,25641,25690: return 0.01; //bike
+		25394,25462,25499,25517,25576,25577,25641,25690: return 0.001; //bike
 
-        default: return 0.03; //other like normal/poor/worker/boat/taxi
+        default: return 0.003; //other like normal/poor/worker/boat/taxi
     }
     return 0.04;
 }
@@ -881,7 +881,7 @@ script OnLoadModsForVehicle(playerid, vehicleid)
     }
     return 1;
 }
-script OnVehicleCreated(modelid, Float:x, Float:y, Float:z, Float:a, color1, color2)
+script OnVehicleCreated(modelid, Float:x, Float:y, Float:z, Float:a, color1, color2, fuel)
 {
     new id = cache_insert_id();
     for (new i = 0; i < MAX_SERVER_VEHICLES; i++)
@@ -890,7 +890,7 @@ script OnVehicleCreated(modelid, Float:x, Float:y, Float:z, Float:a, color1, col
         {
             DB_Vehicle[i] = CreateVehicle(modelid, x, y, z, a, color1, color2, -1);
             DB_VehicleID[i] = id;
-			gVehicleFuel[i] = 100;
+			gVehicleFuel[i] = fuel;
 			g_LastVehiclePos[DB_Vehicle[i]][0] = x;
 			g_LastVehiclePos[DB_Vehicle[i]][1] = y;
 			g_LastVehiclePos[DB_Vehicle[i]][2] = z;

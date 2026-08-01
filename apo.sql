@@ -27,6 +27,19 @@ SET time_zone = "+00:00";
 -- Table structure for table `antennas`
 --
 
+CREATE TABLE `plants` (
+  `id` int NOT NULL,
+  `owner` int NOT NULL,
+  `type` tinyint NOT NULL,
+  `x` float NOT NULL,
+  `y` float NOT NULL,
+  `z` float NOT NULL,
+  `world` int NOT NULL,
+  `interior` int NOT NULL,
+  `planttime` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 CREATE TABLE `antennas` (
   `id` int NOT NULL,
   `type` int DEFAULT NULL,
@@ -392,6 +405,9 @@ CREATE TABLE `weapon_drops` (
 -- Indexes for dumped tables
 --
 
+ALTER TABLE `plants`
+  ADD PRIMARY KEY (`id`);
+
 --
 -- Indexes for table `antennas`
 --
@@ -498,6 +514,9 @@ ALTER TABLE `gang_zones`
 -- AUTO_INCREMENT for table `missions`
 --
 ALTER TABLE `missions`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+
+ALTER TABLE `plants`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --

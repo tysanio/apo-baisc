@@ -32,7 +32,7 @@ script actorclanc()
 	missionactor[5] = CreateActor(70,279.6077,1855.4661,8.7649,296.1035); // science
 	missionactor[6] = CreateActor(191,273.4673,1864.6194,8.7578,4.8688); // spécial faction
 	//other NPC
-	missionactor[7] = CreateActor(26702,584.7945,870.1245,-42.4973,283.6910); //miner
+	missionactor[7] = CreateActor(260,584.7945,870.1245,-42.4973,283.6910); //miner
     return 1;
 }
 Dialog:Missionclan00(playerid, response, listitem, inputtext[])

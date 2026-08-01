@@ -42,7 +42,11 @@ $stmt->execute([ $player["idclan"]]);$clanLocation = $stmt->fetch(PDO::FETCH_ASS
 // Load Plants
 // =====================================
 
-$stmt = $pdo->query(" SELECT plants.*, players.Username FROM plants LEFT JOIN players ON plants.owner = players.ID ORDER BY plants.id ASC ");
+$stmt = $pdo->prepare("SELECT plants.*, players.Username FROM plants LEFT JOIN players ON plants.owner = players.ID WHERE plants.owner = ? ORDER BY plants.id ASC ");
+
+$stmt->execute([$player["ID"]]);
+$plants = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute([$player["ID"]]);
 $plants = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
