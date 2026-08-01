@@ -2,7 +2,7 @@ CMD:ahelp(playerid, params[])
 {
     if(!pData[playerid][Admin]) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
     SendServerMessage(playerid, "---List of commands admins  for this server---");
-    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/kick, /mute, /unmute, /freeze, /unfreeze /setskin, /sethp, /setarmor, /resetweapons");
+    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/a, /kick, /mute, /unmute, /freeze, /unfreeze /setskin, /sethp, /setarmor, /resetweapons");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/goto, /zoneinfo, /addpoint, /resetintvw, /setthirst, /sethunger");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/banperm, /bantemp, /unban, /banlist, /editveh, /editstation /stationlist");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/createobject, /editobject, /delobject, /editclan");
@@ -13,6 +13,22 @@ CMD:ahelp(playerid, params[])
     return 1;
 }
 //admin 1
+CMD:a(playerid, params[])
+{
+    new message[144],string[180];
+    if(pData[playerid][Admin] < 1)
+        return SendServerMessage(playerid, "You are not an admin.");
+    if(sscanf(params, "s[144]", message))
+        return SendCommandMessage(playerid, "/a [message]");
+    format(string, sizeof(string), "[ADMIN CHAT] %s: %s", Name[playerid],message);
+    for(new i = 0; i < MAX_PLAYERS; i++)
+    {
+        if(!IsPlayerConnected(i)) continue;
+        if(pData[i][Admin] < 1) continue;
+        SendClientMessage(i, 0xFF0000FF, string);
+    }
+    return 1;
+}
 CMD:kick(playerid, params[])
 {
     new targetid, reason[64],lookupid;

@@ -1,7 +1,7 @@
 CMD:help(playerid, params[])
 {
     SendServerMessage(playerid, "---List of commands for this server---");
-	SendCommandMessage(playerid, "/howto, /me, /do, /stats, /craft, /use, /suggest, /levelup");
+	SendCommandMessage(playerid, "/howto, /me, /do, /stats, /craft, /use, /suggest, /levelup, /vipchat");
     SendCommandMessage(playerid, "/dwep, /swep, /pwep, /storage, /editstorage, /animcmds, /dc, /admins");
 	SendCommandMessage(playerid, "/clan, /clanchest, /clanwar, /claninvite, /clanremove, /clanrank, /clanres, /clans");
     SendCommandMessage(playerid, "/repairleak, /repair, /refuel, /virtualworld, /discordconfirm");
@@ -74,6 +74,20 @@ CMD:do(playerid, params[])
 	}
 	pData[playerid][clanexp][0] += random(3)+1;
 	return 1;
+}
+CMD:vipchat(playerid, params[])
+{
+    new message[144],string[180];
+    if(pData[playerid][VIP] < 1 && pData[playerid][Admin] < 1) return SendServerMessage(playerid, "You are not a VIP.");
+    if(sscanf(params, "s[144]", message)) return SendCommandMessage(playerid, "/v [message]");
+    format(string, sizeof(string), "[VIP CHAT] %s: %s",Name[playerid],message);
+    for(new i = 0; i < MAX_PLAYERS; i++)
+    {
+        if(!IsPlayerConnected(i)) continue;
+        if(pData[i][VIP] < 1 && pData[i][Admin] < 1) continue;
+        SendClientMessage(i, 0x33CCFFFF, string);
+    }
+    return 1;
 }
 CMD:virtualworld(playerid, params[])
 {

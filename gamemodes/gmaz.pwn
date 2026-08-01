@@ -1,4 +1,4 @@
-//total lines 9287
+//total lines 9349
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -37,7 +37,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.21.9287");
+	SetGameModeText("Apo 0.21.9349");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -121,17 +121,35 @@ public OnPlayerConnect(playerid)
 	PlayerTextDrawSetShadow(playerid, DistanceTD[playerid], 0);
 	PlayerTextDrawHide(playerid, DistanceTD[playerid]);
 
-    txtSpeed[playerid] = CreatePlayerTextDraw(playerid,505.0, 145.0, "Speed: 0 km/h");
+    txtSpeed[playerid] = CreatePlayerTextDraw(playerid,500.0, 135.0, "Speed: 0 km/h");
     PlayerTextDrawFont(playerid, txtSpeed[playerid], 1);
     PlayerTextDrawLetterSize(playerid, txtSpeed[playerid], 0.25, 1.0);
     PlayerTextDrawColor(playerid, txtSpeed[playerid], -1);
     PlayerTextDrawSetOutline(playerid, txtSpeed[playerid], 1);
 
-    FuelBar[playerid] = CreatePlayerProgressBar(playerid, 505.0, 125.0, 100.0, 5.0, 0xFFFF00AA, 100.0);
-    HealthBar[playerid] = CreatePlayerProgressBar(playerid, 505.0, 135.0, 100.0, 5.0, 0xFF0000AA, 100.0);
+    food[playerid] = CreatePlayerTextDraw(playerid, 496.666687, 101.629638, "hud:radar_datefood");
+    PlayerTextDrawLetterSize(playerid, food[playerid], 0.000000, 0.000000);
+    PlayerTextDrawTextSize(playerid, food[playerid], 11.999980, 9.955547);
+    PlayerTextDrawAlignment(playerid, food[playerid], 2);
+    PlayerTextDrawColor(playerid, food[playerid], -1);
+    PlayerTextDrawSetShadow(playerid, food[playerid], 0);
+    PlayerTextDrawSetOutline(playerid, food[playerid], 0);
+    PlayerTextDrawFont(playerid, food[playerid], 4);
 
-    pData[playerid][Foodbar] = CreatePlayerProgressBar(playerid, 505.0, 105.0, 100.0, 5.0, 0xFFFF00AA, 100.0);
-    pData[playerid][Waterbar] = CreatePlayerProgressBar(playerid, 505.0, 115.0, 100.0, 5.0, 0xFF0000AA, 100.0);
+    water[playerid] = CreatePlayerTextDraw(playerid, 547.666809, 101.629646, "hud:radar_datedrink");
+    PlayerTextDrawLetterSize(playerid, water[playerid], 0.000000, 0.000000);
+    PlayerTextDrawTextSize(playerid, water[playerid], 10.333271, 9.125927);
+    PlayerTextDrawAlignment(playerid, water[playerid], 1);
+    PlayerTextDrawColor(playerid, water[playerid], -1);
+    PlayerTextDrawSetShadow(playerid, water[playerid], 0);
+    PlayerTextDrawSetOutline(playerid, water[playerid], 0);
+    PlayerTextDrawFont(playerid, water[playerid], 4);
+
+    FuelBar[playerid] = CreatePlayerProgressBar(playerid, 500.0, 115.0, 100.0, 5.0, 0xFFFF00AA, 100.0);
+    HealthBar[playerid] = CreatePlayerProgressBar(playerid, 500.0, 125.0, 100.0, 5.0, 0xFF0000AA, 100.0);
+
+    pData[playerid][Foodbar] = CreatePlayerProgressBar(playerid, 510.0, 105.0, 40.0, 5.0, 0xFFFF00AA, 100.0);
+    pData[playerid][Waterbar] = CreatePlayerProgressBar(playerid, 560.0, 105.0, 40.0, 5.0, 0xFF0000AA, 100.0);
 
     for (new i = 0; i < TotalGZ; i++) GangZoneShowForPlayer(playerid, GangZones[i][gZoneID], GetTeamZoneColor(GangZones[i][gTeamID]));
     LoginCameraStep[playerid] = 0;
@@ -154,30 +172,6 @@ public OnPlayerDisconnect(playerid, reason)
             CheckWarZoneEmpty(i);
         }
     }
-	return 1;
-}
-
-public OnPlayerDeath(playerid, killerid, reason)
-{
-	new Float:pPosX, Float:pPosY, Float:pPosZ;
-	GetPlayerPos(playerid, pPosX, pPosY, pPosZ);
-	PlayerTextDrawHide(playerid, txtSpeed[playerid]);
-    HidePlayerProgressBar(playerid, FuelBar[playerid]);
-    HidePlayerProgressBar(playerid, HealthBar[playerid]);
-    for(new i_slot = 0, gun, ammo; i_slot != 12; i_slot++)
-    {
-        GetPlayerWeaponData(playerid, i_slot, gun, ammo);
-        if(gun != 0 && ammo != 0) CreateDroppedGun(gun, ammo, pPosX+random(2)-random(2), pPosY+random(2)-random(2), pPosZ);
-    }
-    for (new i = 0; i < TotalGZ; i++)
-    {
-        if (ZoneInWar[i])
-        {
-            CheckWarZoneEmpty(i);
-        }
-    }
-    ResetPlayerWeapons(playerid);
-    Death[playerid] = 1;
 	return 1;
 }
 public OnPlayerUpdate(playerid)
@@ -565,16 +559,25 @@ public OnPlayerSpawn(playerid)
     SetPlayerSkillLevel(playerid,WEAPONSKILL_M4,200);
     SetPlayerSkillLevel(playerid,WEAPONSKILL_SNIPERRIFLE,200);
     SetPlayerSkin(playerid,pData[playerid][skin]);
+    SetPlayerColor(playerid, 0xFFFFFFFF);
     //vie armure
 	SetPlayerHealth(playerid,pData[playerid][Life]);
 	SetPlayerArmour(playerid,pData[playerid][Armor]);
     SetPlayerSkin(playerid,pData[playerid][skin]);
     SetPlayerInterior(playerid,pData[playerid][interior]);
     SetPlayerScore(playerid, pData[playerid][Score]);
+    PlayerTextDrawShow(playerid, food[playerid]);
+    PlayerTextDrawShow(playerid, water[playerid]);
     if(Death[playerid] == 1)
 	{
+        SetPlayerHealth(playerid,10);
+        SetPlayerArmour(playerid,0);
         SetPlayerInterior(playerid,0);
         ResetPlayerWeapons(playerid);
+        pData[playerid][Water] = 20;
+        pData[playerid][Food] = 20;
+        SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], 25);
+        SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], 25);
         switch (random(8))
         {
             case 0: SetPlayerPos(playerid,-722.1279,2582.5281,70.3687);
@@ -586,8 +589,6 @@ public OnPlayerSpawn(playerid)
             case 6: SetPlayerPos(playerid,547.4021,2273.4055,34.8501);
             case 7: SetPlayerPos(playerid,209.4851,2617.1570,16.6514);
         }
-        SetPlayerHealth(playerid,10);
-        SetPlayerArmour(playerid,0);
         Death[playerid] = 0;
     }
     else
@@ -604,9 +605,41 @@ public OnPlayerSpawn(playerid)
 }
 public OnPlayerRequestClass(playerid, classid)
 {
-    SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0], pData[playerid][Pos][0], pData[playerid][Pos][0], 0.0, 0, 0, 0, 0, 0, 0);
+    SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0], pData[playerid][Pos][1], pData[playerid][Pos][2], 0.0, 0, 0, 0, 0, 0, 0);
 	SetPlayerColor(playerid, 0xFFFFFFFF);
 	return 1;
+}
+public OnPlayerDeath(playerid, killerid, reason)
+{
+	new Float:pPosX, Float:pPosY, Float:pPosZ;
+	GetPlayerPos(playerid, pPosX, pPosY, pPosZ);
+	PlayerTextDrawHide(playerid, txtSpeed[playerid]);
+    HidePlayerProgressBar(playerid, FuelBar[playerid]);
+    HidePlayerProgressBar(playerid, HealthBar[playerid]);
+    for(new i_slot = 0, gun, ammo; i_slot != 12; i_slot++)
+    {
+        GetPlayerWeaponData(playerid, i_slot, gun, ammo);
+        if(gun != 0 && ammo != 0) CreateDroppedGun(gun, ammo, pPosX+random(2)-random(2), pPosY+random(2)-random(2), pPosZ);
+    }
+    for (new i = 0; i < TotalGZ; i++)
+    {
+        if (ZoneInWar[i])
+        {
+            CheckWarZoneEmpty(i);
+        }
+    }
+    ResetPlayerWeapons(playerid);
+    Death[playerid] = 1;
+    SetTimerEx("RespawnPlayer", 1000, false, "i", playerid); // 0.5 second respawn
+	return 1;
+}
+script RespawnPlayer(playerid)     //error death need to add this
+{
+    if(!IsPlayerConnected(playerid))
+        return 1;
+    SetPlayerHealth(playerid,10);
+    SpawnPlayer(playerid);
+    return 1;
 }
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 {

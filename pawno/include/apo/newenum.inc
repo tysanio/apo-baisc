@@ -7,7 +7,7 @@ new DCC_Role: RoleStaff1,bool:sistaff1ok,DCC_Embed:Embed;
 
 new mysql,Name[MAX_PLAYERS][24],IP[MAX_PLAYERS][16],Death[MAX_PLAYERS];
 
-new PlayerText:DistanceTD[MAX_PLAYERS],inJOB[MAX_PLAYERS], Hunter_Deer[MAX_PLAYERS],AdminTarget[MAX_PLAYERS],
+new PlayerText:DistanceTD[MAX_PLAYERS],inJOB[MAX_PLAYERS], Hunter_Deer[MAX_PLAYERS],AdminTarget[MAX_PLAYERS],PlayerText:food[MAX_PLAYERS],PlayerText:water[MAX_PLAYERS],
 	Meeters_BTWDeer[MAX_PLAYERS],Meeters[MAX_PLAYERS], Deer[MAX_PLAYERS], Deep_Deer[MAX_PLAYERS], Meeter_Kill[MAX_PLAYERS],Shoot_Deer[MAX_PLAYERS];
 
 new DB_Vehicle[MAX_SERVER_VEHICLES],DB_VehicleID[MAX_SERVER_VEHICLES],VehicleOwner[MAX_SERVER_VEHICLES][MAX_PLAYER_NAME],VehiclePaintjob[MAX_SERVER_VEHICLES];

@@ -166,21 +166,20 @@ script OnAccountLoad(playerid)
 	{
 		switch (random(8))
 		{
-			case 0: SetPlayerPos(playerid,-722.1279,2582.5281,70.3687);
-			case 1: SetPlayerPos(playerid,-884.5097,2761.1423,46.0000);
-			case 2: SetPlayerPos(playerid,-209.0710,2771.4448,62.3780);
-			case 3: SetPlayerPos(playerid,84.2828,2450.4319,16.4844);
-			case 4: SetPlayerPos(playerid,413.4136,2585.2964,16.7334);
-			case 5: SetPlayerPos(playerid,145.4671,2209.1653,35.5056);
-			case 6: SetPlayerPos(playerid,547.4021,2273.4055,34.8501);
-			case 7: SetPlayerPos(playerid,209.4851,2617.1570,16.6514);
+			case 0: SetSpawnInfo(playerid, 0, pData[playerid][skin], -722.1279,2582.5281,70.3687,0.0,0,0,0,0,0,0);
+			case 1: SetSpawnInfo(playerid, 0, pData[playerid][skin], -884.5097,2761.1423,46.0000,0.0,0,0,0,0,0,0);
+			case 2: SetSpawnInfo(playerid, 0, pData[playerid][skin], -209.0710,2771.4448,62.3780,0.0,0,0,0,0,0,0);
+			case 3: SetSpawnInfo(playerid, 0, pData[playerid][skin], 84.2828,2450.4319,16.4844,0.0,0,0,0,0,0,0);
+			case 4: SetSpawnInfo(playerid, 0, pData[playerid][skin], 413.4136,2585.2964,16.7334,0.0,0,0,0,0,0,0);
+			case 5: SetSpawnInfo(playerid, 0, pData[playerid][skin], 145.4671,2209.1653,35.5056,0.0,0,0,0,0,0,0);
+			case 6: SetSpawnInfo(playerid, 0, pData[playerid][skin], 547.4021,2273.4055,34.8501,0.0,0,0,0,0,0,0);
+			case 7: SetSpawnInfo(playerid, 0, pData[playerid][skin], 209.4851,2617.1570,16.6514,0.0,0,0,0,0,0,0);
 		}
 	}
-	else SetPlayerPos(playerid,pData[playerid][Pos][0],pData[playerid][Pos][1],pData[playerid][Pos][2]);
-	SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0], pData[playerid][Pos][1], pData[playerid][Pos][2], 0.0, 0, 0, 0, 0, 0, 0);
+	else SetSpawnInfo(playerid, 0, pData[playerid][skin], pData[playerid][Pos][0],pData[playerid][Pos][1],pData[playerid][Pos][2],0.0,0,0,0,0,0,0);
 	KillTimer(LoginCameraTimer[playerid]);
 	TogglePlayerSpectating(playerid, 0);
-	SpawnPlayer(playerid);
+	//SpawnPlayer(playerid);
 	TogglePlayerControllable(playerid, 1);
 	SetCameraBehindPlayer(playerid);
 	SendServerMessage(playerid,"Successfully logged in"); //tell them that they have successfully logged in
@@ -1119,7 +1118,7 @@ script OnMissionLoadRandomCheckpoints(playerid)
 script OnActorStreamIn(actorid, forplayerid)
 {
 	SetActorInvulnerable(actorid, true);
-	SetActorRespawnTime(actorid,120000);
+	SetActorRespawnTime(actorid,12000);
     return 1;
 }
 script SetPlayerToUnfreeze(playerid, Float:x, Float:y, Float:z)
