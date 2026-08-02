@@ -42,7 +42,7 @@ function GetItemName($id)
 		case 19: return "Canned Food";
 		case 20: return "Seed(s)";
 		case 21: return "Potato(es)";
-		case 22: return "inv22";
+		case 22: return "Weed(s)";
 		case 23: return "Tomato(es)";
 		case 24: return "inv24";
 		case 25: return "inv25";

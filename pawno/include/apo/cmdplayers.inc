@@ -25,7 +25,7 @@ CMD:stats(playerid, params[])
 	Dialog_Show(playerid, dSTATS,DIALOG_STYLE_TABLIST,"Account stats","Level Admin : \t%d\nLevel VIP : \t%d\nScore : \t%d\n\
     Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\nOre(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
     Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\nSeed(s) : \t%d\n\
-    Potato(es) : \t%d\ninv22 : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d\nClan 0 Exp: \t%d\nClan 1 Exp: \t%d\nClan 2 Exp: \t%d\nClan 3 Exp: \t%d\nClan 4 Exp: \t%d\nDiscord ID : \t%s\
+    Potato(es) : \t%d\nWeed(s) : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d\nClan 0 Exp: \t%d\nClan 1 Exp: \t%d\nClan 2 Exp: \t%d\nClan 3 Exp: \t%d\nClan 4 Exp: \t%d\nDiscord ID : \t%s\
     ", "Close","",pData[playerid][Admin],pData[playerid][VIP],pData[playerid][Score],\
     pData[playerid][inv][1],pData[playerid][inv][2],pData[playerid][inv][3],pData[playerid][inv][4],pData[playerid][inv][5],\
     pData[playerid][inv][6],pData[playerid][inv][7],pData[playerid][inv][8],pData[playerid][inv][9],pData[playerid][inv][10],\
@@ -183,7 +183,7 @@ CMD:editstorage(playerid, params[])
 		SendServerMessage(playerid, "1: Meat(s), 2: Wood(s), 3: Metal(s),4: Cloth(s), 5: Plastic(s),6: Gun Powder(s)");
 		SendServerMessage(playerid, "7: Ore(s), 8: Iron(s), 9: Gold(s), 10: Lockpick(s), 11: Repair kit(s), 12: Med Kit(s),13: Jerrycan(s) ");
 		SendServerMessage(playerid, "14: 9mm Bullet(s), 15: 00' Buck's, 16: 308(s), 17: Armor Plate(s), 18: Water Bottle, 19: Canned Food");
-		SendServerMessage(playerid, "20: Seed(s), 21: Potato(es), 22: inv22, 23: Tomato(es), 24: inv24, 25: inv25");
+		SendServerMessage(playerid, "20: Seed(s), 21: Potato(es), 22: Weed(s), 23: Tomato(es), 24: inv24, 25: inv25");
         return 1;
     }
     if (!strcmp(subcmd, "withdraw", true))
@@ -236,7 +236,7 @@ CMD:editstorage(playerid, params[])
 			Ore(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
 			Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n\
 			9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\n\
-			Water Bottle : \t%d\nCanned Food : \t%d\nSeed(s) : \t%d\nPotato(es) : \t%d\ninv22 : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d\n\
+			Water Bottle : \t%d\nCanned Food : \t%d\nSeed(s) : \t%d\nPotato(es) : \t%d\nWeed(s) : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d\n\
 			", "Close","",storageData[id][storagesLock],GetStorageCapacity(id),\
 			storageData[id][storagesInv][1],storageData[id][storagesInv][2],storageData[id][storagesInv][3],storageData[id][storagesInv][4],storageData[id][storagesInv][5],\
 			storageData[id][storagesInv][6],storageData[id][storagesInv][7],storageData[id][storagesInv][8],storageData[id][storagesInv][9],storageData[id][storagesInv][10],\
@@ -290,7 +290,7 @@ CMD:craft(playerid, params[])
 }
 CMD:use(playerid, params[])
 {
-	Dialog_Show(playerid, UseItem,DIALOG_STYLE_LIST,"Use Item(s)","9 mm\n00' Buck's\n.308\nMed Kit\nArmor Plates\nJerrycan\nWater Bottle\nCanned Food\nLockpick", "Use", "Close");
+	Dialog_Show(playerid, UseItem,DIALOG_STYLE_LIST,"Use Item(s)","9 mm\n00' Buck's\n.308\nMed Kit\nArmor Plates\nJerrycan\nWater Bottle\nCanned Food\nPotatoes\nTomatoes\nWeed\nLockpick", "Use", "Close");
     return 1;
 }
 CMD:saveveh(playerid, params[])
@@ -474,7 +474,7 @@ CMD:antenna(playerid,params[])
 CMD:plant(playerid, params[])
 {
     new type[16],Float:x,Float:y, Float:z,slot = GetFreePlantSlot(),planttype;
-    if(sscanf(params,"s[16]",type)) return SendCommandMessage(playerid,"/plant [potato/tomato]");
+    if(sscanf(params,"s[16]",type)) return SendCommandMessage(playerid,"/plant [potato/tomato/weed]");
     if(GetPlayerInterior(playerid))  return SendServerMessage(playerid, "You can only plant outside.");
     if(GetPlayerVirtualWorld(playerid)) return SendServerMessage(playerid,  "You can only plant outside.");
     GetPlayerPos(playerid,x,y,z);
@@ -491,6 +491,12 @@ CMD:plant(playerid, params[])
         if(pData[playerid][inv][20] < 1) return SendServerMessage(playerid, "You don't have a tomato seed.");
         pData[playerid][inv][20]--;
         planttype = PLANT_TOMATO;
+    }
+    else if(!strcmp(type,"weed",true))
+    {
+        if(pData[playerid][inv][20] < 1) return SendServerMessage(playerid, "You don't have a weed seed.");
+        pData[playerid][inv][20]--;
+        planttype = PLANT_WEED;
     }
     else return SendServerMessage(playerid, "Valid plants: potato, tomato.");
     Plant[slot][plantExists] = true;
@@ -542,6 +548,13 @@ CMD:harvest(playerid, params[])
             if(pData[playerid][inv][23] + amount > GetBackpackCapacity(playerid))
 				return SendServerMessage(playerid, "You don't have enough backpack space.");
             SendServerMessage(playerid,  "You harvested %d tomatoes.",amount);
+        }
+        case PLANT_WEED:
+        {
+            new amount = random(4)+3; //3-6
+            if(pData[playerid][inv][22] + amount > GetBackpackCapacity(playerid))
+				return SendServerMessage(playerid, "You don't have enough backpack space.");
+            SendServerMessage(playerid,  "You harvested %d weeds.",amount);
         }
     }
     mysql_format(mysql,query,sizeof(query),"DELETE FROM plants WHERE id=%d",Plant[id][plantSQLID]);

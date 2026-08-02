@@ -71,6 +71,7 @@ chainsaw?
 //plant
 #define PLANT_POTATO     (1)
 #define PLANT_TOMATO     (2)
+#define PLANT_WEED     (3)
 
 #define PLANT_GROW_TIME  (86400) // 24 hours
 #define MAX_PLANTS       (500)

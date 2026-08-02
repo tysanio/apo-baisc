@@ -809,6 +809,7 @@ stock GetPlantName(type)
     {
         case PLANT_POTATO: format(name,sizeof(name),"Potato");
         case PLANT_TOMATO: format(name,sizeof(name),"Tomato");
+        case PLANT_WEED: format(name,sizeof(name),"Weed");
         default: format(name,sizeof(name),"Unknown");
     }
     return name;
@@ -849,6 +850,7 @@ stock GetPlantModel(type)
     switch(type)
     {
         case PLANT_POTATO: return 804;
+        case PLANT_WEED: return 804;
         case PLANT_TOMATO: return 806;
     }
     return 806;

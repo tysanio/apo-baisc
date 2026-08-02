@@ -343,6 +343,10 @@ plants.forEach(function(plant)
     {
         plantType = "🍅 Tomato";
     }
+    else if(parseInt(plant.type) == 3)
+    {
+        plantType = "🌿 Weed";
+    }
     let status = "";
     if(Math.floor(Date.now()/1000) >= parseInt(plant.planttime))
     {

@@ -1,4 +1,4 @@
-//total lines 9349
+//total lines 9392
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -37,7 +37,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.21.9349");
+	SetGameModeText("Apo 0.21.9392");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();

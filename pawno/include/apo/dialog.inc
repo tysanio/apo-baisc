@@ -393,7 +393,6 @@ Dialog:UseItem(playerid, response, listitem, inputtext[])
 							if(pData[playerid][Water] > 101) pData[playerid][Water] = 100;
 						}						
 					}
-					SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
 					SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], pData[playerid][Water]);
 					pData[playerid][inv][18] -= 1;
 				}
@@ -435,12 +434,40 @@ Dialog:UseItem(playerid, response, listitem, inputtext[])
 							SendServerMessage(playerid, "This canned food was not so good.");
 							if(pData[playerid][Food] > 101) pData[playerid][Food] = 100;
 						}
-					}				
+					}
+					SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
 					pData[playerid][inv][19] -= 1;
 				}
 				else SendServerMessage(playerid, "You don't have a canned food(s).");
 			}
-			case 8: 
+            case 8: 
+			{
+				if (pData[playerid][inv][21] >= 1)
+				{
+					pData[playerid][Food] += 3;
+					SendServerMessage(playerid, "You eat a potato.");
+					if(pData[playerid][Food] > 101) pData[playerid][Food] = 100;					
+					SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
+					pData[playerid][inv][21] -= 1;
+				}
+				else SendServerMessage(playerid, "You don't have potato(es).");
+			}
+            case 9: 
+			{
+				if (pData[playerid][inv][23] >= 1)
+				{
+					pData[playerid][Food] += 1;
+					pData[playerid][Water] += 2;
+					SendServerMessage(playerid, "You eat a tomato");
+					if(pData[playerid][Food] > 101) pData[playerid][Food] = 100;			
+					if(pData[playerid][Water] > 101) pData[playerid][Water] = 100;			
+					pData[playerid][inv][23] -= 1;
+					SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
+					SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], pData[playerid][Water]);
+				}
+				else SendServerMessage(playerid, "You don't have a tomato(es).");
+			}
+			case 11: 
 			{
                 if(pData[playerid][inv][10] >= 1)
 				{
@@ -757,7 +784,7 @@ Dialog:CLANDIALOG10(playerid, response, listitem, inputtext[])
 			case 21:
 			{
 				claninv = 22;
-				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv22", "How much you want to withdraw?", "Withdraw", "Back");
+				Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Weed(s)", "How much you want to withdraw?", "Withdraw", "Back");
 			}
 			case 22:
 			{
@@ -1016,12 +1043,12 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		}
 		if(claninv == 22)
 		{
-			if (amount < 0 || amount >= clans[id][inv][22]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "inv22 ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
+			if (amount < 0 || amount >= clans[id][inv][22]) return Dialog_Show(playerid, CLANDIALOG100, DIALOG_STYLE_INPUT, "Weed(s) ", "Error on the quantity!\nHow much you want to withdraw?", "Withdraw", "Back");
 			if (pData[playerid][inv][22] + amount > GetBackpackCapacity(playerid))
 				return SendServerMessage(playerid, "Not enough storage space for this item in your backpack.");
 			clans[id][inv][22] -= amount;
 			pData[playerid][inv][22] += amount;
-			SendServerMessage(playerid,"You take %d inv22 (s) from the clan chest.",amount);
+			SendServerMessage(playerid,"You take %d Weed(s) from the clan chest.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv22` = '%d' WHERE `idclan` = '%d'", clans[id][inv][22], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
@@ -1066,7 +1093,7 @@ Dialog:CLANDIALOG100(playerid, response, listitem, inputtext[])
 		Gun Powder : \t%d\nOre(s) : \t%d\nIron(s): \t%d\nGold(s) : \t%d\nLockpick(s): \t%d\n\
 		Repair kit(s) : \t%d\nMed Kit(s) : \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n\
 		.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\nSeeds : \t%d\n\
-		Potato(es) : \t%d\ninv22 : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d", "OK", "",clans[id][inv][1],clans[id][inv][2],clans[id][inv][3],clans[id][inv][4],clans[id][inv][5],        clans[id][inv][6],clans[id][inv][7],clans[id][inv][8],clans[id][inv][9],clans[id][inv][10],        clans[id][inv][11],clans[id][inv][12],clans[id][inv][13],clans[id][inv][14],clans[id][inv][15],        clans[id][inv][16],clans[id][inv][17],clans[id][inv][18],clans[id][inv][19],clans[id][inv][20],        clans[id][inv][21],clans[id][inv][22],clans[id][inv][23],clans[id][inv][24],clans[id][inv][25]); 
+		Potato(es) : \t%d\nWeed(s) : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d", "OK", "",clans[id][inv][1],clans[id][inv][2],clans[id][inv][3],clans[id][inv][4],clans[id][inv][5],        clans[id][inv][6],clans[id][inv][7],clans[id][inv][8],clans[id][inv][9],clans[id][inv][10],        clans[id][inv][11],clans[id][inv][12],clans[id][inv][13],clans[id][inv][14],clans[id][inv][15],        clans[id][inv][16],clans[id][inv][17],clans[id][inv][18],clans[id][inv][19],clans[id][inv][20],        clans[id][inv][21],clans[id][inv][22],clans[id][inv][23],clans[id][inv][24],clans[id][inv][25]); 
 	}
 	return 1;
 }
@@ -1448,12 +1475,12 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 		}
 		if(claninv == 22)
 		{
-			if (amount < 0 || amount >= pData[playerid][inv][22]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "inv22 ", "Error on the quantity!\nHow much you want to give?", "give", "Back");
+			if (amount < 0 || amount >= pData[playerid][inv][22]) return Dialog_Show(playerid, CLANDIALOG200, DIALOG_STYLE_INPUT, "Weed(s)", "Error on the quantity!\nHow much you want to give?", "give", "Back");
 			if (clans[id][inv][22] + amount > GetClanCapacity(id))
 				return SendServerMessage(playerid, "Not enough storage space for this item in clan chest.");
 			pData[playerid][inv][22] -= amount;
 			clans[id][inv][22] += amount;
-			SendServerMessage(playerid,"You give %d inv22 (s) into the chest clan.",amount);
+			SendServerMessage(playerid,"You give %d Weed(s) into the chest clan.",amount);
 			mysql_format(mysql, query, sizeof(query), "UPDATE `clans` SET `inv22` = '%d' WHERE `idclan` = '%d'",clans[id][inv][22], clans[id][idclan]);
 			mysql_tquery(mysql, query);
 		}
@@ -1496,7 +1523,7 @@ Dialog:CLANDIALOG200(playerid, response, listitem, inputtext[])
 	{
 		Dialog_Show(playerid, CLANDIALOG20,DIALOG_STYLE_TABLIST,"Inventory","Meat(s) : \t%d\nWood(s) : \t%d\nMetal(s) : \t%d\nCloth(s) : \t%d\nPlastic(s) : \t%d\nGun Powder(s) : \t%d\nOre(s) : \t%d\nIron(s) : \t%d\nGold(s) : \t%d\nLockpick(s) : \t%d\n\
 		Repair kit(s) : \t%d\nMed Kit( s): \t%d\nJerrycan(s) : \t%d\n9mm Bullet(s) : \t%d\n00' Buck's : \t%d\n.308(s) : \t%d\nArmor Plate(s) : \t%d\nWater Bottle : \t%d\nCanned Food : \t%d\nSeed(s) : \t%d\n\
-		Potato(es) : \t%d\ninv22 : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d\
+		Potato(es) : \t%d\nWeed(s) : \t%d\nTomato(es) : \t%d\ninv24 : \t%d\ninv25 : \t%d\
 		", "Close","",pData[playerid][inv][1],pData[playerid][inv][2],pData[playerid][inv][3],pData[playerid][inv][4],pData[playerid][inv][5],\
 		pData[playerid][inv][6],pData[playerid][inv][7],pData[playerid][inv][8],pData[playerid][inv][9],pData[playerid][inv][10],\
 		pData[playerid][inv][11],pData[playerid][inv][12],pData[playerid][inv][13],pData[playerid][inv][14],pData[playerid][inv][15],\

@@ -444,10 +444,10 @@ new ItemNames[26][24] =
     "Armor Plate(s)",
     "Water Bottle(s)", //18
     "Canned Food",  //19
-    "seeds", //seeds
-    "potatoes", //potatoes
-    "inv22", //weed-drug
-    "tomatoes", //tomatoes
+    "Seeds", //seeds
+    "Potatoes", //potatoes
+    "Weed(s)", //weed-drug
+    "Tomatoes", //tomatoes
     "inv24",
     "inv25"
 };
