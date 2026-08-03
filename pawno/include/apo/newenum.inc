@@ -579,3 +579,5 @@ enum ePlant
     Text3D:plantLabel
 };
 new Plant[MAX_PLANTS][ePlant];
+//weather 
+new CurrentWeather,WeatherTimer;

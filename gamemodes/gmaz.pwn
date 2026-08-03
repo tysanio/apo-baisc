@@ -1,4 +1,4 @@
-//total lines 9392
+//total lines 9421
 #include <a_samp>
 #include <a_mysql>
 #include <a_actor>
@@ -37,7 +37,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.21.9392");
+	SetGameModeText("Apo 0.21.9421");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -76,10 +76,14 @@ public OnGameModeInit()
     SetTimer("AntennaDecay",600000,true);
 	SetTimer("AntennaFuel",300000,true);
     SetTimer("UpdatePlantLabels",60000,true);
+    CurrentWeather = 0;
+    SetWeather(CurrentWeather);
+    WeatherTimer = SetTimer("RandomWeather", 1800000, true); // 30 minutes
 	return 1;
 }
 public OnGameModeExit()
 {
+    KillTimer(WeatherTimer);
     mysql_close(mysql);
     return 1;
 }

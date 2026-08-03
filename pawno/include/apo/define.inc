@@ -3,7 +3,6 @@ command /howto dialog to do stuff
 clanexp0 need to player exp and everything for a player
 need to do skill weapons maybe when level up?
 checking actor because doing something fuck top maybe need interior actor?
-command invite for clan stuff-----to test
 Secteur H , la meute, les évader et la zone---name D.rtto
 do admin edit player stuff
 do admin edit stuff discord
@@ -58,8 +57,8 @@ chainsaw?
 #define MAX_ANTENNAS           128
 
 #define ANTENNA_SMALL_RANGE    250.0
-#define ANTENNA_MEDIUM_RANGE   1000.0
-#define ANTENNA_LARGE_RANGE    2000.0
+#define ANTENNA_MEDIUM_RANGE   750.0
+#define ANTENNA_LARGE_RANGE    1500.0
 
 #define ANTENNA_MAX_HEALTH     100.0
 

@@ -9,7 +9,7 @@ CMD:ahelp(playerid, params[])
     SendClientMessage(playerid, COLOR_LIGHTRED, "/createantenna, /editantenna, /deleteantenna");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/setvip /setlevel, /createspawn, /createveh, /createentrance, /delentrance, /editentrance");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/deleteveh, /createstation, /delstation, /gzcreate, /gzdelete, /gzreload");
-    SendClientMessage(playerid, COLOR_PURPLE, "/setadmin, /flushpoint, /flushspawn, /resetplayer");
+    SendClientMessage(playerid, COLOR_PURPLE, "/setadmin, /flushpoint, /flushspawn, /resetplayer, /setweather");
     return 1;
 }
 //admin 1
@@ -1049,5 +1049,16 @@ CMD:flushpoint(playerid, params[])
     mysql_format(mysql, query, sizeof(query), "DELETE FROM missions");
     mysql_tquery(mysql, query);
     SendServerMessage(playerid, "[ADMIN] Checkpoint mission table has been flushed effective next reboot.");
+    return 1;
+}
+CMD:setweather(playerid, params[])
+{
+    new weather;
+    if(pData[playerid][Admin] <3) return SendServerMessage(playerid, "Only admin level 3+ can use this command.");
+    if(sscanf(params, "d", weather)) return SendCommandMessage(playerid, "/setweather [weatherid]");
+    if(weather < 0 || weather > 255) return SendServerMessage(playerid, "Weather ID must be between 0 and 255.");
+    CurrentWeather = weather;
+    SetWeather(weather);
+    SendServerMessage(playerid, "Weather changed to %d",weather);
     return 1;
 }

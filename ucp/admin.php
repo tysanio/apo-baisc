@@ -29,6 +29,7 @@ require_once "includes/header.php";
 <a href="admin_missions.php"> 📍 Missions Spawn </a><br>
 <a href="admin_objects.php"> 🏗️ Object Spawn </a><br>
 <a href="admin_tools.php"> ⚒️ Admins tools </a><br>
+<a href="admin_annouce.php"> 📢  Admins Annoucement </a><br>
 </div>
 
 

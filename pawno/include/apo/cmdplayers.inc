@@ -7,7 +7,6 @@ CMD:help(playerid, params[])
     SendCommandMessage(playerid, "/repairleak, /repair, /refuel, /virtualworld, /discordconfirm");
     SendCommandMessage(playerid, "Admin Commands : /ahelp");
     SendServerMessage(playerid, "To pickup and item crouch and press ~k~~CONVERSATION_NO~");
-    SendServerMessage(playerid, "To start a car press ~k~~CONVERSATION_YES~");
     return 1;
 }
 CMD:howto(playerid, params[])

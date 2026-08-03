@@ -17,7 +17,6 @@ if($player["Admin"] < 2)
     require_once "includes/footer.php";
     exit;
 }
-require_once "includes/header.php";
 $message = "";
 $error = "";
 if(isset($_POST["update_player"]))

@@ -8,12 +8,41 @@ require_once "includes/discord_check.php";
 require_once "includes/samp_status.php";
 
 $server = GetSAMPStatus($SERVER_IP, $SERVER_PORT);
+$stmt = $pdo->query(" SELECT * FROM announcements ORDER BY id DESC LIMIT 3");
 
+$announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="dashboard-layout">
     <!-- LEFT SIDE -->
     <div class="player-section">
+	<div class="card">
+		<h2>📢 Latest Announcements</h2>
+		<?php
+		if(count($announcements) == 0)
+		{
+			echo '<p>No announcements available.</p> ';
+		}
+		else
+		{
+			foreach($announcements as $row)
+			{
+			?>
+			<div class="announcement-box">
+				<div class="announcement-header">
+                <strong> 👤 <?php echo htmlspecialchars($row["Username"]); ?>  </strong>
+                <span>  <?php echo date("d M Y - H:i", strtotime($row["Date"])); ?> </span>
+				</div>
+            <div class="announcement-message"> <br><?php echo nl2br(htmlspecialchars($row["Message"])); ?> </div>
+			<br>
+        </div>
+        <?php
+			}
+		}
+		?>
+	<br>
+	</div>
+		<br>
         <div class="card">
             <h2> Welcome back <?php echo htmlspecialchars($player["Username"]); ?> ! </h2>
             <br>

@@ -1328,3 +1328,17 @@ script UpdatePlantLabels()
 
     return 1;
 }
+//weather
+script RandomWeather()
+{
+    new r = random(100);
+    if(r < 35)       CurrentWeather = 0;   // Sunny
+    else if(r < 55)  CurrentWeather = 1;   // Bright
+    else if(r < 70)  CurrentWeather = 3;   // Dull
+    else if(r < 82)  CurrentWeather = 4;   // Cloudy
+    else if(r < 90)  CurrentWeather = 8;   // Fog
+    else if(r < 96)  CurrentWeather = 9;   // Heavy Fog
+    else             CurrentWeather = 19;  // Sandstorm
+    SetWeather(CurrentWeather);
+    return 1;
+}
