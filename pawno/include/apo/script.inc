@@ -69,7 +69,7 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
     }
     if (newtarget == missionactor[2]) //police
     {
-        Dialog_Show(playerid, Missionclan10, DIALOG_STYLE_LIST, "Mission", "Quest 1\n{0f5900}Quest validation.{FFFFFF}\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
+        Dialog_Show(playerid, Missionclan10, DIALOG_STYLE_LIST, "Mission", "Go kill some infected.\nQuest 2\n{0f5900}Quest validation.{FFFFFF}\nGo see what going on there!\nQuest 4\n{0f5900}Quest validation.{FFFFFF}\nQuest 5\n{0f5900}Quest validation.{FFFFFF}\nLevel Up", "OK", "Quit");
     }
     if (newtarget == missionactor[3])
     {

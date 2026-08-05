@@ -27,6 +27,7 @@ stock mysql_Init()
 		if(ini_GetValue(fileString, "Dchat", Dchat, sizeof(Dchat))) continue;
 		if(ini_GetValue(fileString, "Achat", Achat, sizeof(Achat))) continue;
 		if(ini_GetValue(fileString, "ooc", ooc, sizeof(ooc))) continue;
+		if(ini_GetValue(fileString, "MAX_ZOMBIES", fileString, sizeof(fileString))) { MAX_ZOMBIES = strval(fileString); continue; }
 	}
 	fclose(fileHandle);
 	mysql = mysql_connect(host, user, db, pass);

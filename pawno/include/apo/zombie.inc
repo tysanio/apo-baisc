@@ -28,6 +28,8 @@ public FCNPC_OnDeath(npcid, killerid, reason)
 {
     FCNPC_GetPosition(npcid,ZombieDeadPos[npcid][0], ZombieDeadPos[npcid][1], ZombieDeadPos[npcid][2]);
     ZombieDead[npcid] = 1;
+	pData[killerid][clanexp][0] += 10;
+	pData[killerid][pZombieKill] += 1;
     ZombieIsAttack[npcid] = 0;
     FCNPC_Stop(npcid);
     FCNPC_StopAttack(npcid);

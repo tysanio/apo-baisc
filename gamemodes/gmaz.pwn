@@ -1,4 +1,4 @@
-//total lines 9634
+//total lines 9656
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -41,7 +41,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.22.9634");
+	SetGameModeText("Apo 0.22.9656");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -806,6 +806,11 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                     storages_Save(id);
                     SendServerMessage(playerid,"The storage lock is broken, use /storage install a new lock");
                 }
+		        if ((id = Entrance_Nearest(playerid)) != -1)
+	            {
+                    EntranceData[id][entranceLocked] = 0;
+                    SendServerMessage(playerid,"This entrance has now the lock broken you can go inside now.");
+		        }
                 return 1;
             }
             Lockpick[playerid][lpZoneStart] = random(14)+3;
@@ -1326,7 +1331,7 @@ public OnPlayerSelectedMenuRow(playerid, row)
 				{
                     ShowModelSelectionMenu(playerid, "Select your new clothes", MODEL_SELECTION_POLICE, Skinspolice, sizeof(Skinspolice), -16.0, 0.0, -55.0);
                     pData[playerid][inv][4] -= 10;
-                    SendServerMessage(playerid, "Thanks for the purchase civilian");
+                    SendServerMessage(playerid, "Thanks for the purchase civilian.");
                 }
                 else SendServerMessage(playerid, "You don't have 10 cloths.");
                 ShowMenuForPlayer(PoliceArmory, playerid);

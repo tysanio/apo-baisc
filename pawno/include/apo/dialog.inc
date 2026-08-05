@@ -471,13 +471,18 @@ Dialog:UseItem(playerid, response, listitem, inputtext[])
 			{
                 if(pData[playerid][inv][10] >= 1)
 				{
-					new id = Storage_Nearest(playerid);
-					if(id != -1)
+					new id = -1;
+					if ((id = Storage_Nearest(playerid)) != -1)
 					{
 						pData[playerid][pLockpickStorage] = id;
 						StartLockpick(playerid, 50, random(5)+1, random(3)+1);
 					}
-					else SendServerMessage(playerid,"Not near any storage to lockpick.");
+					else if ((id = Entrance_Nearest(playerid)) != -1)
+					{
+						pData[playerid][pLockpickStorage] = id;
+						StartLockpick(playerid, 50, random(5)+1, random(3)+1);
+					}
+					else SendServerMessage(playerid,"Not near anything to lockpick.");
                 }
                 else SendServerMessage(playerid, "You don't have atleast one lockpick to try it.");
 			} //lockpick stuff

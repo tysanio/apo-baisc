@@ -119,11 +119,19 @@ Dialog:Missionclan10(playerid, response, listitem, inputtext[])
 	{
         switch (listitem)
         {
-            case 0: {			}
+            case 0:
+			{
+				if(pData[playerid][pZombieKill] > 10)
+				{
+					pData[playerid][clanexp][2] += 100;
+					pData[playerid][pZombieKill] -= 10;
+					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1 done", "Rest and peace for who those where infected.\n{0f5900}Exp clan + 100", "OK", "");
+				}
+				else  Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 1", "Go kill some infected and report to me! (10 kills)", "OK", "");
+			}
             case 1: {			}
-            case 2: {			}
-			case 3: {			}
-			case 4:
+			case 2: {			}
+			case 3:
 			{
 				if(missioncheck == 22)
 				{
@@ -139,7 +147,7 @@ Dialog:Missionclan10(playerid, response, listitem, inputtext[])
 					missioncheck = 2;
 				}
 			}
-            case 9:
+            case 8:
             {
                 if(pData[playerid][clanexp][2] >= 2500)
                 {

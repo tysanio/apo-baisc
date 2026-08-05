@@ -62,9 +62,7 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </span>
             </div>
             <div class="info">
-                <strong>
-                    🏆 If you want to be a VIP or Admin ask on discord!
-                </strong>
+                <strong> 🏆 If you want to be a VIP or Admin ask on discord! </strong>
             </div>
             <!-- Discord Status -->
             <div class="card">
@@ -74,8 +72,7 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 {
                 ?>
                     <p>❌ Not Linked</p>
-                    <a href="discord.php"> <button class="action-button success-button"> 🔗 Link Discord </button>
-                    </a>
+                    <a href="discord.php"> <button class="action-button success-button"> 🔗 Link Discord </button> </a>
                 <?php
                 }
                 else
@@ -91,7 +88,7 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     {
                     ?>
                         <p>⚠️ Discord linked but not verified</p>
-                        <p>  Please make sure you joined the Discord server. </p>
+                        <p>  Please make sure you joined the Discord server or check with admin on discord. </p>
                     <?php
 
                     }

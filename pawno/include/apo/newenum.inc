@@ -55,7 +55,9 @@ enum DATAX
 	//antenna
 	pHasRadio,
     pFrequency,
-    pCurrentAntenna
+    pCurrentAntenna,
+	//zombie
+	pZombieKill
 }
 new pData[MAX_PLAYERS][DATAX];
 
@@ -588,3 +590,4 @@ new SpawnedZombies=0, ZombiesTimer,ZombieIsAttack[MAX_PLAYERS],Timer:ZombieTimer
 new Float:ZombieDeadPos[MAX_PLAYERS][3];
 new ZombieDead[MAX_PLAYERS];
 new z_zombieskin[] = {162};
+new MAX_ZOMBIES;
