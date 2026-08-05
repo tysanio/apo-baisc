@@ -1318,7 +1318,7 @@ public OnPlayerSelectedMenuRow(playerid, row)
                 TogglePlayerControllable(playerid, 1);
             }
         }
-        AllowWeapon(playerid, 25,2);
+        AllowWeapon(playerid, 25,3);
         AllowWeapon(playerid, 26,3);
 	}
 	if(PlayerMenu == PoliceArmory) {
