@@ -74,3 +74,5 @@ chainsaw?
 
 #define PLANT_GROW_TIME  (86400) // 24 hours
 #define MAX_PLANTS       (500)
+//zombie
+#define MAX_ZOMBIES 10 // change this to whatever number you want

@@ -12,10 +12,11 @@ CMD:help(playerid, params[])
 CMD:howto(playerid, params[])
 {
 	Dialog_Show(playerid, howto, DIALOG_STYLE_MSGBOX, "How to do stuff","\
-	Q: How to pickup stuff?\nA: If its an item crouch and press N, if its a weapon /pwep\n\n\
+	Q: How to pickup stuff?\nA: If its an item crouch and press ~k~~CONVERSATION_NO~, if its a weapon /pwep\n\n\
 	Q: How to level up?\nA: Need to have 5000 exp on personal exp (clan exp 0) or one of the 4 clan have 2500 exp go see them and select level up.\n\n\
 	Q: How to interact with those bots?\nA: Aim at then to have a dialog pop-in up.\n\n\
 	Q: How to have bigger backpack? \nA: Each 5 level 0 to 25 give bigger backpack slot 8-16-32 max 256.\n\n\
+	Q: How to search on a zombie?\nA: Press ~k~~CONVERSATION_NO~ to search the zombie.n\n\
 	","OK","");
     return 1;
 }

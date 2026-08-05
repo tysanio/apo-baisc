@@ -1,6 +1,9 @@
-//total lines 9421
+//total lines 9634
 #include <a_samp>
 #include <a_mysql>
+#include <fcnpc>
+#include <YSI\y_timers>
+#include <mapandreas>
 #include <a_actor>
 #include <a_extactor>
 #include <streamer>
@@ -27,6 +30,7 @@
 #include <apo/clan>
 #include <apo/cmdadmins>
 #include <apo/cmddebug>
+#include <apo/zombie>
 #include <apo/dc>
 
 main(){}
@@ -37,7 +41,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.21.9421");
+	SetGameModeText("Apo 0.22.9634");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -79,6 +83,9 @@ public OnGameModeInit()
     CurrentWeather = 0;
     SetWeather(CurrentWeather);
     WeatherTimer = SetTimer("RandomWeather", 1800000, true); // 30 minutes
+    MapAndreas_Init(MAP_ANDREAS_MODE_FULL);
+    ZombiesTimer = SetTimer("CreateZombies", 50, true);
+    SetTimer("ZombieGroundFix", 1000, true);
 	return 1;
 }
 public OnGameModeExit()
@@ -666,7 +673,60 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 		if (GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_DUCK)
 		{
 			if(GetPlayerState(playerid) != PLAYER_STATE_ONFOOT) return 1;
-			new f = MAX_SPAWNPOS+1,chancerand = random(36),taking = random(3) + 1;
+			new f = MAX_SPAWNPOS+1,chancerand = random(35),taking = random(3) + 1;
+			for(new i = 0; i < MAX_PLAYERS; i++)
+			{
+				if(!ZombieDead[i]) continue;
+				if(!IsPlayerInRangeOfPoint(playerid,2.0,ZombieDeadPos[i][0],ZombieDeadPos[i][1],ZombieDeadPos[i][2])) continue;
+				ZombieDead[i] = 0; // already searched
+				SetTimerEx("RespawnZombie",500,false,"i",i);
+				switch(chancerand)
+				{
+					//melee
+					case 0: GiveWeaponWithReplace(playerid, 4,random(2)+1);
+					case 1: GiveWeaponWithReplace(playerid, 3,random(2)+1);
+					case 2: GiveWeaponWithReplace(playerid, 6,random(2)+1);
+					//pistol
+					case 3: GiveWeaponWithReplace(playerid, 22,random(5)+1);
+					//shotgun
+					case 4: GiveWeaponWithReplace(playerid, 25,random(10)+1);
+					case 5: GiveWeaponWithReplace(playerid, 26,random(4)+1);
+					//rifle
+					case 6: GiveWeaponWithReplace(playerid,33,random(5)+1);
+					case 35: GiveWeaponWithReplace(playerid,34,random(2)+1);
+					//inventaire
+					case 7 .. 31:
+					{
+						new invIndex = chancerand - 6;
+						if (pData[playerid][inv][invIndex] + taking > GetBackpackCapacity(playerid))
+						{
+							return SendServerMessage(playerid, "Your backpack is full you tossed away.");
+						}
+						pData[playerid][inv][invIndex] += taking;
+						SendServerMessage(playerid,"You pickup a(n) %s from the zombie.", ItemNames[invIndex]);
+					}
+					case 32: ShowModelSelectionMenu(playerid, "Select your new clothes", MODEL_SELECTION_SKIN, Skinsskins, sizeof(Skinsskins), -16.0, 0.0, -55.0);
+					//grenade
+					case 33: GiveWeaponWithReplace(playerid,16,1);
+					case 34: GiveWeaponWithReplace(playerid,18,1);
+				}
+				AllowWeapon(playerid, 4,4);
+				AllowWeapon(playerid, 3,4);
+				AllowWeapon(playerid, 6,4);
+				//pistol
+				AllowWeapon(playerid, 22,6);
+				AllowWeapon(playerid, 25,11);
+				AllowWeapon(playerid, 26,5);
+				AllowWeapon(playerid, 33,6);
+				AllowWeapon(playerid, 16,1);
+				AllowWeapon(playerid, 18,1);
+				pData[playerid][clanexp][0] += random(3)+1;
+				pData[playerid][Food] -= random(2);
+				pData[playerid][Water] -= random(2);
+				SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
+				SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], pData[playerid][Water]);
+				return 1;
+			}
 			for(new a = 0; a < MAX_SPAWNPOS; a++)
 			{
 				if(IsPlayerInRangeOfPoint(playerid, 2.0, dspawnpos[a][Pos][0], dspawnpos[a][Pos][1], dspawnpos[a][Pos][2]) && IsValidDynamicObject(dspawnpos[a][Objects]))
@@ -675,7 +735,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 					break;
 				}
 			}
-			if(f > MAX_SPAWNPOS) return SendClientMessage(playerid, COLOR_RED, "You are not near an object that you can pick up.");
+            if(f > MAX_SPAWNPOS) return 0;
 			switch(chancerand)
 			{
 				//melee
@@ -723,8 +783,8 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
             pData[playerid][Water] -= random(2);
             SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], pData[playerid][Food]);
             SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], pData[playerid][Water]);
-			return 1;
 		}
+        return 1;
 	}
     if(!Lockpick[playerid][lpActive])
         return 1;
@@ -881,8 +941,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
         new name[MAX_PLAYER_NAME];
         GetPlayerName(playerid, name, sizeof(name));
         printf("[ANTI-CHEAT] %s used rapid fire with weapon %d", name, weaponid);
-        SendClientMessage(playerid, -1, "Kicked: Rapid fire cheat detected.");
-        Kick(playerid);
+        SendAdminAlert(COLOR_LIGHTRED,"[CHEAT] %s used rapid fire with weapon %d", name, weaponid);
         return 1;
     }
     LastShotTick[playerid] = tick;
@@ -900,8 +959,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
             new name[MAX_PLAYER_NAME];
             GetPlayerName(playerid, name, sizeof(name));
             printf("[ANTI-CHEAT] %s suspected of silent aimbot!", name);
-            SendClientMessage(playerid, -1, "Kicked: Silent aimbot detected.");
-            Kick(playerid);
+            SendAdminAlert(COLOR_LIGHTRED,"[Cheat]: %s suspected of silent aimbot!", name);
         }
     }
     return 1;

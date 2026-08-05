@@ -34,6 +34,7 @@ stock mysql_Init()
 	{ 
 		printf("[MySQL] (mysql) Fatal Error! Could not connect to MySQL: Host %s - DB: %s - User: %s", host, db, user);
 		printf("[MySQL] Error number: %d", mysql_errno(mysql));
+		SendRconCommand("exit");
 	}
 	else {printf("Successfully connected on DB %s",db);}
 	mysql_log(LOG_ALL);
