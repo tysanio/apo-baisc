@@ -23,6 +23,8 @@
     <a href="dashboard.php">🏠 Dashboard</a>
 
     <a href="character.php">👤 Character</a>
+	
+    <a href="achivements.php">🏅 Achivements</a>
 
     <a href="inventory.php">🎒 Inventory</a>
 

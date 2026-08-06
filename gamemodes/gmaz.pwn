@@ -1,4 +1,4 @@
-//total lines 9656
+//total lines 9727-390map
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -41,7 +41,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.22.9656");
+	SetGameModeText("Apo 0.23.9727");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -557,18 +557,6 @@ public OnPlayerSpawn(playerid)
 {
 	if(IsPlayerNPC(playerid)) return 1;
     ResetAllowedWeapons(playerid);
-	//skill
-	SetPlayerSkillLevel(playerid,WEAPONSKILL_PISTOL,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_PISTOL_SILENCED,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_DESERT_EAGLE,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_SHOTGUN,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_SAWNOFF_SHOTGUN,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_SPAS12_SHOTGUN,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_MICRO_UZI,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_MP5,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_AK47,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_M4,200);
-    SetPlayerSkillLevel(playerid,WEAPONSKILL_SNIPERRIFLE,200);
     SetPlayerSkin(playerid,pData[playerid][skin]);
     SetPlayerColor(playerid, 0xFFFFFFFF);
     //vie armure
@@ -627,6 +615,16 @@ public OnPlayerDeath(playerid, killerid, reason)
 	PlayerTextDrawHide(playerid, txtSpeed[playerid]);
     HidePlayerProgressBar(playerid, FuelBar[playerid]);
     HidePlayerProgressBar(playerid, HealthBar[playerid]);
+	if (reason == 22)	switch(random(5))	{case 0: pData[killerid][pSkills][1] +=1;}
+	if (reason == 23)	switch(random(5))	{case 1: pData[killerid][pSkills][2] +=1;}
+	if (reason == 24)	switch(random(5))	{case 2: pData[killerid][pSkills][3] +=1;}
+	if (reason == 25)	switch(random(5))	{case 3: pData[killerid][pSkills][4] +=1;}
+	if (reason == 26)	switch(random(5))	{case 4: pData[killerid][pSkills][5] +=1;}
+	if (reason == 27)	switch(random(5))	{case 0: pData[killerid][pSkills][6] +=1;}
+	if (reason == 28 || reason == 32)	switch(random(5))	{case 1: pData[killerid][pSkills][7] +=1;}
+	if (reason == 29)	switch(random(5))	{case 2: pData[killerid][pSkills][8] +=1;}
+	if (reason == 30)	switch(random(5))	{case 3: pData[killerid][pSkills][9] +=1;}
+	if (reason == 31)	switch(random(5))	{case 4: pData[killerid][pSkills][0] +=1;}
     for(new i_slot = 0, gun, ammo; i_slot != 12; i_slot++)
     {
         GetPlayerWeaponData(playerid, i_slot, gun, ammo);
@@ -954,6 +952,7 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
     new Float:px, Float:py, Float:pz, Float:fx, Float:fy, Float:fz,Float:angleToTarget = atan2(fy - py, fx - px),Float:playerFacing;
     GetPlayerPos(playerid, px, py, pz);
     GetPlayerPos(damagedid, fx, fy, fz);
+    if(IsPlayerNPC(damagedid)) return 0;
     GetPlayerFacingAngle(playerid, playerFacing);
     new Float:diff = floatsub(playerFacing, angleToTarget);
     if (floatabs(diff) > 90.0)
@@ -1448,31 +1447,3 @@ AntiDeAMX()
     };
     #pragma unused a
 }
-
-    /*    if(!IsABoat(vehicleid) || !IsAPlane(vehicleid) || !IsAHelicopter(vehicleid) || !IsABike(vehicleid) || !IsAVelo(vehicleid))
-		{
-			if(GetVehicleSpeed(GetPlayerVehicleID(playerid)) > 230)
-			{
-				new Float:x, Float:y, Float:z;
-                GetPlayerPos(playerid, x, y, z);
-                SetPlayerPos(playerid, x, y, z+5);
-                SendErrorMessage(playerid,"Suspicion de SpeedHack");
-				KickEx(playerid);
-				return 1;
-			}
-        }
-        if(IsABike(vehicleid) || IsAVelo(vehicleid))
-		{
-			if(GetVehicleSpeed(GetPlayerVehicleID(playerid)) > 200)
-			{
-				new Float:x, Float:y, Float:z;
-                GetPlayerPos(playerid, x, y, z);
-                SetPlayerPos(playerid, x, y, z+5);
-                SendErrorMessage(playerid,"Suspicion de SpeedHack");
-				KickEx(playerid);
-				return 1;
-			}
-        }    */
-
-
-

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 03, 2026 at 06:46 PM
+-- Generation Time: Jul 28, 2026 at 03:17 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.30
 
@@ -24,24 +24,43 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `announcements`
---
-
-CREATE TABLE `announcements` (
-  `id` int NOT NULL,
-  `Username` varchar(24) NOT NULL,
-  `Message` varchar(128) NOT NULL,
-  `Date` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `announcements`
---
--- --------------------------------------------------------
-
---
 -- Table structure for table `antennas`
 --
+
+CREATE TABLE `players_options` (
+  `Username` varchar(24) NOT NULL,
+  `pSkill0` int NOT NULL DEFAULT '0',
+  `pSkill1` int NOT NULL DEFAULT '0',
+  `pSkill2` int NOT NULL DEFAULT '0',
+  `pSkill3` int NOT NULL DEFAULT '0',
+  `pSkill4` int NOT NULL DEFAULT '0',
+  `pSkill5` int NOT NULL DEFAULT '0',
+  `pSkill6` int NOT NULL DEFAULT '0',
+  `pSkill7` int NOT NULL DEFAULT '0',
+  `pSkill8` int NOT NULL DEFAULT '0',
+  `pSkill9` int NOT NULL DEFAULT '0',
+  `pSkill10` int NOT NULL DEFAULT '0',
+  `pLog0` int NOT NULL DEFAULT '0',
+  `pLog1` int NOT NULL DEFAULT '0',
+  `pLog2` int NOT NULL DEFAULT '0',
+  `pLog3` int NOT NULL DEFAULT '0',
+  `pLog4` int NOT NULL DEFAULT '0',
+  `pLog5` int NOT NULL DEFAULT '0',
+  `pLog6` int NOT NULL DEFAULT '0',
+  `pLog7` int NOT NULL DEFAULT '0',
+  `pLog8` int NOT NULL DEFAULT '0',
+  `pLog9` int NOT NULL DEFAULT '0',
+  `pAchivements0` int NOT NULL DEFAULT '0',
+  `pAchivements1` int NOT NULL DEFAULT '0',
+  `pAchivements2` int NOT NULL DEFAULT '0',
+  `pAchivements3` int NOT NULL DEFAULT '0',
+  `pAchivements4` int NOT NULL DEFAULT '0',
+  `pAchivements5` int NOT NULL DEFAULT '0',
+  `pAchivements6` int NOT NULL DEFAULT '0',
+  `pAchivements7` int NOT NULL DEFAULT '0',
+  `pAchivements8` int NOT NULL DEFAULT '0',
+  `pAchivements9` int NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE `antennas` (
   `id` int NOT NULL,
@@ -52,11 +71,9 @@ CREATE TABLE `antennas` (
   `health` float DEFAULT NULL,
   `powered` int DEFAULT NULL,
   `fuel` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
---
--- Dumping data for table `antennas`
---
+
 -- --------------------------------------------------------
 
 --
@@ -73,10 +90,8 @@ CREATE TABLE `bans` (
   `duration` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `bans`
---
------------------------------------------------------
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `clans`
@@ -137,7 +152,6 @@ CREATE TABLE `clans` (
 --
 -- Dumping data for table `clans`
 --
-
 -- --------------------------------------------------------
 
 --
@@ -160,11 +174,7 @@ CREATE TABLE `entrances` (
   `entranceExterior` int NOT NULL,
   `entranceExteriorVW` int NOT NULL,
   `entranceWorld` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `entrances`
---
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- --------------------------------------------------------
 
@@ -177,12 +187,9 @@ CREATE TABLE `fuel_stations` (
   `pos_x` float DEFAULT NULL,
   `pos_y` float DEFAULT NULL,
   `pos_z` float DEFAULT NULL,
-  `stock` int DEFAULT '0'
+  `stock` int DEFAULT '0',
+  `price_per_liter` int DEFAULT '10'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `fuel_stations`
---
 
 -- --------------------------------------------------------
 
@@ -201,10 +208,6 @@ CREATE TABLE `gang_zones` (
   `capturetime` int NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `gang_zones`
---
-
 -- --------------------------------------------------------
 
 --
@@ -217,10 +220,6 @@ CREATE TABLE `missions` (
   `y` float NOT NULL,
   `z` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `missions`
-
 
 -- --------------------------------------------------------
 
@@ -241,33 +240,6 @@ CREATE TABLE `objects` (
   `objectsWorld` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `objects`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `plants`
---
-
-CREATE TABLE `plants` (
-  `id` int NOT NULL,
-  `owner` int NOT NULL,
-  `type` tinyint NOT NULL,
-  `x` float NOT NULL,
-  `y` float NOT NULL,
-  `z` float NOT NULL,
-  `world` int NOT NULL,
-  `interior` int NOT NULL,
-  `planttime` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `plants`
---
-
-
 -- --------------------------------------------------------
 
 --
@@ -279,7 +251,6 @@ CREATE TABLE `players` (
   `Username` varchar(24) NOT NULL,
   `Password` varchar(129) NOT NULL,
   `IP` varchar(16) NOT NULL,
-  `lasttime` int NOT NULL,
   `Admin` int NOT NULL,
   `VIP` int NOT NULL,
   `Score` int NOT NULL,
@@ -353,28 +324,6 @@ CREATE TABLE `players` (
   `AWeap12` int NOT NULL DEFAULT '0',
   `discordid` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `players`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `server_commands`
---
-
-CREATE TABLE `server_commands` (
-  `id` int NOT NULL,
-  `command` varchar(128) NOT NULL,
-  `executed` tinyint DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `server_commands`
---
-
 -- --------------------------------------------------------
 
 --
@@ -386,7 +335,6 @@ CREATE TABLE `spawnpos` (
   `posy` float NOT NULL,
   `posz` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 -- --------------------------------------------------------
 
@@ -437,19 +385,6 @@ CREATE TABLE `storages` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `suggestions`
---
-
-CREATE TABLE `suggestions` (
-  `id` int NOT NULL,
-  `Username` varchar(32) NOT NULL,
-  `suggestions` text NOT NULL,
-  `Status` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `vehicles`
 --
 
@@ -482,19 +417,9 @@ CREATE TABLE `weapon_drops` (
   `pos_y` float NOT NULL,
   `pos_z` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `weapon_drops`
---
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `announcements`
---
-ALTER TABLE `announcements`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `antennas`
@@ -521,12 +446,6 @@ ALTER TABLE `entrances`
   ADD PRIMARY KEY (`entranceID`);
 
 --
--- Indexes for table `fuel_stations`
---
-ALTER TABLE `fuel_stations`
-  ADD UNIQUE KEY `id` (`id`);
-
---
 -- Indexes for table `gang_zones`
 --
 ALTER TABLE `gang_zones`
@@ -546,12 +465,6 @@ ALTER TABLE `objects`
   ADD UNIQUE KEY `objectsID` (`objectsID`);
 
 --
--- Indexes for table `plants`
---
-ALTER TABLE `plants`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `players`
 --
 ALTER TABLE `players`
@@ -559,22 +472,10 @@ ALTER TABLE `players`
   ADD UNIQUE KEY `ID` (`ID`);
 
 --
--- Indexes for table `server_commands`
---
-ALTER TABLE `server_commands`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `storages`
 --
 ALTER TABLE `storages`
   ADD PRIMARY KEY (`storagesID`);
-
---
--- Indexes for table `suggestions`
---
-ALTER TABLE `suggestions`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `vehicles`
@@ -593,94 +494,74 @@ ALTER TABLE `weapon_drops`
 --
 
 --
--- AUTO_INCREMENT for table `announcements`
---
-ALTER TABLE `announcements`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
 -- AUTO_INCREMENT for table `antennas`
 --
 ALTER TABLE `antennas`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `bans`
 --
 ALTER TABLE `bans`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `clans`
 --
 ALTER TABLE `clans`
-  MODIFY `idclan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `idclan` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `entrances`
 --
 ALTER TABLE `entrances`
-  MODIFY `entranceID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `entranceID` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `gang_zones`
 --
 ALTER TABLE `gang_zones`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `missions`
 --
 ALTER TABLE `missions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `objects`
 --
 ALTER TABLE `objects`
-  MODIFY `objectsID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- AUTO_INCREMENT for table `plants`
---
-ALTER TABLE `plants`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `objectsID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `players`
 --
 ALTER TABLE `players`
-  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- AUTO_INCREMENT for table `server_commands`
---
-ALTER TABLE `server_commands`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `ID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `storages`
 --
 ALTER TABLE `storages`
-  MODIFY `storagesID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-
---
--- AUTO_INCREMENT for table `suggestions`
---
-ALTER TABLE `suggestions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `storagesID` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `vehicles`
 --
 ALTER TABLE `vehicles`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT for table `weapon_drops`
 --
 ALTER TABLE `weapon_drops`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+COMMIT;
+
+ALTER TABLE `players_options`
+  ADD UNIQUE KEY `Username` (`Username`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

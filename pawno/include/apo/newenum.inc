@@ -57,7 +57,11 @@ enum DATAX
     pFrequency,
     pCurrentAntenna,
 	//zombie
-	pZombieKill
+	pZombieKill,
+	//other table stuff
+	pLog[10], //can be more right now jsut 10
+	pSkills[11], //skills stuff shooting zombie/target
+	pAchivements[10] //achivement die once kill 100 in one session go level 10 had clan exp over 5000 etc
 }
 new pData[MAX_PLAYERS][DATAX];
 
