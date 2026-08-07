@@ -38,7 +38,7 @@ stock mysql_Init()
 		SendRconCommand("exit");
 	}
 	else {printf("Successfully connected on DB %s",db);}
-	mysql_log(LOG_ALL);
+	mysql_log(LOG_WARNING | LOG_ERROR);
 }
 stock IsNearChest(playerid)
 {

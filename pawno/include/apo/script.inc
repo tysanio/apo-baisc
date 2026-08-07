@@ -242,15 +242,15 @@ script SavePlayerData(playerid)
     	mysql_format(mysql, query, sizeof(query), "UPDATE `players` SET `%s`=%d WHERE `ID`=%d" ,tmpString , tmpPlayerWeapons[i][1] , pData[playerid][ID]);
     	mysql_tquery(mysql, query, "", "");
 	}
-	mysql_format(mysql, query, sizeof(query), "UPDATE `players_options` SET `pSkill0`=%d,`pSkill1`=%d,`pSkill2`=%d,`pSkill3`=%d,`pSkill4`=%d,`pSkill5`=%d,`pSkill6`=%d,`pSkill7`=%d,`pSkill8`=%d,`pSkill9`=%d,`pSkill10`=%d, `pLog0`=%d,`pLog1`=%d,`pLog2`=%d,`pLog3`=%d,`pLog4`=%d,`pLog5`=%d,`pLog6`=%d,`pLog7`=%d,`pLog8`=%d,`pLog9`=%d, `pAchievement0`=%d,`pAchievement1`=%d,`pAchievement2`=%d,`pAchievement3`=%d,`pAchievement4`=%d, `pAchievement5`=%d,`pAchievement6`=%d,`pAchievement7`=%d,`pAchievement8`=%d,`pAchievement9`=%d  WHERE `Username`='%e'",
+	mysql_format(mysql, query, sizeof(query), "UPDATE `players_options` SET `pSkill0`=%d,`pSkill1`=%d,`pSkill2`=%d,`pSkill3`=%d,`pSkill4`=%d,`pSkill5`=%d,`pSkill6`=%d,`pSkill7`=%d,`pSkill8`=%d,`pSkill9`=%d,`pSkill10`=%d, `pLog0`=%d,`pLog1`=%d,`pLog2`=%d,`pLog3`=%d,`pLog4`=%d,`pLog5`=%d,`pLog6`=%d,`pLog7`=%d,`pLog8`=%d,`pLog9`=%d, `pAchievements0`=%d,`pAchievements1`=%d,`pAchievements2`=%d,`pAchievements3`=%d,`pAchievements4`=%d, `pAchievements5`=%d,`pAchievements6`=%d,`pAchievements7`=%d,`pAchievements8`=%d,`pAchievements9`=%d  WHERE `Username`='%e'",
 	pData[playerid][pSkills][0], pData[playerid][pSkills][1], pData[playerid][pSkills][2], pData[playerid][pSkills][3], pData[playerid][pSkills][4],
 	pData[playerid][pSkills][5], pData[playerid][pSkills][6], pData[playerid][pSkills][7], pData[playerid][pSkills][8], pData[playerid][pSkills][9],
 	pData[playerid][pSkills][10],
 	pData[playerid][pLog][0], pData[playerid][pLog][1], pData[playerid][pLog][2], pData[playerid][pLog][3],	pData[playerid][pLog][4],
 	pData[playerid][pLog][5], pData[playerid][pLog][6],	pData[playerid][pLog][7], pData[playerid][pLog][8],	pData[playerid][pLog][9],
-	pData[playerid][pAchivements][0], pData[playerid][pAchivements][1],	pData[playerid][pAchivements][2], pData[playerid][pAchivements][3],
-	pData[playerid][pAchivements][4], pData[playerid][pAchivements][5],	pData[playerid][pAchivements][6], pData[playerid][pAchivements][7],
-	pData[playerid][pAchivements][8], pData[playerid][pAchivements][9],	Name[playerid]);
+	pData[playerid][pAchievements][0], pData[playerid][pAchievements][1],	pData[playerid][pAchievements][2], pData[playerid][pAchievements][3],
+	pData[playerid][pAchievements][4], pData[playerid][pAchievements][5],	pData[playerid][pAchievements][6], pData[playerid][pAchievements][7],
+	pData[playerid][pAchievements][8], pData[playerid][pAchievements][9],	Name[playerid]);
 	mysql_tquery(mysql, query);
 }
 script OnAccountCheck(playerid)
@@ -315,16 +315,16 @@ script OnPlayersoptionload(playerid)
     pData[playerid][pLog][7] =	cache_get_field_content_int(0, "pLog7");
     pData[playerid][pLog][8] =	cache_get_field_content_int(0, "pLog8");
     pData[playerid][pLog][9] =	cache_get_field_content_int(0, "pLog9");
-    pData[playerid][pAchivements][0] =	cache_get_field_content_int(0, "pAchivements0");
-    pData[playerid][pAchivements][1] =	cache_get_field_content_int(0, "pAchivements1");
-    pData[playerid][pAchivements][2] =	cache_get_field_content_int(0, "pAchivements2");
-    pData[playerid][pAchivements][3] =	cache_get_field_content_int(0, "pAchivements3");
-    pData[playerid][pAchivements][4] =	cache_get_field_content_int(0, "pAchivements4");
-    pData[playerid][pAchivements][5] =	cache_get_field_content_int(0, "pAchivements5");
-    pData[playerid][pAchivements][6] =	cache_get_field_content_int(0, "pAchivements6");
-    pData[playerid][pAchivements][7] =	cache_get_field_content_int(0, "pAchivements7");
-    pData[playerid][pAchivements][8] =	cache_get_field_content_int(0, "pAchivements8");
-    pData[playerid][pAchivements][9] =	cache_get_field_content_int(0, "pAchivements9");
+    pData[playerid][pAchievements][0] =	cache_get_field_content_int(0, "pAchievements0");
+    pData[playerid][pAchievements][1] =	cache_get_field_content_int(0, "pAchievements1");
+    pData[playerid][pAchievements][2] =	cache_get_field_content_int(0, "pAchievements2");
+    pData[playerid][pAchievements][3] =	cache_get_field_content_int(0, "pAchievements3");
+    pData[playerid][pAchievements][4] =	cache_get_field_content_int(0, "pAchievements4");
+    pData[playerid][pAchievements][5] =	cache_get_field_content_int(0, "pAchievements5");
+    pData[playerid][pAchievements][6] =	cache_get_field_content_int(0, "pAchievements6");
+    pData[playerid][pAchievements][7] =	cache_get_field_content_int(0, "pAchievements7");
+    pData[playerid][pAchievements][8] =	cache_get_field_content_int(0, "pAchievements8");
+    pData[playerid][pAchievements][9] =	cache_get_field_content_int(0, "pAchievements9");
 	SetPlayerSkillLevel(playerid,WEAPONSKILL_PISTOL,pData[playerid][pSkills][0]);
     SetPlayerSkillLevel(playerid,WEAPONSKILL_PISTOL_SILENCED,pData[playerid][pSkills][1]);
     SetPlayerSkillLevel(playerid,WEAPONSKILL_DESERT_EAGLE,pData[playerid][pSkills][2]);

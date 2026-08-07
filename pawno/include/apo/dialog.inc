@@ -87,6 +87,12 @@ Dialog:Craft01(playerid, response, listitem, inputtext[])
 					GetPlayerFacingAngle(playerid, a);
 					mysql_format(mysql, query, sizeof(query),"INSERT INTO vehicles (model, posX, posY, posZ, rot,  color1, color2, fuel) VALUES (568,%f,%f,%f,%f,-1,-1,20)", x, y, z, a, color1, color2);
 					modelid = 568;
+					if(pData[playerid][pAchievements][2] == 0)
+					{
+						SendACMessage(playerid,"Achivements unlock craft a bandito for the first time vroom vroom!");
+						pData[playerid][clanexp][0] += 100;
+						pData[playerid][pAchievements][2] = 1;
+					}
 					mysql_tquery(mysql, query, "OnVehicleCreated", "iffffii", modelid, x, y, z, a, color1, color2);
 					SendServerMessage(playerid, "Vehicle crafted and saved.");
 				}

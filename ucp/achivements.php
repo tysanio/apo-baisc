@@ -8,17 +8,8 @@ require_once "includes/header.php";
 // Load Player Options
 // =====================================
 
-$stmt = $pdo->prepare("
-    SELECT *
-    FROM players_options
-    WHERE Username = ?
-    LIMIT 1
-");
-
-$stmt->execute([
-    $player["Username"]
-]);
-
+$stmt = $pdo->prepare(" SELECT * FROM players_options WHERE Username = ? LIMIT 1");
+$stmt->execute([ $player["Username"] ]);
 $options = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
@@ -29,10 +20,7 @@ $options = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <?php
 
-if(!$options)
-{
-    echo "<p>No achievement data found.</p>";
-}
+if(!$options) echo "<p>No achievement data found.</p>";
 else
 {
     $skillNames =
@@ -63,35 +51,19 @@ else
 for($i = 0; $i <= 10; $i++)
 {
     $skill = "pSkill".$i;
-
     $value = isset($options[$skill]) ? (int)$options[$skill] : 0;
-
     $value = max(0, min(1000, $value));
-
     $percent = ($value / 1000) * 100;
-
     $barClass = "danger";
-
-    if($percent >= 70)
-    {
-        $barClass = "normal";
-    }
-    elseif($percent >= 40)
-    {
-        $barClass = "warning";
-    }
+    if($percent >= 70) $barClass = "normal";
+    elseif($percent >= 40) $barClass = "warning";
 ?>
 
 <tr>
-
+    <td> <strong><?php echo $skillNames[$i]; ?></strong> </td>
     <td>
-        <strong><?php echo $skillNames[$i]; ?></strong>
-    </td>
-
-    <td>
-
         <div class="item-progress">
-            <div class="item-count"> 0 </div>
+            
             <div class="item-bar">
                 <div
                     class="item-fill <?php echo $barClass; ?>"
@@ -109,7 +81,77 @@ for($i = 0; $i <= 10; $i++)
 ?>
 
 </table>
+<br>
 
+<h2>🏅 Achievements</h2>
+
+<?php
+
+$achievementNames =
+[
+    "First Blood",
+    "Zombie Hunter",
+    "Craft a vehicle",
+    "None",
+    "None",
+    "None",
+    "None",
+    "None",
+    "None",
+    "None"
+];
+
+?>
+
+<table class="inventory-table">
+
+<tr>
+    <th>Achievement</th>
+    <th>Status</th>
+</tr>
+
+<?php
+
+for($i = 0; $i <= 9; $i++)
+{
+    $achievement = "pAchievements".$i;
+
+    $unlocked = isset($options[$achievement]) ? (int)$options[$achievement] : 0;
+
+?>
+
+<tr>
+
+    <td>
+
+        <?php echo $achievementNames[$i]; ?>
+
+    </td>
+
+    <td>
+
+        <?php
+
+        if($unlocked == 1)
+        {
+            echo "✅ Yes";
+        }
+        else
+        {
+            echo "❌ No";
+        }
+
+        ?>
+
+    </td>
+
+</tr>
+
+<?php
+}
+?>
+
+</table>
 <?php
 }
 ?>
