@@ -89,7 +89,7 @@ Dialog:Craft01(playerid, response, listitem, inputtext[])
 					modelid = 568;
 					if(pData[playerid][pAchievements][2] == 0)
 					{
-						SendACMessage(playerid,"Achivements unlock craft a bandito for the first time vroom vroom!");
+						SendACMessage(playerid,"Craft a bandito for the first time vroom vroom!");
 						pData[playerid][clanexp][0] += 100;
 						pData[playerid][pAchievements][2] = 1;
 					}

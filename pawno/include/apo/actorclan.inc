@@ -70,6 +70,12 @@ Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 					pData[playerid][clanexp][1] += 200;
 					missioncheck = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
+					if(pData[playerid][pAchievements][4] == 0)
+				    {
+                        SendACMessage(playerid,"Did you visite a lot of the map?");
+                        pData[playerid][clanexp][0] += 500;
+                        pData[playerid][pAchievements][4] = 1;
+                    }
 				}
 				else
 				{
@@ -138,6 +144,12 @@ Dialog:Missionclan10(playerid, response, listitem, inputtext[])
 					pData[playerid][clanexp][2] += 200;
 					missioncheck = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
+					if(pData[playerid][pAchievements][4] == 0)
+				    {
+                        SendACMessage(playerid,"Did you visite a lot of the map?");
+                        pData[playerid][clanexp][0] += 500;
+                        pData[playerid][pAchievements][4] = 1;
+                    }
 				}
 				else 
 				{
@@ -208,6 +220,12 @@ Dialog:Missionclan20(playerid, response, listitem, inputtext[])
 					pData[playerid][clanexp][3] += 200;
 					missioncheck = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
+					if(pData[playerid][pAchievements][4] == 0)
+				    {
+                        SendACMessage(playerid,"Did you visite a lot of the map?");
+                        pData[playerid][clanexp][0] += 500;
+                        pData[playerid][pAchievements][4] = 1;
+                    }
 				}
 				else
 				{

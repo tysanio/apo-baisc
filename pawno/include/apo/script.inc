@@ -1398,3 +1398,62 @@ script RandomWeather()
     SetWeather(CurrentWeather);
     return 1;
 }
+//outside
+stock bool:IsPlayerOutsideGtaMap(playerid)
+{
+    new Float:x, Float:y, Float:z;
+    GetPlayerPos(playerid, x, y, z);
+    if(x < -3000.0 || x > 3000.0 || y < -3000.0 || y > 3000.0) return true;
+    return false;
+}
+script CheckPlayersOutsideMap()
+{
+    foreach(Player, playerid)
+    {
+        if(!IsPlayerConnected(playerid)) continue;
+        if(IsPlayerOutsideGtaMap(playerid))
+        {
+            // Player just went outside the map
+            if(!OutsideMap[playerid])
+            {
+                OutsideMap[playerid] = true;
+                // Start the 30 second timer
+                if(OutsideMapTimer[playerid] != 0) KillTimer(OutsideMapTimer[playerid]);
+                OutsideMapTimer[playerid] = SetTimerEx("GiveOutsideMapAchievement",30000,false,"i",playerid);
+            }
+        }
+        else
+        {
+            // Player returned inside the map
+            if(OutsideMap[playerid])
+            {
+                OutsideMap[playerid] = false;
+                if(OutsideMapTimer[playerid] != 0)
+                {
+                    KillTimer(OutsideMapTimer[playerid]);
+                    OutsideMapTimer[playerid] = 0;
+                }
+            }
+        }
+    }
+    return 1;
+}
+script GiveOutsideMapAchievement(playerid)
+{
+    OutsideMapTimer[playerid] = 0;
+    if(!IsPlayerConnected(playerid)) return 1;
+    // Player came back before the 30 seconds finished
+    if(!IsPlayerOutsideGtaMap(playerid))
+    {
+        OutsideMap[playerid] = false;
+        return 1;
+    }
+    // Achievement: "How do you get there"
+	if(pData[playerid][pAchievements][6] == 0)
+	{
+		SendACMessage(playerid,"How do you get there!!");
+		pData[playerid][clanexp][0] += 100;
+		pData[playerid][pAchievements][6] = 1;
+	}
+    return 1;
+}

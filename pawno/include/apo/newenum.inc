@@ -595,3 +595,5 @@ new Float:ZombieDeadPos[MAX_PLAYERS][3];
 new ZombieDead[MAX_PLAYERS];
 new z_zombieskin[] = {162};
 new MAX_ZOMBIES;
+//outside
+new OutsideMapTimer[MAX_PLAYERS], bool:OutsideMap[MAX_PLAYERS];

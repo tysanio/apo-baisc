@@ -1,4 +1,4 @@
-//total lines 9748-390map
+//total lines 9840-390map
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -41,7 +41,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.23.9748");
+	SetGameModeText("Apo 0.23.9840");
 	SendRconCommand("ackslimit 5000");
     SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
 	UsePlayerPedAnims();
@@ -86,6 +86,7 @@ public OnGameModeInit()
     MapAndreas_Init(MAP_ANDREAS_MODE_FULL);
     ZombiesTimer = SetTimer("CreateZombies", 50, true);
     SetTimer("ZombieGroundFix", 1000, true);
+    SetTimer("CheckPlayersOutsideMap", 5000, true);
 	return 1;
 }
 public OnGameModeExit()
@@ -172,17 +173,17 @@ public OnPlayerDisconnect(playerid, reason)
 	PlayerTextDrawHide(playerid, txtSpeed[playerid]);
     HidePlayerProgressBar(playerid, FuelBar[playerid]);
     HidePlayerProgressBar(playerid, HealthBar[playerid]);
-	if(IsPlayerRegisterd[playerid] != 0)
-	{
-		SavePlayerData(playerid);
-	}
+	if(IsPlayerRegisterd[playerid] != 0) SavePlayerData(playerid);
     for (new i = 0; i < TotalGZ; i++)
     {
-        if (ZoneInWar[i])
-        {
-            CheckWarZoneEmpty(i);
-        }
+        if (ZoneInWar[i]) CheckWarZoneEmpty(i);
     }
+    if(OutsideMapTimer[playerid] != 0)
+    {
+        KillTimer(OutsideMapTimer[playerid]);
+        OutsideMapTimer[playerid] = 0;
+    }
+    OutsideMap[playerid] = false;
 	return 1;
 }
 public OnPlayerUpdate(playerid)
@@ -809,6 +810,12 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
                     EntranceData[id][entranceLocked] = 0;
                     SendServerMessage(playerid,"This entrance has now the lock broken you can go inside now.");
 		        }
+                if(pData[playerid][pAchievements][5] == 0)
+				{
+                    SendACMessage(playerid,"Achivements is theve even illegal now?");
+                    pData[playerid][clanexp][0] += 500;
+                    pData[playerid][pAchievements][5] = 1;
+                }
                 return 1;
             }
             Lockpick[playerid][lpZoneStart] = random(14)+3;
@@ -1160,6 +1167,12 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
                     pData[playerid][inv][2] -= 100;
 					pData[playerid][inv][3] -= 100;
                     pData[playerid][clanexp][0] += 150;
+                    if(pData[playerid][pAchievements][3] == 0)
+				    {
+                        SendACMessage(playerid,"Achivements unlock craft your first house!");
+                        pData[playerid][clanexp][0] += 500;
+                        pData[playerid][pAchievements][3] = 1;
+                    }
                 }
                 else SendServerMessage(playerid, "You don't have 100 woods(s) or/and 100 metal(s).");
                 if(modelid == 19339 && pData[playerid][inv][2] >= 10 && pData[playerid][inv][3] >= 10)

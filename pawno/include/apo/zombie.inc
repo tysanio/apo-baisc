@@ -46,13 +46,13 @@ public FCNPC_OnDeath(npcid, killerid, reason)
 	if (reason == 31)	switch(random(5))	{case 4: pData[killerid][pSkills][0] +=1;}
 	if(pData[killerid][pZombieKill] < 10 && pData[killerid][pAchievements][0] == 0)
 	{
-		SendACMessage(killerid,"Achivements unlock kill 10 zombies in one session!");
+		SendACMessage(killerid,"Kill 10 zombies in one session!");
 		pData[killerid][clanexp][0] += 100;
 		pData[killerid][pAchievements][0] = 1;
 	}
 	if(pData[killerid][pZombieKill] < 100 && pData[killerid][pAchievements][1] == 0)
 	{
-		SendACMessage(killerid,"Achivements unlock kill 100 zombies in one session!");
+		SendACMessage(killerid,"Kill 100 zombies in one session!");
 		pData[killerid][clanexp][0] += 100;
 		pData[killerid][pAchievements][1] = 1;
 	}

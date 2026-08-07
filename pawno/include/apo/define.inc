@@ -50,7 +50,7 @@ chainsaw?
 #define SendRadioMessage(%0,%1) \
 	SendClientMessageEx(%0, COLOR_GREEN, "[Radio]:{FFFFFF} "%1)
 #define SendACMessage(%0,%1) \
-	SendClientMessageEx(%0, COLOR_PURPLE, "[Achivements]:{FFFFFF} "%1)
+	SendClientMessageEx(%0, COLOR_PURPLE, "[Achievements unlock]:{FFFFFF} "%1)
 
 
 //timer first value minute(s)
