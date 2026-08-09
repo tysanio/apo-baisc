@@ -54,6 +54,27 @@ CMD:suggest(playerid,params[])
     else SendServerMessage(playerid,"Text exceed 64 character long.");
     return 1;
 }
+DISCORD:help( DCC_Channel: channel, DCC_User: author, params[ ] )
+{
+	new	string1[128],string99[128];
+    DCC_HasGuildMemberRole(GUILD_ID1,author,RoleJoueur,simembreroleok);
+	if (simembreroleok)
+	{
+		Embed = DCC_CreateEmbed(string1,string99);
+		DCC_AddEmbedField(Embed ,"💬 ?c", "Send a message to the server.");
+		DCC_AddEmbedField(Embed ,"📡 ?ping", "Check the server ping.");
+        DCC_AddEmbedField(Embed ,"👥 ?players", "Show all online players.");
+        DCC_AddEmbedField(Embed ,"↓↓-------Staff only-------↓↓", "");
+        DCC_AddEmbedField(Embed ,"📊 ?ostats", "Show online player statistics.");
+		DCC_AddEmbedField(Embed ,"👢 ?kick", "Kick a player from the server.");
+		DCC_AddEmbedField(Embed ,"🔨 ?ban", "Ban a player from the server.");
+		DCC_AddEmbedField(Embed ,"🔎 ?baninfo", "Check a player's ban information.");
+		DCC_SetEmbedColor(Embed,0x00FF00);
+		DCC_SendChannelEmbedMessage(discordlog, Embed);
+	}
+	else DCC_SendChannelMessage(discordlog, "> **[ERROR]** You can't do this command.");
+    return 1;
+}
 DISCORD:c( DCC_Channel: channel, DCC_User: author, params[ ] )
 {
 	new msg[100];

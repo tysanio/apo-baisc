@@ -88,20 +88,24 @@ CMD:destroy(playerid, params[])
 	return 1;
 }
 #define UCP_BROWSER_ID 100
-#define UCP_URL "http://198.58.151.2/ucp/"
 public OnCefInitialize(player_id, success)
 {
     if (!success)
     {
-        SendClientMessage(player_id, -1, "CEF failed to initialize.");
+        SendClientMessage(player_id, -1, "....");
         return 1;
     }
-    cef_create_browser(player_id,UCP_BROWSER_ID,UCP_URL,true,false );
+    cef_always_listen_keys(player_id, UCP_BROWSER_ID, true);
     return 1;
 }
 CMD:cef(playerid, params[])
 {
-    cef_load_url(playerid, UCP_BROWSER_ID, UCP_URL);
+    if (isnull(params))
+    {
+        SendClientMessage(playerid, -1, "Usage: /cef [URL]");
+        return 1;
+    }
+    cef_load_url(playerid, UCP_BROWSER_ID, params);
     cef_hide_browser(playerid, UCP_BROWSER_ID, false);
     cef_focus_browser(playerid, UCP_BROWSER_ID, true);
 	SetTimerEx("closeucp", 60000, false, "i", playerid);//close time after 60sec rightnow

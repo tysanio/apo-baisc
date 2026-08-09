@@ -1,4 +1,4 @@
-//total lines 9924-390map
+//total lines 9948-390map
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -42,7 +42,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.25.9924");
+	SetGameModeText("Apo 0.25.9948");
 	SendRconCommand("ackslimit 5000");
     new command[160];
     format(command, sizeof(command), "hostname %s", ServerHost);

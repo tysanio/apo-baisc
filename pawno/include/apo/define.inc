@@ -1,7 +1,6 @@
 /*
 command /howto dialog to do stuff	
 clanexp0 need to player exp and everything for a player
-need to do skill weapons maybe when level up?
 checking actor because doing something fuck top maybe need interior actor?
 Secteur H , la meute, les évader et la zone---name D.rtto
 do admin edit player stuff
