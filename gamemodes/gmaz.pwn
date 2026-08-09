@@ -1,4 +1,4 @@
-//total lines 9840-390map
+//total lines 9891-390map
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -18,6 +18,7 @@
 #include <discord-command>
 
 #include <apo/antiairbreak>
+#include <apo/cef>  //for now just example for thing futur
 
 //define blabla stuff easy
 #include <apo/define>
@@ -41,9 +42,11 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.23.9840");
+	SetGameModeText("Apo 0.25.9891");
 	SendRconCommand("ackslimit 5000");
-    SendRconCommand("hostname [0.3.7] GTA-SA Apocalyptica World (Alpha release)");
+    new command[160];
+    format(command, sizeof(command), "hostname %s", ServerHost);
+    SendRconCommand(command);
 	UsePlayerPedAnims();
     ManualVehicleEngineAndLights(); //vehicle on/off
 	DisableInteriorEnterExits();
@@ -294,7 +297,6 @@ public OnPlayerText(playerid, text[])
 	        pData[playerid][pSpamCount] = 0;
 
             SetTimerEx("UnMutedTimer",5000, false, "i", playerid); //60*1000 = 1 minute
-
 	        SendServerMessage(playerid, "SPAM detected muted (5 seconds).");
 	        SendAdminAlert(COLOR_LIGHTRED, "[ADMIN]: %s has been automatic muted for spam.", Name[playerid]);
 	        return 0;
@@ -307,9 +309,26 @@ public OnPlayerText(playerid, text[])
 	}
     else
     {
-	    SendNearbyMessage(playerid, 15.0, COLOR_WHITE, "%s say: %.64s", Name[playerid], text);
-	    SendNearbyMessage(playerid, 15.0, COLOR_WHITE, "...%s", text[64]);
+        if(strlen(text) > 64)
+        {
+            SendNearbyMessage(playerid, 15.0, COLOR_WHITE, "%s say: %.64s", Name[playerid], text);
+            SendNearbyMessage(playerid, 15.0, COLOR_WHITE, "...%s", text[64]);
+            return 1;
+        }
+        else SendNearbyMessage(playerid, 15.0, COLOR_WHITE, "%s say: %s", Name[playerid], text);
     }
+	if(pData[playerid][Score] == 10 && pData[playerid][pAchievements][7] == 0)
+	{
+		SendACMessage(playerid,"Level 10 wow that a lot!");
+		pData[playerid][clanexp][0] += 100;
+		pData[playerid][pAchievements][6] = 1;
+	}
+	if(pData[playerid][pAchievements][8] == 0 && pData[playerid][clanexp][0] == 5000 && pData[playerid][clanexp][1] == 2500 && pData[playerid][clanexp][2] == 2500 && pData[playerid][clanexp][3] == 2500 && pData[playerid][clanexp][4] == 2500)
+	{
+		SendACMessage(playerid,"All this exp what you gonna do about it?");
+		pData[playerid][pAchievements][8] = 1;
+        pData[playerid][Score] += 5;
+	}
     return 0;
 }
 public OnPlayerStateChange(playerid, newstate, oldstate)
@@ -638,6 +657,7 @@ public OnPlayerDeath(playerid, killerid, reason)
             CheckWarZoneEmpty(i);
         }
     }
+    pData[playerid][pZombieKill] = 0;
     ResetPlayerWeapons(playerid);
     Death[playerid] = 1;
     SetTimerEx("RespawnPlayer", 1000, false, "i", playerid); // 0.5 second respawn

@@ -1257,14 +1257,12 @@ script LockpickUpdate(playerid)
 script LoginCamera(playerid)
 {
     if(!IsPlayerConnected(playerid)) return 0;
-
     new id = LoginCameraStep[playerid];
-
     SetPlayerCameraPos(playerid,CamPos[id][0],CamPos[id][1],CamPos[id][2]);
     SetPlayerCameraLookAt(playerid,CamLook[id][0],CamLook[id][1],CamLook[id][2]);
     LoginCameraStep[playerid]++;
     if(LoginCameraStep[playerid] >= MAX_LOGIN_CAMERAS) LoginCameraStep[playerid] = 0;
-    LoginCameraTimer[playerid] =SetTimerEx("LoginCamera",15000, false, "i", playerid);
+    LoginCameraTimer[playerid] = SetTimerEx("LoginCamera",15000, false, "i", playerid);
 
     return 1;
 }

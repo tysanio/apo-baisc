@@ -96,8 +96,8 @@ $achievementNames =
     "Visiting new place",
     "Lockpick something",
     "How do you get there",
-    "None",
-    "None",
+    "Level Up",
+    "Too much exp",
     "None"
 ];
 

@@ -21,7 +21,7 @@ Dialog:dREGISTER(playerid, response, listitem, inputtext[])
     WP_Hash(pData[playerid][Password], 129, inputtext); //hashing inputtext
 	mysql_format(mysql, query, sizeof(query), "INSERT INTO `players` (`Username`, `Password`, `IP`, `Admin`, `VIP`,`Score`) VALUES ('%e', '%s', '%s', 0, 0, 0)", Name[playerid], pData[playerid][Password], IP[playerid]);
 	mysql_tquery(mysql, query, "OnAccountRegister", "i", playerid);
-	mysql_format(mysql, query, sizeof(query), "INSERT INTO `players_options` (`Username`) VALUES ('%e )", Name[playerid]);
+	mysql_format(mysql, query, sizeof(query), "INSERT INTO `players_options` (`Username`) VALUES ('%e')", Name[playerid]);
 	mysql_tquery(mysql, query);
 	return 1;
 }
