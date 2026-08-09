@@ -11,22 +11,25 @@ require_once "includes/discord.php";
 if(isset($_POST["reset_player"]))
 {
     $stmt = $pdo->prepare(" UPDATE players SET
-            Score = 0,
-            inv1 = 0,inv2 = 0,inv3 = 0,inv4 = 0,inv5 = 0,inv6 = 0,inv7 = 0,inv8 = 0,inv9 = 0,
+            Score = 0,inv1 = 0,inv2 = 0,inv3 = 0,inv4 = 0,inv5 = 0,inv6 = 0,inv7 = 0,inv8 = 0,inv9 = 0,
             inv10 = 0,inv11 = 0,inv12 = 0,inv13 = 0,inv14 = 0,inv15 = 0,inv16 = 0,inv17 = 0,inv18 = 0,inv19 = 0,
             inv20 = 0,inv21 = 0,inv22 = 0,inv23 = 0,inv24 = 0,inv25 = 0,
             clanexp0 = 0,clanexp1 = 0,clanexp2 = 0,clanexp3 = 0,clanexp4 = 0,
             Weap1 = 0,Weap2 = 0,Weap3 = 0,Weap4 = 0, Weap5 = 0,Weap6 = 0,Weap7 = 0,Weap8 = 0,Weap9 = 0,
-            Weap10 = 0,Weap11 = 0,Weap12 = 0,
-            AWeap1 = 0,AWeap2 = 0,AWeap3 = 0,AWeap4 = 0,AWeap5 = 0,AWeap6 = 0,AWeap7 = 0,AWeap8 = 0,AWeap9 = 0,
+            Weap10 = 0,Weap11 = 0,Weap12 = 0,AWeap1 = 0,AWeap2 = 0,AWeap3 = 0,AWeap4 = 0,AWeap5 = 0,AWeap6 = 0,AWeap7 = 0,AWeap8 = 0,AWeap9 = 0,
             AWeap10 = 0,AWeap11 = 0,AWeap12 = 0 WHERE Username = ? ");
-
     $stmt->execute([ $player["Username"] ]);
-	DiscordWebhook(
-	"🗑️ Character Reset",
-	"**Player:** ".$player["Username"]);
-	
-	
+
+    $stmt = $pdo->prepare("
+        UPDATE players_options SET
+            pSkill0 = 0,pSkill1 = 0,pSkill2 = 0,pSkill3 = 0,pSkill4 = 0,pSkill5 = 0,pSkill6 = 0,pSkill7 = 0,pSkill8 = 0,pSkill9 = 0,pSkill10 = 0,
+			pLog0 = 0,pLog1 = 0,pLog2 = 0,pLog3 = 0,pLog4 = 0,pLog5 = 0,pLog6 = 0,pLog7 = 0,pLog8 = 0,pLog9 = 0,
+			pAchievements0 = 0,pAchievements1 = 0,pAchievements2 = 0,pAchievements3 = 0,pAchievements4 = 0,pAchievements5 = 0,pAchievements6 = 0,pAchievements7 = 0,pAchievements8 = 0,pAchievements9 = 0,pAchievements10 = 0 WHERE Username = ?
+    ");
+    $stmt->execute([
+        $player["Username"]
+    ]);
+	DiscordWebhook( "🗑️ Character Reset", "**Player:** ".$player["Username"]);		
     header("Location: index.php?reset=1");
     exit;
 }
@@ -124,6 +127,9 @@ if($message != "")
             <li>All equipped weapons</li>
             <li>All weapon ammunition</li>
             <li>All clan experience</li>
+            <li>All achievements</li>
+            <li>All weapons skills</li>
+            <li>All collectibles logs</li>
         </ul>
         <strong>This action cannot be undone.</strong>
     </p>

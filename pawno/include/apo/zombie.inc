@@ -34,23 +34,24 @@ public FCNPC_OnDeath(npcid, killerid, reason)
     FCNPC_Stop(npcid);
     FCNPC_StopAttack(npcid);
     ApplyAnimation(npcid,"PED","BIKE_fall_off",4.1,0,1,1,1,0,1);
-	if (reason == 22)	switch(random(5))	{case 0: pData[killerid][pSkills][1] +=1;}
-	if (reason == 23)	switch(random(5))	{case 1: pData[killerid][pSkills][2] +=1;}
-	if (reason == 24)	switch(random(5))	{case 2: pData[killerid][pSkills][3] +=1;}
-	if (reason == 25)	switch(random(5))	{case 3: pData[killerid][pSkills][4] +=1;}
-	if (reason == 26)	switch(random(5))	{case 4: pData[killerid][pSkills][5] +=1;}
-	if (reason == 27)	switch(random(5))	{case 0: pData[killerid][pSkills][6] +=1;}
-	if (reason == 28 || reason == 32)	switch(random(5))	{case 1: pData[killerid][pSkills][7] +=1;}
-	if (reason == 29)	switch(random(5))	{case 2: pData[killerid][pSkills][8] +=1;}
-	if (reason == 30)	switch(random(5))	{case 3: pData[killerid][pSkills][9] +=1;}
-	if (reason == 31)	switch(random(5))	{case 4: pData[killerid][pSkills][0] +=1;}
-	if(pData[killerid][pZombieKill] < 10 && pData[killerid][pAchievements][0] == 0)
+	if (reason == 22)	switch(random(5))	{case 0: pData[killerid][pSkills][0] +=1;}
+	if (reason == 23)	switch(random(5))	{case 1: pData[killerid][pSkills][1] +=1;}
+	if (reason == 24)	switch(random(5))	{case 2: pData[killerid][pSkills][2] +=1;}
+	if (reason == 25)	switch(random(5))	{case 3: pData[killerid][pSkills][3] +=1;}
+	if (reason == 26)	switch(random(5))	{case 4: pData[killerid][pSkills][4] +=1;}
+	if (reason == 27)	switch(random(5))	{case 0: pData[killerid][pSkills][5] +=1;}
+	if (reason == 28 || reason == 32)	switch(random(5))	{case 1: pData[killerid][pSkills][6] +=1;}
+	if (reason == 29)	switch(random(5))	{case 2: pData[killerid][pSkills][7] +=1;}
+	if (reason == 30)	switch(random(5))	{case 3: pData[killerid][pSkills][8] +=1;}
+	if (reason == 31)	switch(random(5))	{case 4: pData[killerid][pSkills][9] +=1;}
+	if (reason == 33 || reason == 34)	switch(random(5))	{case 1: pData[killerid][pSkills][10] +=1;}
+	if(pData[killerid][pZombieKill] == 10 && pData[killerid][pAchievements][0] == 0)
 	{
 		SendACMessage(killerid,"Kill 10 zombies in one session!");
 		pData[killerid][clanexp][0] += 100;
 		pData[killerid][pAchievements][0] = 1;
 	}
-	if(pData[killerid][pZombieKill] < 100 && pData[killerid][pAchievements][1] == 0)
+	if(pData[killerid][pZombieKill] == 100 && pData[killerid][pAchievements][1] == 0)
 	{
 		SendACMessage(killerid,"Kill 100 zombies in one session!");
 		pData[killerid][clanexp][0] += 100;

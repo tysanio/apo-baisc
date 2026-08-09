@@ -45,6 +45,7 @@ CMD:levelup(playerid, params[])
         Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "Wow a self thought congradulation!\nLevel up +1\nPersonnal Exp -5000", "OK", "");
     }
     else Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Level UP", "You don't have the right amount of EXP do it (5000).", "OK", "");
+	return 1;
 }
 CMD:me(playerid, params[])
 {
