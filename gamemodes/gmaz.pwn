@@ -1,4 +1,4 @@
-//total lines 9948-390map
+//total lines 9993-390map
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -42,7 +42,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.25.9948");
+	SetGameModeText("Apo 0.25.9993");
 	SendRconCommand("ackslimit 5000");
     new command[160];
     format(command, sizeof(command), "hostname %s", ServerHost);
@@ -732,7 +732,6 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				AllowWeapon(playerid, 4,4);
 				AllowWeapon(playerid, 3,4);
 				AllowWeapon(playerid, 6,4);
-				//pistol
 				AllowWeapon(playerid, 22,6);
 				AllowWeapon(playerid, 25,11);
 				AllowWeapon(playerid, 26,5);

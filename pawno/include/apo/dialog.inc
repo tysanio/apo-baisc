@@ -43,7 +43,7 @@ Dialog:Craft(playerid, response, listitem, inputtext[])
         switch (listitem)
         {
             case 0: Dialog_Show(playerid, Craft01, DIALOG_STYLE_LIST, "Craft Vehicles", "Bicycle(8M/2P/2I)\nBandito(24M/24P/5G)", "Craft", "Close");
-            case 1: Dialog_Show(playerid, Craft11, DIALOG_STYLE_LIST, "Craft Weapons", "Pistol\nShotGun\nRifle\nSniper", "Craft", "Close");
+            case 1: Dialog_Show(playerid, Craft11, DIALOG_STYLE_LIST, "Craft Weapons", "Pistol(5M/8B/2I)\nShotGun(7M/5B/3I)\nRifle(8M/5.380/5I)\nSniper(16M/5.308/8I)", "Craft", "Close");
             case 2: Dialog_Show(playerid, Craft21, DIALOG_STYLE_LIST, "Craft Ammos", "9 mm(5M/5P/5GP)\n00' Buck's(5M/5P/10GP)\n.308(5M/5P/25GP)", "Craft", "Close");
             case 3: Dialog_Show(playerid, Craft31, DIALOG_STYLE_LIST, "Craft Miscs", "Repair kit (3M/3P)\nMed Kit(2M/3P/5C)\nJerrycan (3P/Stations)\nArmor Plates(10M/10P/10C)\nCanned Food(1M/2Meats)\nBarricades", "Craft", "Close");
 		}
@@ -109,10 +109,54 @@ Dialog:Craft11(playerid, response, listitem, inputtext[])
 	{
         switch (listitem)
         {
-            case 0: {pData[playerid][clanexp][0] += 10;}
-            case 1: {pData[playerid][clanexp][0] += 10;}
-            case 2: {pData[playerid][clanexp][0] += 10;}
-            case 3: {pData[playerid][clanexp][0] += 10;}
+            case 0: 
+			{
+				if (pData[playerid][inv][3] >= 5 && pData[playerid][inv][14] >= 8 && pData[playerid][inv][8] >= 2)
+				{
+					pData[playerid][clanexp][0] += 250;
+					pData[playerid][inv][3] -= 5;
+					pData[playerid][inv][14] -= 8;
+					pData[playerid][inv][8] -= 2;
+					GiveWeaponWithReplace(playerid, 22,8);
+				}
+				else SendServerMessage(playerid, "You don't have 5 metals or/and 8 9mm bullets or/and 2 irons.");
+			}
+            case 1:
+			{
+				if (pData[playerid][inv][3] >= 7 && pData[playerid][inv][15] >= 5 && pData[playerid][inv][8] >= 3)
+				{
+					pData[playerid][clanexp][0] += 300;
+					pData[playerid][inv][3] -= 7;
+					pData[playerid][inv][15] -= 5;
+					pData[playerid][inv][8] -= 3;
+                    GiveWeaponWithReplace(playerid, 25,5);
+				}
+				else SendServerMessage(playerid, "You don't have 7 metals or/and 5 00' Buck'so r/and 3 irons.");
+			}
+            case 2:
+			{
+				if (pData[playerid][inv][3] >= 8 && pData[playerid][inv][16] >= 5 && pData[playerid][inv][8] >= 5)
+				{
+					pData[playerid][clanexp][0] += 700;
+					pData[playerid][inv][3] -= 8;
+					pData[playerid][inv][16] -= 5;
+					pData[playerid][inv][8] -= 5;
+                    GiveWeaponWithReplace(playerid, 33,5);
+				}
+				else SendServerMessage(playerid, "You don't have 8 metals or/and 5 .308's or/and 5 irons.");
+			}
+            case 3:
+			{
+				if (pData[playerid][inv][3] >= 16 && pData[playerid][inv][16] >= 5 && pData[playerid][inv][8] >= 8)
+				{
+					pData[playerid][clanexp][0] += 1000;
+					pData[playerid][inv][3] -= 16;
+					pData[playerid][inv][16] -= 5;
+					pData[playerid][inv][8] -= 8;
+                    GiveWeaponWithReplace(playerid, 34,5);
+				}
+				else SendServerMessage(playerid, "You don't have 16 metals or/and 5 .308's or/and 8 irons.");
+			}
 		}
         return 1;
 	}
