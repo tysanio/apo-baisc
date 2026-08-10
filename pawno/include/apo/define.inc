@@ -50,7 +50,8 @@ chainsaw?
 	SendClientMessageEx(%0, COLOR_GREEN, "[Radio]:{FFFFFF} "%1)
 #define SendACMessage(%0,%1) \
 	SendClientMessageEx(%0, COLOR_PURPLE, "[Achievements unlock]:{FFFFFF} "%1)
-
+#define SendCraftMessage(%0,%1) \
+	SendClientMessageEx(%0, COLOR_LIGHTBLUE, "[Crafting]:{FFFFFF} "%1)
 
 //timer first value minute(s)
 #define GANG_RESOURCE_TIME (30 * 60 * 1000) // 30 minutes

@@ -427,7 +427,7 @@ enum entranceData {
 new EntranceData[MAX_OBJECTSC][entranceData];
 
 new CraftBarridaces[12] = { //18259 big one
-	16404,3260,3302,19865,1446,18259,19339,1410,2991,2319
+	16404,3260,3302,19865,1446,18259,19339,1410,2991,2319,3383,14869
 };
 
 new ItemNames[26][24] =

@@ -1,4 +1,4 @@
-//total lines 9993-390map
+//total lines 10020-390map
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -42,7 +42,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.25.9993");
+	SetGameModeText("Apo 0.25.10020");
 	SendRconCommand("ackslimit 5000");
     new command[160];
     format(command, sizeof(command), "hostname %s", ServerHost);
@@ -1153,34 +1153,34 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
 					pData[playerid][inv][5] -= 5;
                     pData[playerid][clanexp][0] += 3;
                 }
-                else SendServerMessage(playerid, "You don't have 10 wood(s) or/and 5 plastic(s).");
+                else SendServerMessage(playerid, "You don't have 10 woods or/and 5 plastics.");
                 if(modelid == 3260 && pData[playerid][inv][2] >= 5 && pData[playerid][inv][3] >= 2)
 				{
                     pData[playerid][inv][2] -= 5;
 					pData[playerid][inv][3] -= 2;
                     pData[playerid][clanexp][0] += 3;
                 }
-                else SendServerMessage(playerid, "You don't have 5 woods(s) or/and 2 metal(s).");
+                else SendServerMessage(playerid, "You don't have 5 woodss or/and 2 metals.");
                 if(modelid == 3302 && pData[playerid][inv][3] >= 6)
 				{
 					pData[playerid][inv][3] -= 6;
                     pData[playerid][clanexp][0] += 4;
                 }
-                else SendServerMessage(playerid, "You don't have 6 metal(s).");
+                else SendServerMessage(playerid, "You don't have 6 metals.");
                 if(modelid == 19865 && pData[playerid][inv][2] >= 25 && pData[playerid][inv][3] >= 5)
 				{
                     pData[playerid][inv][2] -= 25;
 					pData[playerid][inv][3] -= 5;
                     pData[playerid][clanexp][0] += 10;
                 }
-                else SendServerMessage(playerid, "You don't have 25 woods(s) or/and 5 metal(s).");
+                else SendServerMessage(playerid, "You don't have 25 woods or/and 5 metals.");
                 if(modelid == 1446 && pData[playerid][inv][2] >= 20 && pData[playerid][inv][3] >= 3)
 				{
                     pData[playerid][inv][2] -= 20;
 					pData[playerid][inv][3] -= 3;
                     pData[playerid][clanexp][0] += 8;
                 }
-                else SendServerMessage(playerid, "You don't have 20 woods(s) or/and 3 metal(s).");
+                else SendServerMessage(playerid, "You don't have 20 woods or/and 3 metals.");
                 if(modelid == 18259 && pData[playerid][inv][2] >= 100 && pData[playerid][inv][3] >= 100)
 				{
                     pData[playerid][inv][2] -= 100;
@@ -1193,34 +1193,42 @@ public OnModelSelectionResponse(playerid, extraid, index, modelid, response)
                         pData[playerid][pAchievements][3] = 1;
                     }
                 }
-                else SendServerMessage(playerid, "You don't have 100 woods(s) or/and 100 metal(s).");
+                else SendServerMessage(playerid, "You don't have 100 woodss or/and 100 metals.");
                 if(modelid == 19339 && pData[playerid][inv][2] >= 10 && pData[playerid][inv][3] >= 10)
 				{
                     pData[playerid][inv][2] -= 10;
 					pData[playerid][inv][3] -= 10;
                     pData[playerid][clanexp][0] += 10;
                 }
-                else SendServerMessage(playerid, "You don't have 10 woods(s) or/and 10 metal(s).");
+                else SendServerMessage(playerid, "You don't have 10 woods or/and 10 metals.");
                 if(modelid == 1410 && pData[playerid][inv][2] >= 15 && pData[playerid][inv][3] >= 3)
 				{
                     pData[playerid][inv][2] -= 15;
 					pData[playerid][inv][3] -= 3;
                     pData[playerid][clanexp][0] += 11;
                 }
-                else SendServerMessage(playerid, "You don't have 15 woods(s) or/and 3 metal(s).");
+                else SendServerMessage(playerid, "You don't have 15 woods or/and 3 metals.");
                 if(modelid == 2991 && pData[playerid][inv][2] >= 50)
 				{
 					pData[playerid][inv][2] -= 50;
                     pData[playerid][clanexp][0] += 50;
                 }
-                else SendServerMessage(playerid, "You don't have 50 wood(s).");
+                else SendServerMessage(playerid, "You don't have 50 woods.");
                 if(modelid == 2319 && pData[playerid][inv][3] >= 10 && pData[playerid][inv][4] >= 10)
 				{
 					pData[playerid][inv][3] -= 10;
                     pData[playerid][inv][4] -= 10;
                     pData[playerid][clanexp][0] += 20;
                 }
-                else SendServerMessage(playerid, "You don't have 10 metal(s). or/and 10 cloth(s)");
+                else SendServerMessage(playerid, "You don't have 10 metals. or/and 10 cloths");
+                if((modelid == 3383 || modelid == 14869) && pData[playerid][inv][2] >= 8 && pData[playerid][inv][3] >= 8 && pData[playerid][inv][5] >= 8)
+				{
+                    pData[playerid][inv][2] -= 8;
+					pData[playerid][inv][3] -= 8;
+                    pData[playerid][inv][5] -= 8;
+                    pData[playerid][clanexp][0] += 50;
+                }
+                else SendServerMessage(playerid, "You don't have 8 woodss or/and 8 metals or/and 8 plastics.");
                 objectsData[i][objectsModel] = modelid;
                 objectsData[i][objectsPos][0] = x + (3.0 * floatsin(-angle, degrees));
                 objectsData[i][objectsPos][1] = y + (3.0 * floatcos(-angle, degrees));

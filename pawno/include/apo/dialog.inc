@@ -40,11 +40,20 @@ Dialog:Craft(playerid, response, listitem, inputtext[])
 {
     if (response)
 	{
+		static idcraft = -1;
         switch (listitem)
         {
-            case 0: Dialog_Show(playerid, Craft01, DIALOG_STYLE_LIST, "Craft Vehicles", "Bicycle(8M/2P/2I)\nBandito(24M/24P/5G)", "Craft", "Close");
-            case 1: Dialog_Show(playerid, Craft11, DIALOG_STYLE_LIST, "Craft Weapons", "Pistol(5M/8B/2I)\nShotGun(7M/5B/3I)\nRifle(8M/5.380/5I)\nSniper(16M/5.308/8I)", "Craft", "Close");
-            case 2: Dialog_Show(playerid, Craft21, DIALOG_STYLE_LIST, "Craft Ammos", "9 mm(5M/5P/5GP)\n00' Buck's(5M/5P/10GP)\n.308(5M/5P/25GP)", "Craft", "Close");
+            case 0:	Dialog_Show(playerid, Craft01, DIALOG_STYLE_LIST, "Craft Vehicles", "Bicycle(8M/2P/2I)\nBandito(24M/24P/5G)", "Craft", "Close");				
+            case 1:			
+			{			
+				if ((idcraft = objects_Nearest(playerid)) != -1) if(objectsData[idcraft][objectsModel] != 3383 && objectsData[idcraft][objectsModel] != 14869) SendServerMessage(playerid, "You're not near a crafting table");		 
+				Dialog_Show(playerid, Craft11, DIALOG_STYLE_LIST, "Craft Weapons", "Pistol(5M/8B/2I)\nShotGun(7M/5B/3I)\nRifle(8M/5.380/5I)\nSniper(16M/5.308/8I)", "Craft", "Close");
+			}
+            case 2: 
+			{			
+				if ((idcraft = objects_Nearest(playerid)) != -1) if(objectsData[idcraft][objectsModel] != 3383 && objectsData[idcraft][objectsModel] != 14869) SendServerMessage(playerid, "You're not near a crafting table");	
+				Dialog_Show(playerid, Craft21, DIALOG_STYLE_LIST, "Craft Ammos", "9 mm(5M/5P/5GP)\n00' Buck's(5M/5P/10GP)\n.308(5M/5P/25GP)", "Craft", "Close");
+			}
             case 3: Dialog_Show(playerid, Craft31, DIALOG_STYLE_LIST, "Craft Miscs", "Repair kit (3M/3P)\nMed Kit(2M/3P/5C)\nJerrycan (3P/Stations)\nArmor Plates(10M/10P/10C)\nCanned Food(1M/2Meats)\nBarricades", "Craft", "Close");
 		}
         return 1;
@@ -72,6 +81,7 @@ Dialog:Craft01(playerid, response, listitem, inputtext[])
 					modelid = 481;
 					mysql_tquery(mysql, query, "OnVehicleCreated", "iffffii", modelid, x, y, z, a, color1, color2);
 					SendServerMessage(playerid, "Vehicle crafted and saved.");
+					SendCraftMessage(playerid, "You have craft a bicycle.");
 				}
 				else SendServerMessage(playerid, "You don't have 8 metals or/and 2 plastics or/and 2 irons.");
 			}
@@ -95,6 +105,7 @@ Dialog:Craft01(playerid, response, listitem, inputtext[])
 					}
 					mysql_tquery(mysql, query, "OnVehicleCreated", "iffffii", modelid, x, y, z, a, color1, color2);
 					SendServerMessage(playerid, "Vehicle crafted and saved.");
+					SendCraftMessage(playerid, "You have craft a bandito.");
 				}
 				else SendServerMessage(playerid, "You don't have 24 metals or/and 24 plastics or/and 5 golds.");
 			}
@@ -118,6 +129,7 @@ Dialog:Craft11(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][14] -= 8;
 					pData[playerid][inv][8] -= 2;
 					GiveWeaponWithReplace(playerid, 22,8);
+					SendCraftMessage(playerid, "You have craft a pistol.");
 				}
 				else SendServerMessage(playerid, "You don't have 5 metals or/and 8 9mm bullets or/and 2 irons.");
 			}
@@ -130,6 +142,7 @@ Dialog:Craft11(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][15] -= 5;
 					pData[playerid][inv][8] -= 3;
                     GiveWeaponWithReplace(playerid, 25,5);
+					SendCraftMessage(playerid, "You have craft a shotgun.");
 				}
 				else SendServerMessage(playerid, "You don't have 7 metals or/and 5 00' Buck'so r/and 3 irons.");
 			}
@@ -142,6 +155,7 @@ Dialog:Craft11(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][16] -= 5;
 					pData[playerid][inv][8] -= 5;
                     GiveWeaponWithReplace(playerid, 33,5);
+					SendCraftMessage(playerid, "You have craft a rifle.");
 				}
 				else SendServerMessage(playerid, "You don't have 8 metals or/and 5 .308's or/and 5 irons.");
 			}
@@ -154,6 +168,7 @@ Dialog:Craft11(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][16] -= 5;
 					pData[playerid][inv][8] -= 8;
                     GiveWeaponWithReplace(playerid, 34,5);
+					SendCraftMessage(playerid, "You have craft a sniper rifle.");
 				}
 				else SendServerMessage(playerid, "You don't have 16 metals or/and 5 .308's or/and 8 irons.");
 			}
@@ -172,11 +187,13 @@ Dialog:Craft21(playerid, response, listitem, inputtext[])
 			{
 				if (pData[playerid][inv][3] >= 5 && pData[playerid][inv][5] >= 5 && pData[playerid][inv][6] >= 5)
 				{
+					if (pData[playerid][inv][14] + 1 > GetBackpackCapacity(playerid))
+						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					pData[playerid][clanexp][0] += 20;
-					pData[playerid][inv][14] += 1;
 					pData[playerid][inv][3] -= 5;
 					pData[playerid][inv][5] -= 5;
 					pData[playerid][inv][6] -= 5;
+					SendCraftMessage(playerid, "You have craft 9mm bullet.");
 				}
 				else SendServerMessage(playerid, "You don't have 5 metals or/and 5 plastics or/and 5 gun powders.");
 			}
@@ -184,11 +201,13 @@ Dialog:Craft21(playerid, response, listitem, inputtext[])
 			{
 				if (pData[playerid][inv][3] >= 5 && pData[playerid][inv][5] >= 5 && pData[playerid][inv][6] >= 10)
 				{
+					if (pData[playerid][inv][15] + 1 > GetBackpackCapacity(playerid))
+						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					pData[playerid][clanexp][0] += 30;
-					pData[playerid][inv][15] += 1;
 					pData[playerid][inv][3] -= 5;
 					pData[playerid][inv][5] -= 5;
 					pData[playerid][inv][6] -= 10;
+					SendCraftMessage(playerid, "You have craft an 00'buck.");
 				}
 				else SendServerMessage(playerid, "You don't have 5 metals or/and 5 plastics or/and 10 gun powders.");
 			}
@@ -196,11 +215,13 @@ Dialog:Craft21(playerid, response, listitem, inputtext[])
 			{
 				if (pData[playerid][inv][3] >= 5 && pData[playerid][inv][5] >= 5 && pData[playerid][inv][6] >= 25)
 				{
+					if (pData[playerid][inv][16] + 1 > GetBackpackCapacity(playerid))
+						return SendServerMessage(playerid, "Not enough backpack space for this item.");
 					pData[playerid][clanexp][0] += 50;
-					pData[playerid][inv][16] += 1;
 					pData[playerid][inv][3] -= 5;
 					pData[playerid][inv][5] -= 5;
 					pData[playerid][inv][6] -= 25;
+					SendCraftMessage(playerid, "You have craft an .308 bullet.");
 				}
 				else SendServerMessage(playerid, "You don't have 5 metals or/and 5 plastics or/and 25 gun powders.");
 			}
@@ -226,7 +247,7 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][11] += 1;
 					pData[playerid][inv][3] -= 3;
 					pData[playerid][inv][5] -= 3;
-					SendServerMessage(playerid, "You craft one Repair kit.");
+					SendCraftMessage(playerid, "You craft one Repair kit.");
 				}
 				else SendServerMessage(playerid, "You don't have 3 metals or/and 3 plastics.");
 			}
@@ -241,7 +262,7 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][3] -= 3;
 					pData[playerid][inv][5] -= 3;
 					pData[playerid][inv][4] -= 5;
-					SendServerMessage(playerid, "You craft one med kit.");
+					SendCraftMessage(playerid, "You craft one med kit.");
 				}
 				else SendServerMessage(playerid, "You don't have 3 metals or/and 3 plastics or/and 5 cloths.");
 			}
@@ -261,7 +282,7 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][clanexp][0] += 5;
 					pData[playerid][inv][5] -= 3;
 					pData[playerid][inv][13] += 1;
-					SendServerMessage(playerid, "You craft one jerrycan and filled up.");	
+					SendCraftMessage(playerid, "You craft one jerrycan and filled up.");	
 				}
 				else SendServerMessage(playerid, "You don't have 3 plastics or not in the right position to refuel");
 			}
@@ -276,7 +297,7 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][3] -= 10;
 					pData[playerid][inv][5] -= 10;
 					pData[playerid][inv][4] -= 10;
-					SendServerMessage(playerid, "You craft one armor plate.");
+					SendCraftMessage(playerid, "You craft one armor plate.");
 				}
 				else SendServerMessage(playerid, "You don't have 10 metals or/and 10 plastics or/and 10 cloths.");
 			}
@@ -290,7 +311,7 @@ Dialog:Craft31(playerid, response, listitem, inputtext[])
 					pData[playerid][inv][19] += 1;
 					pData[playerid][inv][1] -= 2;
 					pData[playerid][inv][3] -= 1;
-					SendServerMessage(playerid, "You craft one can of food.");
+					SendCraftMessage(playerid, "You craft one can of food.");
 				}
 				else SendServerMessage(playerid, "You don't have 1 metal or/and 2 meats.");
 			}

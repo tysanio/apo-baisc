@@ -59,12 +59,12 @@ CMD:destroy(playerid, params[])
 			case 3260: {taking2 = 2; taking3 = 1; }
 			case 3302: {taking3 = 3; }
 			case 19865: {taking2 = 12; taking3 = 2; }
-			case 1446: {taking2 = 10; taking3 =1 ; }
+			case 1446: {taking2 = 10; taking3 = 1 ; }
 			case 18259: {taking2 = 50; taking3 = 50; }
 			case 19339: {taking2 = 5; taking3 = 5;	}	
 			case 1410: {taking2 = 7; taking3 = 5;}		
-			case 2991: {taking2 = 25;		}
-			case 2319: {taking3 = 5; taking4 =5;}
+			case 2991: {taking2 = 25;}
+			case 2319: {taking3 = 5; taking4 = 5;}
 			default: return SendServerMessage(playerid, "Not a scavengable object for ressources.");
 		}
 		
