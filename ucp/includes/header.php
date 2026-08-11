@@ -25,6 +25,8 @@
     <a href="character.php">👤 Character</a>
 	
     <a href="achivements.php">🏅 Achivements</a>
+	
+    <a href="log.php">📜 Logs</a>
 
     <a href="inventory.php">🎒 Inventory</a>
 

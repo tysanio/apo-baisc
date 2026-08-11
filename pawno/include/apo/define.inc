@@ -43,7 +43,7 @@ chainsaw?
 #define SendCommandMessage(%0,%1) \
 	SendClientMessageEx(%0, COLOR_GREEN, "[COMMAND]:{FFFFFF} "%1)
 #define SendTWMessage(%0,%1) \
-	SendClientMessageEx(%0, COLOR_PURPLE, "[COMMAND]:{FFFFFF} "%1)
+	SendClientMessageEx(%0, COLOR_PURPLE, "[Talkie-Walkie]:{FFFFFF} "%1)
 #define SendAnimsMessage(%0,%1) \
 	SendClientMessageEx(%0, COLOR_LIGHTBLUE, "[Anims]:{FFFFFF} "%1)
 #define SendRadioMessage(%0,%1) \

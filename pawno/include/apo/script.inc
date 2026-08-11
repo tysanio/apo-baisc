@@ -86,8 +86,22 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
     }
     if (newtarget == missionactor[6] && pData[playerid][Score] >= 5) //secret army
     {
-        Dialog_Show(playerid, Missionclan222, DIALOG_STYLE_MSGBOX, "Secret Quest", "You seems a good call.\nCan you check on my sister?\nShe is probably somewhere with a bunch of wierdos.\nPlease go look out for here.", "OK", "Quit");
-		missioncheck = 333;
+		if(pData[playerid][pLog] == 0 && pData[playerid][missioncheck] == 0)
+        { 
+			Dialog_Show(playerid, Missionclan222, DIALOG_STYLE_MSGBOX, "Secret Quest part 1", "You seems a good call.\nCan you check on my sister?\nShe is probably somewhere with a bunch of wierdos.\nPlease go look out for here.", "OK", "Quit");
+			pData[playerid][missioncheck] = 333;
+		}
+		if(pData[playerid][missioncheck] == 3334)
+        { 
+			Dialog_Show(playerid, Missionclan2222, DIALOG_STYLE_MSGBOX, "Secret Quest part 2", "Thank for checking I know where to find here please take her back to me.", "OK", "Quit");
+			pData[playerid][clanexp][3] += 250;
+			pData[playerid][missioncheck] = 3333;
+		}
+		if(pData[playerid][pLog] == 1)
+        { 
+			Dialog_Show(playerid, Missionclan22222, DIALOG_STYLE_MSGBOX, "Secret Quest final part", "Oh no no NO!!!!\nThank for everything.", "OK", "Quit");
+			pData[playerid][missioncheck] = 0;
+		}
 		return 1;
     }
     if (newtarget == missionactor[7])
@@ -1339,8 +1353,8 @@ script FinishSabotage(playerid,id)
     if(Antenna[id][aHealth] == 0.0) Antenna[id][aPowered] = 0;
     UpdateAntennaVisual(id);
     SaveAntenna(id);
-    missioncheck = 55;
-    SendTWMessage(playerid, "Talkie-Walkie : Go back to me to do your report.");
+    pData[playerid][missioncheck] = 55;
+    SendTWMessage(playerid, " Go back to me to do your report.");
     return 1;
 }
 //plant
@@ -1452,6 +1466,7 @@ script GiveOutsideMapAchievement(playerid)
 		SendACMessage(playerid,"How do you get there!!");
 		pData[playerid][clanexp][0] += 100;
 		pData[playerid][pAchievements][6] = 1;
+		KillTimer(OutsideMapTimer[playerid]);
 	}
     return 1;
 }

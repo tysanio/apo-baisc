@@ -65,10 +65,10 @@ Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 			}
 			case 2:
 			{
-				if(missioncheck == 11)
+				if(pData[playerid][missioncheck] == 11)
 				{
 					pData[playerid][clanexp][1] += 200;
-					missioncheck = 0;
+					pData[playerid][missioncheck] = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
 					if(pData[playerid][pAchievements][4] == 0)
 				    {
@@ -82,16 +82,16 @@ Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
 					mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
 					mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
-					missioncheck = 1;
+					pData[playerid][missioncheck] = 1;
 				}
 			}
 			case 3:
 			{
-				if(missioncheck == 55)
+				if(pData[playerid][missioncheck] == 55)
 				{
 					pData[playerid][clanexp][1] += 50;
 					pData[playerid][inv][14] += 5;
-					missioncheck = 0;
+					pData[playerid][missioncheck] = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 4 done", "Thank for the sabotage of the antenna.\n{0f5900}Exp clan + 50 and 5 9mm bullet(s)", "OK", "");
 				}
 				else
@@ -100,7 +100,7 @@ Dialog:Missionclan00(playerid, response, listitem, inputtext[])
 					if(antenna == -1) return SendServerMessage(playerid,"No antenna available.");
 					SetPlayerCheckpoint(playerid, Antenna[antenna][aPosX],Antenna[antenna][aPosY],Antenna[antenna][aPosZ], 5.0);												
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 4", "Go sabotage some antenna!", "OK", "");
-					missioncheck = 5;
+					pData[playerid][missioncheck] = 5;
 				}
 			}
             case 6:
@@ -139,10 +139,10 @@ Dialog:Missionclan10(playerid, response, listitem, inputtext[])
 			case 2: {			}
 			case 3:
 			{
-				if(missioncheck == 22)
+				if(pData[playerid][missioncheck] == 22)
 				{
 					pData[playerid][clanexp][2] += 200;
-					missioncheck = 0;
+					pData[playerid][missioncheck] = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
 					if(pData[playerid][pAchievements][4] == 0)
 				    {
@@ -156,7 +156,7 @@ Dialog:Missionclan10(playerid, response, listitem, inputtext[])
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
 					mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
 					mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
-					missioncheck = 2;
+					pData[playerid][missioncheck] = 2;
 				}
 			}
             case 8:
@@ -196,17 +196,17 @@ Dialog:Missionclan20(playerid, response, listitem, inputtext[])
 			}
             case 1: 
 			{
-				if(missioncheck == 0)
+				if(pData[playerid][missioncheck] == 0)
 				{
 					new antenna = GetLowestHealthAntenna();
 					if(antenna == -1) return Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2", "All antenna is repair good job civilian.", "OK", "");
-					missioncheck = 4;
+					pData[playerid][missioncheck] = 4;
 					SetPlayerCheckpoint( playerid,Antenna[antenna][aPosX],Antenna[antenna][aPosY],Antenna[antenna][aPosZ],5.0);
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2", "Hey civilians one of our antenna need repair go repair it!", "OK", "");
 				}
-				if(missioncheck == 44)
+				if(pData[playerid][missioncheck] == 44)
 				{
-					missioncheck = 0;
+					pData[playerid][missioncheck] = 0;
 					pData[playerid][clanexp][3] += 50;
 					//reward XP clan and food/water ??
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 2 done", "Thank for the repair on that antenna civilian.\n{0f5900}Exp clan + 50", "OK", "");
@@ -215,10 +215,10 @@ Dialog:Missionclan20(playerid, response, listitem, inputtext[])
 			}
 			case 2:
 			{
-				if(missioncheck == 33)
+				if(pData[playerid][missioncheck] == 33)
 				{
 					pData[playerid][clanexp][3] += 200;
-					missioncheck = 0;
+					pData[playerid][missioncheck] = 0;
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3 done", "Thank for the report.\n{0f5900}Exp clan + 200", "OK", "");
 					if(pData[playerid][pAchievements][4] == 0)
 				    {
@@ -232,7 +232,7 @@ Dialog:Missionclan20(playerid, response, listitem, inputtext[])
 					Dialog_Show(playerid, MISSIONTALK, DIALOG_STYLE_MSGBOX, "Mission 3", "Go outside to see what going on and report to me!", "OK", "");
 					mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
 					mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
-					missioncheck = 3;
+					pData[playerid][missioncheck] = 3;
 				}
 			}
             case 7:
@@ -262,6 +262,25 @@ Dialog:Missionclan22(playerid, response, listitem, inputtext[])
             {            }
         }
         return 1;
+    }
+    return 1;
+}
+Dialog:Missionclan222(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+		mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
+		mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
+        return 1;
+    }
+    return 1;
+}
+Dialog:Missionclan2222(playerid, response, listitem, inputtext[])
+{
+    if (response)
+	{
+		mysql_format(mysql, query, sizeof(query),"SELECT x, y, z FROM missions ORDER BY RAND() LIMIT %d", MAX_MISSION_CHECKPOINTS);
+		mysql_tquery(mysql, query, "OnMissionLoadRandomCheckpoints", "d", playerid);
     }
     return 1;
 }

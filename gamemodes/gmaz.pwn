@@ -1,4 +1,4 @@
-//total lines 10020-390map
+//total lines 10091-390map
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -42,7 +42,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.25.10020");
+	SetGameModeText("Apo 0.25.10091");
 	SendRconCommand("ackslimit 5000");
     new command[160];
     format(command, sizeof(command), "hostname %s", ServerHost);
@@ -89,7 +89,6 @@ public OnGameModeInit()
     MapAndreas_Init(MAP_ANDREAS_MODE_FULL);
     ZombiesTimer = SetTimer("CreateZombies", 50, true);
     SetTimer("ZombieGroundFix", 1000, true);
-    SetTimer("CheckPlayersOutsideMap", 5000, true);
 	return 1;
 }
 public OnGameModeExit()
@@ -110,7 +109,6 @@ public OnPlayerConnect(playerid)
     SetPlayerHealth(playerid,10);
     SetPlayerInterior(playerid,0);
 	IsPlayerRegisterd[playerid] = 0;
-    missioncheck = 0;
     Death[playerid] = 0;
     claninv = -1;
     ResetPlayerWeapons(playerid);
@@ -620,6 +618,7 @@ public OnPlayerSpawn(playerid)
             AllowWeapon(playerid, pData[playerid][Guns][i], pData[playerid][Ammo][i]);
         }
     }
+    SetTimer("CheckPlayersOutsideMap", 5000, true);
     return 1;
 }
 public OnPlayerRequestClass(playerid, classid)
@@ -1024,23 +1023,35 @@ public OnPlayerEnterCheckpoint(playerid)
     else
     {
         DisablePlayerCheckpoint(playerid);
-        if(missioncheck == 1)
+        if(pData[playerid][missioncheck] == 1)
         {
-            SendTWMessage(playerid, "Talkie-Walkie : Go back to me now dirty meat!");
-            missioncheck = 11;
+            SendTWMessage(playerid, " Go back to me now dirty meat!");
+            pData[playerid][missioncheck] = 11;
         }
-        if(missioncheck == 2)
+        if(pData[playerid][missioncheck] == 2)
         {
-            SendTWMessage(playerid, "Talkie-Walkie : Go back to me to do your report civilian.");
-            missioncheck = 22;
+            SendTWMessage(playerid,  "Go back to me to do your report civilian.");
+            pData[playerid][missioncheck] = 22;
         }
-        if(missioncheck == 3)
+        if(pData[playerid][missioncheck] == 3)
         {
-            SendTWMessage(playerid, "Talkie-Walkie : Go back to me to do your report soldier.");
-            missioncheck = 33;
+            SendTWMessage(playerid, " Go back to me to do your report soldier.");
+            pData[playerid][missioncheck] = 33;
+        }
+        if(pData[playerid][missioncheck] == 333)
+        {
+            SendTWMessage(playerid, " Go back to me to do your report about my sister.");
+            pData[playerid][missioncheck] = 3334;
+        }
+        if(pData[playerid][missioncheck] == 3333)
+        {
+            SendTWMessage(playerid, " You find here right? Take her back to me!");
+            pData[playerid][pLog] = 1;
+            pData[playerid][clanexp][3] += 500;
+            SendACMessage(playerid, "You found the first log! Go into the panel to read it.");
         }
     }
-    if(missioncheck == 4)
+    if(pData[playerid][missioncheck] == 4)
     {
         new id = GetLowestHealthAntenna();
         if(GetPlayerDistanceFromPoint(playerid, Antenna[id][aPosX],Antenna[id][aPosY], Antenna[id][aPosZ]) < 5.0)
@@ -1054,13 +1065,13 @@ public OnPlayerEnterCheckpoint(playerid)
                 UpdateAntennaVisual(id);
                 SaveAntenna(id);
                 DisablePlayerCheckpoint(playerid);
-                missioncheck = 44;
-                SendTWMessage(playerid, "Talkie-Walkie : Go back to me to do your report civilian.");
+                pData[playerid][missioncheck] = 44;
+                SendTWMessage(playerid, " Go back to me to do your report civilian.");
 			}
 			else SendServerMessage(playerid, "You don't have 5 metals or/and 1 repair kit.");
         }
     }
-    if(missioncheck == 5)
+    if(pData[playerid][missioncheck] == 5)
     {
         new id = GetHighestHealthAntenna();
 		if (pData[playerid][inv][6] >= 10 && pData[playerid][inv][13] >= 1)

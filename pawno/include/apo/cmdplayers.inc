@@ -1,7 +1,7 @@
 CMD:help(playerid, params[])
 {
     SendServerMessage(playerid, "---List of commands for this server---");
-	SendCommandMessage(playerid, "/howto, /me, /do, /stats, /craft, /use, /suggest, /levelup, /vipchat");
+	SendCommandMessage(playerid, "/howto, /me, /do, /stats, /craft, /use, /suggest, /levelup, /vipchat, /giveplayer");
     SendCommandMessage(playerid, "/dwep, /swep, /pwep, /storage, /editstorage, /animcmds, /dc, /admins");
 	SendCommandMessage(playerid, "/clan, /clanchest, /clanwar, /claninvite, /clanremove, /clanrank, /clanres, /clans");
     SendCommandMessage(playerid, "/repairleak, /repair, /refuel, /virtualworld, /discordconfirm");
@@ -268,6 +268,30 @@ CMD:editstorage(playerid, params[])
     }
 	else return SendServerMessage(playerid, "Invalid option to choose from.");
 	return 1;
+}
+CMD:giveplayer(playerid, params[])
+{
+    new targetid, item_id, amount;
+    if(sscanf(params, "udd", targetid, item_id, amount))
+    {
+        SendCommandMessage(playerid, "Usage: /giveplayer <playerid> <item_id> <amount>");
+        SendServerMessage(playerid, "1: Meat(s), 2: Wood(s), 3: Metal(s), 4: Cloth(s), 5: Plastic(s), 6: Gun Powder(s)");
+        SendServerMessage(playerid, "7: Ore(s), 8: Iron(s), 9: Gold(s), 10: Lockpick(s), 11: Repair kit(s), 12: Med Kit(s), 13: Jerrycan(s)");
+        SendServerMessage(playerid, "14: 9mm Bullet(s), 15: 00' Buck's, 16: 308(s), 17: Armor Plate(s), 18: Water Bottle, 19: Canned Food");
+        SendServerMessage(playerid, "20: Seed(s), 21: Potato(es), 22: Weed(s), 23: Tomato(es), 24: inv24, 25: inv25");
+        return 1;
+    }
+    if(!IsPlayerConnected(targetid)) return SendServerMessage(playerid, "Invalid player ID.");
+    if(targetid == playerid) return SendServerMessage(playerid, "You cannot give items to yourself.");
+    if(item_id < 0 || item_id >= 26) return SendServerMessage(playerid, "Invalid item ID [1-25].");
+    if(amount <= 0) return SendServerMessage(playerid, "Invalid amount.");
+    if(pData[playerid][inv][item_id] < amount) return SendServerMessage(playerid, "You don't have enough of that item.");
+    if(pData[targetid][inv][item_id] + amount > GetBackpackCapacity(GetPlayerScore(targetid))) return SendServerMessage(playerid, "That player doesn't have enough inventory space.");
+    pData[playerid][inv][item_id] -= amount;
+    pData[targetid][inv][item_id] += amount;
+    SendServerMessage(playerid, "You gave %d %s to %s.", amount, ItemNames[item_id], Name[targetid]);
+    SendServerMessage(targetid, "%s gave you %d %s.", Name[playerid], amount, ItemNames[item_id]);
+    return 1;
 }
 CMD:deer(playerid, params[])
 {

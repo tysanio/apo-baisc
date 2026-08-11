@@ -15,7 +15,7 @@ new Float:gVehicleFuel[MAX_SERVER_VEHICLES],PlayerText:txtSpeed[MAX_PLAYERS],Pla
 new bool:EngineState[MAX_SERVER_VEHICLES],bool:FuelLeaking[MAX_SERVER_VEHICLES],bool:FuelWarningVisible[MAX_PLAYERS],FuelStationCount;
 new Float:g_LastVehiclePos[MAX_SERVER_VEHICLES][3];
 
-new missionactor[8],missioncheck;
+new missionactor[8];
 
 native WP_Hash(buffer[], len, const str[]);
 
@@ -61,7 +61,8 @@ enum DATAX
 	//other table stuff
 	pLog[10], //can be more right now jsut 10
 	pSkills[11], //skills stuff shooting zombie/target
-	pAchievements[10] //achivement die once kill 100 in one session go level 10 had clan exp over 5000 etc
+	pAchievements[10], //achivement die once kill 100 in one session go level 10 had clan exp over 5000 etc
+	missioncheck
 }
 new pData[MAX_PLAYERS][DATAX];
 
