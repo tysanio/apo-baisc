@@ -1,4 +1,4 @@
-//total lines 10091-390map
+//total lines 10149-390map
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -42,7 +42,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.25.10091");
+	SetGameModeText("Apo 0.25.10149");
 	SendRconCommand("ackslimit 5000");
     new command[160];
     format(command, sizeof(command), "hostname %s", ServerHost);
@@ -77,6 +77,7 @@ public OnGameModeInit()
         DB_VehicleID[i] = 0;
     }
     loaddiscord();
+    CreateLogPickup(); //pickup log1
     SetTimer("CheckUnoccupiedVehicleTeleport", 3000, true); //antitpveh
     SetTimer("GangZoneResourceTick", GANG_RESOURCE_TIME, true);  //timer reward
     SetTimer("CheckGangZones", 60000, true); // after 7 day gones
@@ -993,6 +994,33 @@ public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid, bodypart)
     }
     return 1;
 }
+public OnPlayerPickUpDynamicPickup(playerid, STREAMER_TAG_PICKUP:pickupid)
+{
+    if(pickupid == LogPickup)
+    {
+        DestroyDynamicPickup(LogPickup);
+        LogPickup = INVALID_STREAMER_ID;
+        if(pData[playerid][pLog][1] == 0)
+        {
+            SendACMessage(playerid, "You found 1 of 3 part of log good job! Try to find other part scattered across the map.");
+            pData[playerid][pLog][1] = 10;
+        }
+        if(pData[playerid][pLog][1] == 10)
+        {
+            SendACMessage(playerid, "You found 2 of 3 part of log good job! Try to find other part scattered across the map.");
+            pData[playerid][pLog][1] = 11;
+        }
+        if(pData[playerid][pLog][1] == 11)
+        {
+            SendACMessage(playerid, "You found 3 of 3 part of log good job! Go to the panel to read it!");
+            pData[playerid][pLog][1] = 3;
+        }
+        if(pData[playerid][pLog][1] == 3) return SendACMessage(playerid, "You already found 3 of 3 part of this story go into the panel to read it.");
+        CreateLogPickup();
+        return 1;
+    }
+    return 1;
+}
 public OnQueryError(errorid, error[], callback[], query1[], connectionHandle)
 {
 	printf("ERROR: %d. %s, callback: %s, query: %s", errorid, error, callback, query1);
@@ -1046,7 +1074,7 @@ public OnPlayerEnterCheckpoint(playerid)
         if(pData[playerid][missioncheck] == 3333)
         {
             SendTWMessage(playerid, " You find here right? Take her back to me!");
-            pData[playerid][pLog] = 1;
+            pData[playerid][pLog][0] = 1;
             pData[playerid][clanexp][3] += 500;
             SendACMessage(playerid, "You found the first log! Go into the panel to read it.");
         }

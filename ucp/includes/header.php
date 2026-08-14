@@ -9,7 +9,7 @@
 <title><?php echo htmlspecialchars($SERVER_NAME); ?> </title>
 
 <link rel="stylesheet" href="assets/css/style.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
 </head>
 
 <body>

@@ -24,9 +24,7 @@ if(isset($_POST["login"]))
     // Whirlpool uppercase (same as database)
     $passwordHash = strtoupper(hash("whirlpool", $password));
     $stmt = $pdo->prepare("SELECT * FROM players WHERE Username = ? LIMIT 1 ");
-    $stmt->execute([
-        $username
-    ]);
+    $stmt->execute([ $username ]);
     $player = $stmt->fetch();
     if($player)
     {
@@ -36,16 +34,9 @@ if(isset($_POST["login"]))
             header("Location: dashboard.php");
             exit;
         }
-        else
-        {
-            $message = " <div class='error'> Invalid password. </div> ";
-        }
+        else $message = " <div class='error'> Invalid password. </div> ";
     }
-    else
-    {
-        $message = " <div class='error'> Account not found. </div> ";
-
-    }
+    else $message = " <div class='error'> Account not found. </div> ";
 }
 ?>
 <!DOCTYPE html>
@@ -59,10 +50,7 @@ if(isset($_POST["login"]))
 	<div class="card" style="width:700px; margin:1px auto;">
 		<h1>📢 Latest News</h1>
 		<?php
-			if(count($announcements) == 0)
-			{
-				echo "<p>No announcements available.</p>";
-			}
+			if(count($announcements) == 0) echo "<p>No announcements available.</p>";
 			else
 			{
 				foreach($announcements as $row)

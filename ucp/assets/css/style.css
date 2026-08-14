@@ -587,6 +587,19 @@ textarea
     color:#eeeeee;
     line-height:1.5;
 }
+.log-paper
+{
+    background:#d8c9a3;
+    color:#29251d;
+    padding:10px;
+    margin-top:10px;
+    border-radius:3px;
+    border:1px solid #b5a47d;
+    box-shadow:0 4px 12px rgba(0,0,0,0.5);
+    font-family:'Special Elite', cursive !important;
+    font-size:18px;
+    line-height:1.5;
+}
 /*  MOBILE RESPONSIVE */
 @media screen and (max-width: 768px)
 {
