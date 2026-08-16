@@ -875,3 +875,13 @@ stock DestroyPlant(id)
     Plant[id][plantType] = 0;
     return 1;
 }
+stock CreateLogPickup()
+{
+    new location;
+    do { location = random(16); }
+    while(location == CurrentLogLocation);
+    CurrentLogLocation = location;
+    if(LogPickup != INVALID_STREAMER_ID) DestroyDynamicPickup(LogPickup);
+    LogPickup = CreateDynamicPickup(2953,1, LogLocations[location][0],LogLocations[location][1],LogLocations[location][2]);
+    return 1;
+}

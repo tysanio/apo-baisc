@@ -86,7 +86,7 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
     }
     if (newtarget == missionactor[6] && pData[playerid][Score] >= 5) //secret army
     {
-		if(pData[playerid][pLog] == 0 && pData[playerid][missioncheck] == 0)
+		if(pData[playerid][pLog][0] == 0 && pData[playerid][missioncheck] == 0)
         { 
 			Dialog_Show(playerid, Missionclan222, DIALOG_STYLE_MSGBOX, "Secret Quest part 1", "You seems a good call.\nCan you check on my sister?\nShe is probably somewhere with a bunch of wierdos.\nPlease go look out for here.", "OK", "Quit");
 			pData[playerid][missioncheck] = 333;
@@ -97,7 +97,7 @@ script OnPlayerTargetActor(playerid, newtarget, oldtarget)
 			pData[playerid][clanexp][3] += 250;
 			pData[playerid][missioncheck] = 3333;
 		}
-		if(pData[playerid][pLog] == 1)
+		if(pData[playerid][pLog][0] == 1)
         { 
 			Dialog_Show(playerid, Missionclan22222, DIALOG_STYLE_MSGBOX, "Secret Quest final part", "Oh no no NO!!!!\nThank for everything.", "OK", "Quit");
 			pData[playerid][missioncheck] = 0;

@@ -1,4 +1,4 @@
-//total lines 10149-390map
+//total lines 10296
 #include <a_samp>
 #include <a_mysql>
 #include <fcnpc>
@@ -42,7 +42,7 @@ public OnGameModeInit()
 {
     AntiDeAMX();
     mysql_Init();
-	SetGameModeText("Apo 0.25.10149");
+	SetGameModeText("Apo 0.25.10296");
 	SendRconCommand("ackslimit 5000");
     new command[160];
     format(command, sizeof(command), "hostname %s", ServerHost);
@@ -341,23 +341,24 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	}
     if (newstate == PLAYER_STATE_DRIVER)
     {
-        new vid = GetPlayerVehicleID(playerid);
-        if(!IsAVelo(GetPlayerVehicleID(playerid)))
+        new vid = GetPlayerVehicleID(playerid),engine, lights, alarm, doors, bonnet, boot, objective;
+        if (!IsAVelo(vid))
         {
-            SetVehicleParamsEx(vid, false, 0, 0, 0, 0, 0, 0); // Always off
-            EngineState[vid] = false;
-            SendClientMessage(playerid, 0xAAAAAAFF, "[Engine] Press Y to start the engine.");
+            GetVehicleParamsEx(vid, engine, lights, alarm, doors, bonnet, boot, objective);
+            // Restore the current engine state
+            SetVehicleParamsEx(vid, EngineState[vid], lights, alarm, doors, bonnet, boot, objective);
+            SendClientMessage(playerid, 0xAAAAAAFF, "[Engine] Press Y to start/stop the engine.");
             ShowPlayerProgressBar(playerid, FuelBar[playerid]);
             ShowPlayerProgressBar(playerid, HealthBar[playerid]);
             PlayerTextDrawShow(playerid, txtSpeed[playerid]);
         }
-        else SetVehicleParamsCarWindows(vid, 1, 0, 0, 0);
-        if(IsAVelo(GetPlayerVehicleID(playerid)))
+        if (IsAVelo(vid))
         {
-            SetVehicleParamsEx(vid, true, 0, 0, 0, 0, 0, 0); // Always off
-            EngineState[vid] = false;
+            SetVehicleParamsEx(vid,1, lights, alarm, doors, bonnet, boot, objective);
+            PlayerTextDrawShow(playerid, txtSpeed[playerid]);
+            HidePlayerProgressBar(playerid, FuelBar[playerid]);
+            HidePlayerProgressBar(playerid, HealthBar[playerid]);
         }
-        else SetVehicleParamsCarWindows(vid, 1, 0, 0, 0);
     }
     return 1;
 }
