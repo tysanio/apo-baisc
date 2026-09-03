@@ -2,8 +2,7 @@ CMD:ahelp(playerid, params[])
 {
     if(!pData[playerid][Admin]) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
     SendServerMessage(playerid, "---List of commands admins  for this server---");
-    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/a, /kick, /mute, /unmute, /freeze, /unfreeze /setskin, /sethp, /setarmor, /resetweapons");
-    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/goto, /zoneinfo, /addpoint, /resetintvw, /setthirst, /sethunger");
+    SendClientMessage(playerid, COLOR_LIGHTBLUE, "/a, /kick, /mute, /unmute, /setstat,/goto, /zoneinfo, /addpoint");
     SendClientMessage(playerid, COLOR_LIGHTBLUE, "/banperm, /bantemp, /unban, /banlist, /editveh, /editstation /stationlist");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/createobject, /editobject, /delobject, /editclan");
     SendClientMessage(playerid, COLOR_LIGHTRED, "/createantenna, /editantenna, /deleteantenna");
@@ -29,6 +28,94 @@ CMD:a(playerid, params[])
     }
     return 1;
 }
+CMD:setstat(playerid, params[])
+{
+    if(pData[playerid][Admin] < 1)
+        return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
+	new subcmd[16],args[64],targetid,value;
+    if(sscanf(params, "s[16]S()[64]", subcmd, args)) return SendCommandMessage(playerid, "Usage: /setstat [hp/armor/thirst/hunger/skin/resetintvw/resetweapons/freeze/unfreeze] [playerid] [value]");
+    if(!strcmp(subcmd, "hp", true))
+    {
+        if(sscanf(args, "ii", targetid, value)) return SendCommandMessage(playerid, "/setstat hp [playerid] [amount]");
+        if(!IsPlayerConnected(targetid)) return SendServerMessage(playerid, "Invalid player ID.");
+        if(value < 0 || value > 100) return SendServerMessage(playerid, "HP must be between 0 and 100.");
+        SetPlayerHealth(targetid, float(value));
+        SendServerMessage(playerid, "You set %s's HP to %d.", Name[targetid], value);
+        return 1;
+    }
+    else if(!strcmp(subcmd, "armor", true))
+    {
+        if(sscanf(args, "ii", targetid, value)) return SendCommandMessage(playerid, "/setstat armor [playerid] [amount]");
+        if(!IsPlayerConnected(targetid)) return SendServerMessage(playerid, "Invalid player ID.");
+        if(value < 0 || value > 100) return SendServerMessage(playerid, "Armor must be between 0 and 100.");
+        SetPlayerArmour(targetid, float(value));
+        SendServerMessage(playerid, "You set %s's armor to %d.", Name[targetid], value);
+        return 1;
+    }
+    else if(!strcmp(subcmd, "thirst", true))
+    {
+        if(sscanf(args, "ii", targetid, value)) return SendCommandMessage(playerid, "/setstat thirst [playerid] [amount]");
+        if(!IsPlayerConnected(targetid)) return SendServerMessage(playerid, "Invalid player ID.");
+		if(value < 0 || value > 100) return SendServerMessage(playerid, "Thirst must be between 0 and 100.");
+        pData[targetid][Water] = value;
+        SendServerMessage(playerid, "You set %s's thirst to %d.", Name[targetid], value);
+        return 1;
+    }
+    else if(!strcmp(subcmd, "hunger", true))
+    {
+        if(sscanf(args, "ii", targetid, value)) return SendCommandMessage(playerid, "/setstat hunger [playerid] [amount]");
+        if(!IsPlayerConnected(targetid)) return SendServerMessage(playerid, "Invalid player ID.");
+		if(value < 0 || value > 100) return SendServerMessage(playerid, "Hunger must be between 0 and 100.");
+        pData[targetid][Food] = value;
+        SendServerMessage(playerid, "You set %s's hunger to %d.", Name[targetid], value);
+        return 1;
+    }
+    else if(!strcmp(subcmd, "skin", true))
+    {
+        if(sscanf(args, "ii", targetid, value)) return SendCommandMessage(playerid, "/setstat skin [playerid] [skinid]");
+        if(!IsPlayerConnected(targetid)) return SendServerMessage(playerid, "Invalid player ID.");
+        SetPlayerSkin(targetid, value);
+        pData[targetid][skin] = value;
+        SendServerMessage(playerid, "You set %s's skin to %d.", Name[targetid], value);
+        return 1;
+    }
+    else if(!strcmp(subcmd, "resetintvw", true))
+    {
+        if(sscanf(args, "i", targetid)) return SendCommandMessage(playerid, "/setstat resetintvw [playerid]");
+        if(!IsPlayerConnected(targetid)) return SendServerMessage(playerid, "Invalid player ID.");
+        SetPlayerInterior(targetid, 0);
+        SetPlayerVirtualWorld(targetid, 0);
+        pData[targetid][interior] = 0;
+        SendServerMessage(playerid, "You reset %s's interior and virtual world.", Name[targetid]);
+        return 1;
+    }
+    else if(!strcmp(subcmd, "resetweapons", true))
+    {
+        if(sscanf(args, "i", targetid)) return SendCommandMessage(playerid, "/setstat resetweapons [playerid]");
+        if(!IsPlayerConnected(targetid))  return SendServerMessage(playerid, "Invalid player ID.");
+		ResetAllowedWeapons(targetid);
+		ResetPlayerWeapons(targetid);
+		SendServerMessage(playerid, "You reset %s's weapons.", Name[targetid]);
+        return 1;
+    }
+    else if(!strcmp(subcmd, "freeze", true))
+    {
+        if(sscanf(args, "i", targetid)) return SendCommandMessage(playerid, "/setstat freeze [playerid]");
+        if(!IsPlayerConnected(targetid))  return SendServerMessage(playerid, "Invalid player ID.");
+        TogglePlayerControllable(targetid, false);
+        SendServerMessage(playerid, "You froze %s.", Name[targetid]);
+        return 1;
+	}
+    else if(!strcmp(subcmd, "unfreeze", true))
+    {
+        if(sscanf(args, "i", targetid)) return SendCommandMessage(playerid, "/setstat unfreeze [playerid]");
+		if(!IsPlayerConnected(targetid))  return SendServerMessage(playerid, "Invalid player ID.");
+        TogglePlayerControllable(targetid, true);
+        SendServerMessage(playerid, "You unfroze %s.", Name[targetid]);
+        return 1;
+    }
+    return SendServerMessage(playerid, "Invalid subcommand. Use: hp, armor, thirst, hunger, skin, resetintvw, resetweapons, freeze, or unfreeze.");
+}
 CMD:kick(playerid, params[])
 {
     new targetid, reason[64],lookupid;
@@ -38,109 +125,6 @@ CMD:kick(playerid, params[])
     SendAdminAlert(COLOR_LIGHTRED, "Admin %s has kick %s. Reason: %s", GetName(playerid), GetName(lookupid), reason);
     KickEx(targetid);
     return 1;
-}
-CMD:unfreeze(playerid, params[])
-{
-    new lookupid;
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-    if(sscanf(params, "u", lookupid))
-        return SendCommandMessage(playerid, "Usage: /freeze <player>");
-    SendAdminAlert(COLOR_LIGHTRED, "Admin %s has unfreeze %s.", GetName(playerid), GetName(lookupid));
-    TogglePlayerControllable(lookupid, 1);
-    return 1;
-}
-CMD:freeze(playerid, params[])
-{
-    new lookupid;
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-    if(sscanf(params, "u", lookupid))
-        return SendCommandMessage(playerid, "Usage: /freeze <player>");
-    SendAdminAlert(COLOR_LIGHTRED, "Admin %s has freeze %s.", GetName(playerid), GetName(lookupid));
-    TogglePlayerControllable(lookupid, 0);
-    return 1;
-}
-CMD:resetintvw(playerid, params[])
-{
-	new lookupid;
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "u",lookupid)) return SendCommandMessage(playerid, "Usage: /resetintvw <playerid/Name> ");
-	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has reset %s (ID:%d) interior and virtual world to 0", GetName(playerid), playerid, GetName(lookupid),lookupid);
-	SetPlayerInterior(lookupid,0);
-	SetPlayerVirtualWorld(lookupid,0);
-	return 1;
-}
-CMD:setskin(playerid, params[])
-{
-	new lookupid, amount;
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setskin <playerid/Name> <id>");
-	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) skin to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
-	SetPlayerSkin(lookupid, amount);
-	pData[lookupid][skin] = amount;
-	return 1;
-}
-CMD:setthirst(playerid, params[])
-{
-	new lookupid, amount;
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setthirst <playerid/Name> <amount>");
-	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) thirst to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
-	pData[lookupid][Water] = amount;
-    SetPlayerProgressBarValue(playerid, pData[playerid][Waterbar], amount);
-	return 1;
-}
-CMD:sethunger(playerid, params[])
-{
-	new lookupid, amount;
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /sethunger <playerid/Name> <amount>");
-	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendAdminAlert(COLOR_RED , "Admin %s (ID:%d) has setted %s (ID:%d) hunger to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
-	pData[lookupid][Food] = amount;
-    SetPlayerProgressBarValue(playerid, pData[playerid][Foodbar], amount);
-	return 1;
-}
-CMD:setarmor(playerid, params[])
-{
-	new lookupid, amount;
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /setarmor <playerid/Name> <amount>");
-	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendAdminAlert(COLOR_RED ,  "Admin %s (ID:%d) has setted %s (ID:%d) armor to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
-	SetPlayerArmour(lookupid, amount);
-	pData[lookupid][Armor] = amount;
-    if (amount >= 101.10) {SetPlayerArmour(lookupid, 100.0);}
-	return 1;
-}
-CMD:sethp(playerid, params[])
-{
-	new lookupid, amount;
-    if(pData[playerid][Admin] < 1) return SendServerMessage(playerid, "Only admin level 1+ can use this cmd.");
-	if(sscanf(params, "ui",lookupid, amount)) return SendCommandMessage(playerid, "Usage: /sethp <playerid/Name> <amount>");
-	if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-	SendAdminAlert(COLOR_RED ,"Admin %s (ID:%d) has setted %s (ID:%d) hp to (%d)", GetName(playerid), playerid, GetName(lookupid),lookupid, amount);
-	SetPlayerHealth(lookupid, amount);
-	pData[lookupid][Life] = amount;
-    if (amount >= 101.10) {SetPlayerHealth(lookupid, 100.0);}
-	return 1;
-}
-CMD:resetweapons(playerid, params[])
-{
-	new lookupid;
-	if(pData[playerid][Admin] < 1)
-	{
-		if(sscanf(params, "u",lookupid)) return SendCommandMessage(playerid, "Usage: /resetweapons <playerid/Name> ");
-		if(!IsPlayerConnected(lookupid)) return SendServerMessage(playerid ,"Player is not connected");
-		SendServerMessage(playerid,"Player got they weapons reset.");
-		SendServerMessage(lookupid,"You got your weapons reset.");
-		ResetAllowedWeapons(lookupid);
-		ResetPlayerWeapons(lookupid);
-	}
-    else return SendServerMessage(playerid, "Only admin 2+ can use this cmd");
-	return 1;
 }
 CMD:mute(playerid, params[])
 {
@@ -382,7 +366,7 @@ CMD:editveh(playerid, params[])
         mysql_tquery(mysql, query);
         SendServerMessage(playerid, "Vehicle fuel updated.");
     }
-    else SendServerMessage(playerid, "Invalid subcommand. Use: owner, color, modelid or paintjob.");
+    else SendServerMessage(playerid, "Invalid subcommand. Use: owner, color, modelid, paintjob or fuel.");
     return 1;
 }
 CMD:stationlist(playerid, params[])
